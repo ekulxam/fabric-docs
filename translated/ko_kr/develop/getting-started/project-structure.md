@@ -20,10 +20,12 @@ authors:
 - `depends`: 모드가 종속하는 다른 모드의 식별자.
 - `mixins`: 모드가 제공하는 Mixin.
 
-아래는 `fabric.mod.json`의 예시입니다. 앞으로 모든 설명서는 아래 `fabric.mod.json`으로 정의된 모드를 예시로 사용할 것입니다.
+You can see an example `fabric.mod.json` file below - this is the `fabric.mod.json` file for the mod that powers this documentation site.
 
-:::details 리퍼런스 프로젝트의 `fabric.mod.json`
+:::details `fabric.mod.json` of the Example Mod
+
 @[code lang=json](@/reference/latest/src/main/resources/fabric.mod.json)
+
 :::
 
 ## 진입점 {#entrypoints}
@@ -47,7 +49,7 @@ authors:
 
 `fabric.mod.json` 파일과 모드에서 사용할 Mixin 구성 파일도 여기에 저장됩니다.
 
-어셋 파일은 리소스 팩 파일의 구조 그대로 저장됩니다. 예를 들어, `mod_block` 블록의 텍스처는 `assets/example-mod/textures/block/mod_block.png`에 저장될 수 있습니다.
+Assets are stored in a structure that mirrors the structure of resource packs - for example, a texture for a block would be stored in `assets/example-mod/textures/block/block.png`.
 
 ## `src/client/resources` {#src-client-resources}
 

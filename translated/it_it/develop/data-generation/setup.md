@@ -28,21 +28,25 @@ Il modo più semplice per attivare la datagen è durante la creazione del proget
 
 ![La casella "Data Generation" attiva nel generatore di mod modello](/assets/develop/data-generation/data_generation_setup_01.png)
 
-:::tip
-Se la datagen è attiva, dovresti avere una configurazione di esecuzione "Data Generation" e un'operazione Gradle `runDatagen`.
+::: tip
+
+If datagen is enabled, you should have a "Data Generation" run configuration and a `runDatagen` Gradle task.
+
 :::
 
-### Manualmente {#manually-enabling-data-generation}
+### Manually {#manually-enabling-data-generation}
 
-Anzitutto, dobbiamo attivare la datagen nel file `build.gradle`.
+First, we need to enable datagen in the `build.gradle` file.
 
-@[code lang=groovy transcludeWith=:::datagen-setup:configure](@/reference/build.gradle)
+@[code transcludeWith=:::datagen-setup:configure](@/reference/build.gradle)
 
-Poi ci serve una classe entrypoint. È qui che comincia la nostra datagen. Mettila da qualche parte nel package `client` - questo esempio la inserisce in `src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java`.
+Next, we need an entrypoint class. This is where our datagen starts. Place this somewhere in the `client` package - this example places it at `src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java`.
 
 @[code lang=java transcludeWith=:::datagen-setup:generator](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-Infine, informiamo Fabric dell'entrypoint nel nostro `fabric.mod.json`:
+Finally, we need to tell Fabric about the entrypoint in our `fabric.mod.json`:
+
+<!-- prettier-ignore -->
 
 ```json
 {
@@ -59,28 +63,32 @@ Infine, informiamo Fabric dell'entrypoint nel nostro `fabric.mod.json`:
 }
 ```
 
-:::warning
-Non dimenticare di aggiungere una virgola (`,`) dopo il blocco entrypoint precedente!
+::: warning
+
+Don't forget to add a comma (`,`) after the previous entrypoint block!
+
 :::
 
-Chiudi e riapri IntelliJ per creare una configurazione di esecuzione per la datagen.
+Close and reopen IntelliJ to create a run configuration for datagen.
 
-## Creare un Pack {#creating-a-pack}
+## Creating a Pack {#creating-a-pack}
 
-Nel metodo `onInitializeDataGenerator` del tuo entrypoint di datagen, dobbiamo creare un `Pack`. Dopo aggiungerai dei **fornitori**, che metteranno i dati generati in questo `Pack`.
+Inside your datagen entrypoint's `onInitializeDataGenerator` method, we need to create a `Pack`. Later, you'll add **providers**, which put generated data into this `Pack`.
 
 @[code lang=java transcludeWith=:::datagen-setup:pack](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## Eseguire la Generazione di Dati {#running-data-generation}
+## Running Data Generation {#running-data-generation}
 
-Per eseguire la datagen, usa la configurazione di esecuzione nel tuo IDE, o esegui `./gradlew runDatagen` nella console. I file generati saranno creati in `src/main/generated`.
+To run datagen, use the run configuration in your IDE, or run `./gradlew runDatagen` in the console. The generated files will be created in `src/main/generated`.
 
-## Prossimi Passi {#next-steps}
+## Next Steps {#next-steps}
 
-Ora che la datagen è configurata, dobbiamo aggiungerle dei **fornitori**. Questi sono ciò che genera i dati da aggiungere al tuo `Pack`. Le pagine successive mostrano come si fa questo.
+Now that datagen is set up, we need to add **providers**. These are what generate the data to add to your `Pack`. The following pages outline how to do this.
 
-- [Progressi](./advancements)
-- [Loot Table](./loot-tables)
-- [Ricette](./recipes)
-- [Tag](./tags)
-- [Traduzioni](./translations)
+- [Advancements](./advancements)
+- [Loot Tables](./loot-tables)
+- [Recipes](./recipes)
+- [Tags](./tags)
+- [Translations](./translations)
+- [Block Models](./block-models)
+- [Item Models](./item-models)

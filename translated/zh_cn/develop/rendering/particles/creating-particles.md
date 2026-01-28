@@ -26,45 +26,51 @@ authors:
 在这个例子中，我们在客户端注册我们的粒子。 使用末地烛粒子的 factory，给予粒子一些移动。 这意味着，我们的粒子就会像末地烛那样移动。
 
 ::: tip
+
 You can see all the particle factories by looking at all the implementations of the `ParticleFactory` interface. This is helpful if you want to use another particle's behaviour for your own particle.
 
-- IntelliJ 的快捷键：Ctrl+Alt+B
-- Visual Studio Code 的快捷键：Ctrl+F12
-  :::
+- IntelliJ's hotkey: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>B</kbd>
+- Visual Studio Code's hotkey: <kbd>Ctrl</kbd>+<kbd>F12</kbd>
 
-## 创建 JSON 文件并添加纹理{#creating-a-json-file-and-adding-textures}
+:::
 
-你需要在你的 `resources/assets/example-mod/` 文件夹中创建两个文件夹。
+## Creating a JSON File and Adding Textures {#creating-a-json-file-and-adding-textures}
 
-| 文件夹路径                | 说明                            |
-| -------------------- | ----------------------------- |
-| `/textures/particle` | `particle` 文件夹会包含你的所有粒子的纹理。   |
-| `/particles`         | `particle` 文件夹会包含你的所有 json 文件 |
+You will need to create 2 folders in your `resources/assets/example-mod/` folder.
 
-例如，我们在 `textures/particle` 中只有一个纹理，叫做 `sparkle_particle_texture.png`。
+| Folder Path          | Explanation                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| `/textures/particle` | The `particle` folder will contain all the textures for all of your particles.       |
+| `/particles`         | The `particles` folder will contain all of the json files for all of your particles. |
 
-然后，在 `particles` 中创建新的 JSON 文件，名称与用于创建你的 ParticleType 的 JSON 路径相同。 例如，我们需要创建 `sparkle_particle.json`。 这个文件很重要，因为让 Minecraft 知道我们的粒子应该使用哪个纹理。
+For this example, we will have only one texture in `textures/particle` called "sparkle_particle_texture.png".
+
+Next, create a new JSON file in `particles` with the same name as the JSON path that you used when registering your ParticleType. For this example, we will need to create `sparkle_particle.json`. This file is important because it lets Minecraft know which textures our particle should use.
 
 @[code lang=json](@/reference/latest/src/main/resources/assets/example-mod/particles/sparkle_particle.json)
 
-:::tip
-可以给 `textures` 数组添加更多纹理以创建粒子动画。 粒子会在这个数组中循环纹理，以第一个纹理开始。
+::: tip
+
+You can add more textures to the `textures` array to create a particle animation. The particle will cycle through the textures in the array, starting with the first texture.
+
 :::
 
-## 测试新的粒子{#testing-the-new-particle}
+## Testing the New Particle {#testing-the-new-particle}
 
-完成了 JSON 文件并保存你的作品后，就能够载入 Minecraft 并测试好一切了！
+Once you have completed the JSON file and saved your work, you are good to load up Minecraft and test everything out!
 
-可以输入以下命令，看看是否一切正常：
+You can see if everything has worked by typing the following command:
 
 ```mcfunction
 /particle example-mod:sparkle_particle ~ ~1 ~
 ```
 
-![粒子的展示](/assets/develop/rendering/particles/sparkle-particle-showcase.png)
+![Showcase of the particle](/assets/develop/rendering/particles/sparkle-particle-showcase.png)
 
-:::info
-用这个命令，粒子会生成在玩家内。 你可能需要往后走才能实际看到。
+::: info
+
+The particle will spawn inside the player with this command. You will likely need to walk backwards to actually see it.
+
 :::
 
-你也可以使用相同命令，用命令方块召唤粒子。
+Alternatively, you can also use a command block to summon the particle with the exact same command.

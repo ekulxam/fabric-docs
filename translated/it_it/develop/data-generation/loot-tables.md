@@ -3,6 +3,7 @@ title: Generazione di Loot Table
 description: Una guida per configurare la generazione di loot table con datagen.
 authors:
   - Alphagamer47
+  - CelDaemon
   - JustinHuPrime
   - matthewperiut
   - skycatminepokie
@@ -12,44 +13,48 @@ authors-nogithub:
   - mcrafterzz
 ---
 
-:::info PREREQUISITI
-Assicurati di aver prima completato il processo di [configurazione della datagen](./setup).
+<!---->
+
+:::info PREREQUISITES
+
+Make sure you've completed the [datagen setup](./setup) process first.
+
 :::
 
-Ti serviranno fornitori (classi) diversi per blocchi, bauli, ed entità. Ricorda di aggiungerli tutto al tuo pack nella tua `DataGeneratorEntrypoint` nel metodo `onInitializeDataGenerator`.
+You will need different providers (classes) for blocks, chests, and entities. Remember to add them all to your pack in your `DataGeneratorEntrypoint` within the `onInitializeDataGenerator` method.
 
-@[code lang=java transclude={34-35}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code lang=java transcludeWith=:::datagen-loot-tables:register](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## Loot Table Spiegate {#loot-tables-explained}
+## Loot Tables Explained {#loot-tables-explained}
 
-Le **loot table** definiscono cosa si ottiene dalla rottura di un blocco (esclusi i contenuti, per esempio per i bauli), uccisione di un'entità, o apertura di un contenitore appena generato. Ogni loot table ha dei **pool** fra cui gli oggetti sono selezionati. Le loot table hanno anche **funzioni**, che modificano il loot risultante in qualche modo.
+**Loot tables** define what you get from breaking a block (not including contents, like in chests), killing an entity, or opening a newly-generated container. Each loot table has **pools** from which items are selected. Loot tables also have **functions**, which modify the resulting loot in some way.
 
-Le loot pool hanno **voci**, **condizioni**, funzioni, **roll** e **roll bonus**. Le voci sono gruppi, sequenze, o possibilità di oggetti, o solo oggetti. Le condizioni sono cose per cui si testa nel mondo, come incantesimi su un'utensile o una probabilità casuale. Il numero minimo di voci scelte da una pool è detto roll, e qualsiasi cosa sopra a ciò è detta una roll bonus.
+Loot pools have **entries**, **conditions**, functions, **rolls**, and **bonus rolls**. Entries are groups, sequences, or possibilities of items, or just items. Conditions are things that are tested for in the world, such as enchantments on a tool or a random chance. The minimum number of entries chosen by a pool are called rolls, and anything over that is called a bonus roll.
 
-## Blocchi {#blocks}
+## Blocks {#blocks}
 
-Perché i blocchi droppino oggetti - inclusi se stessi - dobbiamo creare una loot table. Crea una classe che `extends FabricBlockLootTableProvider`:
+In order for blocks to drop items - including itself - we need to make a loot table. Create a class that extends `FabricBlockLootTableProvider`:
 
 @[code lang=java transcludeWith=:::datagen-loot-tables:block-provider](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModBlockLootTableProvider.java)
 
-Assicurati di aggiungere questo fornitore al tuo pack!
+Make sure to add this provider to your pack!
 
-Ci sono parecchi metodi ausiliari per aiutarti a costruire le tue loot table. Non li analizzeremo, per cui assicurati di controllarli nel tuo IDE.
+There's a lot of helper methods available to help you build your loot tables. We won't go over all of them, so make sure to check them out in your IDE.
 
-Aggiungiamo alcuni drop nel metodo `generate`:
+Let's add a few drops in the `generate` method:
 
 @[code lang=java transcludeWith=:::datagen-loot-tables:block-drops](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModBlockLootTableProvider.java)
 
-## Bauli {#chests}
+## Chests {#chests}
 
-Il loot dei bauli è un po' più complesso del loot dei blocchi. Crea una classe che `extends SimpleFabricLootTableProvider` come nell'esempio sotto **e aggiungila al tuo pack**.
+Chest loot is a little bit tricker than block loot. Create a class that extends `SimpleFabricLootTableProvider` similar to the example below **and add it to your pack**.
 
 @[code lang=java transcludeWith=:::datagen-loot-tables:chest-provider](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModChestLootTableProvider.java)
 
-Ci servirà una `RegistryKey<LootTable>` per la nostra loot table. Mettiamola in una nuova classe chiamata `ModLootTables`. Assicurati che sia nel tuo insieme di sorgenti `main` se usi fonti suddivise.
+We'll need a `ResourceKey<LootTable>` for our loot table. Let's put that in a new class called `ModLootTables`. Make sure this is in your `main` source set if you're using split sources.
 
 @[code lang=java transcludeWith=:::datagen-loot-tables:mod-loot-tables](@/reference/latest/src/main/java/com/example/docs/ModLootTables.java)
 
-Poi possiamo generare una loot table nel metodo `generate` del tuo fornitore.
+Then, we can generate a loot table inside the `generate` method of your provider.
 
 @[code lang=java transcludeWith=:::datagen-loot-tables:chest-loot](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModChestLootTableProvider.java)

@@ -1,6 +1,8 @@
 ---
-title: Reproducir SoundEvents (Eventos de Sonido)
+title: Playing Sounds
 description: Aprende a reproducir eventos de sonido.
+authors:
+  - JR1811
 ---
 
 Minecraft tiene una gran selección de sonidos para elegir. Mira la clase de `SoundEvents` para ver todas las instancias de eventos de sonido vanilla que Mojang provee.
@@ -9,13 +11,13 @@ Minecraft tiene una gran selección de sonidos para elegir. Mira la clase de `So
 
 ¡Asegúrate de ejecutar el método `playSond()` en el lado del servidor lógico cuando uses sonidos!
 
-En este ejemplo, los métodos de `useOnEntity()` y `useOnBlock()` para un item interactivo personalizado son usados para reproducir sonidos de "colocar un bloque de cobre" y de saqueador.
+In this example, the `interactLivingEntity()` and `useOn()` methods for a custom interactive item are used to play a "placing copper block" and a pillager sound.
 
-@[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/CustomSoundItem.java)
+@[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/custom/CustomSoundItem.java)
 
-El método `playSound()` es usado con el objeto de `LivingEntity` (Entidad Viviente). Solamente se tienen que especificar el SoundEvent, el volumen y el tono. También puedes usar el método de `playSound()` de la instancia del mundo para tener un mayor grado de control.
+El método `playSound()` es usado con el objeto de `LivingEntity` (Entidad Viviente). Solamente se tienen que especificar el SoundEvent, el volumen y el tono. You can also use the `playSound()` method from the level instance to have a higher level of control.
 
-@[code lang=java transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/CustomSoundItem.java)
+@[code lang=java transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/custom/CustomSoundItem.java)
 
 ### SoundEvent y SoundCategory (Categoría de Sonido)
 

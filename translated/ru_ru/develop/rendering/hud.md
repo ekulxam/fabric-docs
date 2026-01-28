@@ -1,28 +1,57 @@
 ---
 title: Рендеринг в HUD
-description: Узнайте, как использовать событие HudRenderCallback для рендеринга в HUD.
+description: Узнайте, как использовать Fabric Hud API для рендеринга в HUD.
 authors:
   - IMB11
+  - kevinthegreat1
 ---
 
-Мы уже кратко затронули тему рендеринга объектов в HUD на странице [Основные концепции рендеринга](./basic-concepts) и [Использование контекста рисования](./draw-context), поэтому на этой странице мы остановимся на событии `HudRenderCallback` и параметре `deltaTick`.
+We already briefly touched on rendering things to the HUD in the [Basic Rendering Concepts](./basic-concepts) page and [Using The Drawing Context](./draw-context), so on this page we'll stick to the Hud API and the `DeltaTracker` parameter.
 
-## HudRenderCallback {#hudrendercallback}
+## `HudRenderCallback` {#hudrendercallback}
 
-Событие `HudRenderCallback`, предоставляемое Fabric API, вызывается в каждом кадре и используется для рендеринга объектов в HUD.
+::: warning
 
-Чтобы зарегистрироваться на это событие, вы можете просто вызвать `HudRenderCallback.EVENT.register` и передать lambda, которое принимает `DrawContext` и `float` (deltaTick) в качестве параметров.
+Previously, Fabric provided `HudRenderCallback` to render to the HUD. Due to changes to HUD rendering, this event became extremely limited and is deprecated since Fabric API 0.116. Usage is strongly discouraged.
 
-Контекст отрисовки можно использовать для доступа к различным утилитам рендеринга, предоставляемым игрой, а также для доступа к стеку необработанных матриц.
+:::
 
-Вам следует посетить страницу [Контекст рисования](./draw-context), чтобы узнать больше о контексте рисования.
+## `HudElementRegistry` {#hudelementregistry}
 
-### DeltaTick {#deltatick}
+Fabric provides the Hud API to render and layer elements on the HUD.
 
-`deltaTick` относится ко времени с момента последнего кадра в секундах. Это можно использовать для создания анимации и других временных эффектов.
+To start, we need to register a listener to `HudElementRegistry` which registers your elements. Each element is a `HudElement`. A `HudElement` instance is usually a lambda that takes a `GuiGraphics` and a `DeltaTracker` instance as parameters. See `HudElementRegistry` and related Javadocs for more details on how to use the API.
 
-Например, предположим, что вы хотите изменять цвет с течением времени. Вы можете использовать `deltaTickManager`, чтобы получить deltaTick, и сохранять его с течением времени для преобразования цвета:
+The draw context can be used to access the various rendering utilities provided by the game, and access the raw matrix stack. You should check out the [Draw Context](./draw-context) page to learn more about the draw context.
+
+### Delta Tracker {#delta-tracker}
+
+The `DeltaTracker` class allows you to retrieve the current `gameTimeDeltaPartialTick` value. `gameTimeDeltaPartialTick` is the "progress" between the last game tick and the next game tick.
+
+For example, if we assume a 200 FPS scenario, the game runs a new tick roughly every 10 frames. Each frame, `gameTimeDeltaPartialTick` represents how far we are between the last tick and the next. Over 11 frames, you might see:
+
+| Frame | `gameTimeDeltaPartialTick`    |
+| :---: | ----------------------------- |
+|  `1`  | `1`: New tick |
+|  `2`  | `1/10 = 0.1`                  |
+|  `3`  | `2/10 = 0.2`                  |
+|  `4`  | `3/10 = 0.3`                  |
+|  `5`  | `4/10 = 0.4`                  |
+|  `6`  | `5/10 = 0.5`                  |
+|  `7`  | `6/10 = 0.6`                  |
+|  `8`  | `7/10 = 0.7`                  |
+|  `9`  | `8/10 = 0.8`                  |
+|  `10` | `9/10 = 0.9`                  |
+|  `11` | `1`: New tick |
+
+You can retrieve `gameTimeDeltaPartialTick` by calling `deltaTracker.getGameTimeDeltaPartialTick(false)`, where the boolean parameter is `ignoreFreeze`, which essentially just allows you to ignore whenever players use the `/tick freeze` command.
+
+In practice, you should only use `gameTimeDeltaPartialTick` when your animations depend on Minecraft's ticks. For time-based animations, use `Util.getMillis()`, which measures real-world time.
+
+In this example, we'll use `Util.getMillis()` to linearly interpolate the color of a square that is being rendered to the HUD.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/HudRenderingEntrypoint.java)
 
-![Изменение цвета с течением времени](/assets/develop/rendering/hud-rendering-deltatick.webp)
+![Lerping a color over time](/assets/develop/rendering/hud-rendering-deltatick.webp)
+
+Why don't you try use `gameTimeDeltaPartialTick` and see what happens to the animation when you run the `/tick freeze` command? You should see the animation freeze in place as `gameTimeDeltaPartialTick` becomes constant (assuming you have passed `false` as the parameter to `DeltaTracker#getGameTimeDeltaPartialTick`)

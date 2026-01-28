@@ -1,11 +1,14 @@
 ---
 title: Installer Java sous Linux
-description: Un guide étape par étape sur comment installer Java sous Linux.
+description: A step-by-step guide on how to install Java on Linux.
 authors:
   - IMB11
+next: false
 ---
 
 Ce guide vous accompagnera dans l'installation de Java 21 sous Linux.
+
+The Minecraft Launcher comes with its own Java installation, so this section is only relevant if you want to use the Fabric `.jar` based installer, or if you want to use the Minecraft Server `.jar`.
 
 ## 1. Vérification de si Java est déjà installé {#1-check-if-java-is-already-installed}
 
@@ -13,77 +16,83 @@ Ouvrez un terminal, entrez `java -version`, et pressez <kbd>Entrer</kbd>.
 
 ![Terminal avec "java -version" entré dedans](/assets/players/installing-java/linux-java-version.png)
 
-:::warning
-Pour utiliser Minecraft 1.21, vous avez besoin d'avoir au moins Java 21 d'iinstallé. Si cette commande affiche une version inférieure à 21, vous aurez besoin de mettre à jour votre installation de Java.
+::: warning
+
+To use Minecraft 1.21.11, you'll need at least Java 21 installed.
+
+If this command displays any version lower than 21, you'll need to update your existing Java installation; keep reading this page.
+
 :::
 
-## 2. Téléchargement et installation de Java 21 {#2-downloading-and-installing-java}
+## 2. Downloading and Installing Java 21 {#2-downloading-and-installing-java}
 
-Nous recommandons d'utiliser OpenJDK 21, qui est disponible sur la plupart des distributions Linux.
+We recommend using OpenJDK 21, which is available for most Linux distributions.
 
 ### Arch Linux {#arch-linux}
 
-:::info
-Pour plus d'information sur comment installer Java sous Arch Linux, consultez le [Wiki d'Arch Linux (Anglais)](https://wiki.archlinux.org/title/Java).
+::: info
+
+For more information on installing Java on Arch Linux, see the [Arch Linux Wiki](https://wiki.archlinux.org/title/Java).
+
 :::
 
-Vous pouvez installer le dernier JRE depuis les dépots officiels :
+You can install the latest JRE from the official repositories:
 
 ```sh
 sudo pacman -S jre-openjdk
 ```
 
-Si vous faites tourner un serveur sans besoin d'interface graphique, vous pouvez installer la version sans affichage à la place :
+If you're running a server without the need for a graphical UI, you can install the headless version instead:
 
 ```sh
 sudo pacman -S jre-openjdk-headless
 ```
 
-Si vous prévoyez de développer des mods, vous aurez plutôt besoin du JDK :
+If you plan to develop mods, you'll need the JDK instead:
 
 ```sh
 sudo pacman -S jdk-openjdk
 ```
 
-### Debian/Ubuntu
+### Debian/Ubuntu {#debian-ubuntu}
 
-Vous pouvez installer Java 21 en utilisant `apt` avec les commandes suivantes :
+You can install Java 21 using `apt` with the following commands:
 
 ```sh
 sudo apt update
 sudo apt install openjdk-21-jdk
 ```
 
-### Fedora
+### Fedora {#fedora}
 
-Vous pouvez installer Java 21 en utilisant `dnf` avec les commandes suivantes :
+You can install Java 21 using `dnf` with the following commands:
 
 ```sh
 sudo dnf install java-21-openjdk
 ```
 
-Si vous n'avez pas besoin d'interface graphique, vous pouvez installer la version sans affichage à la place :
+If you don't need a graphical UI, you can install the headless version instead:
 
 ```sh
 sudo dnf install java-21-openjdk-headless
 ```
 
-Si vous prévoyez de développer des mods, vous aurez plutôt besoin du JDK :
+If you plan to develop mods, you'll need the JDK instead:
 
 ```sh
 sudo dnf install java-21-openjdk-devel
 ```
 
-### Autres distributions Linux
+### Other Linux Distributions {#other-linux-distributions}
 
-Si votre distribution n'est pas listée ci-dessus, vous pouvez télécharger le dernier JRE sur [Adoptium](https://adoptium.net/fr/temurin/)
+If your distribution isn't listed above, you can download the latest JRE from [Adoptium](https://adoptium.net/temurin/)
 
-Il est recommandé de se référer à un guide alternatif pour votre distribution si vous souhaitez développer des mods.
+You should refer to an alternative guide for your distribution if you plan to develop mods.
 
-## 3. Vérifier que Java 21 est bien installé {#3-verify-that-java-is-installed}
+## 3. Verify That Java 21 Is Installed {#3-verify-that-java-is-installed}
 
-Lorsque l'installation est terminée, vous pouvez vérifier que Java 21 est installé en ouvrant un terminal et en entrant `java -version`.
+Once the installation is complete, you can verify that Java 21 is installed by opening a terminal and typing `java -version`.
 
-Si la commande se termine avec succès, vous verrez quelque chose de similaire à avant, où la version de java est affichée :
+If the command runs successfully, you will see something like shown before, where the Java version is displayed:
 
 ![Terminal avec "java -version" entré dedans](/assets/players/installing-java/linux-java-version.png)

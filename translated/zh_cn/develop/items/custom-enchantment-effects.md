@@ -2,6 +2,7 @@
 title: 自定义魔咒效果
 description: 学习如何创建自己的魔咒效果。
 authors:
+  - CelDaemon
   - krizh-p
 ---
 
@@ -9,52 +10,54 @@ authors:
 
 效果组件包含定义魔咒特殊效果的代码。 Minecraft 原版已支持一些默认效果，例如物品损害值、击退和经验。
 
-:::tip
-来看看 [Minecraft Wiki 的附魔效果组件页面](https://zh.minecraft.wiki/w/%E9%AD%94%E5%92%92%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F#%E5%AE%9A%E4%B9%89)，检查 Minecraft 默认效果是否满足你的需求。 本指南假定你了解如何配置“简单”的数据驱动魔咒，并侧重于创建默认不支持的自定义魔咒效果。
+::: tip
+
+Be sure to check if the default Minecraft effects satisfy your needs by visiting [the Minecraft Wiki's Enchantment Effect Components page](https://minecraft.wiki/w/Enchantment_definition#Effect_components). This guide assumes you understand how to configure "simple" data-driven enchantments and focuses on creating custom enchantment effects that aren't supported by default.
+
 :::
 
-## 自定义魔咒效果 {#custom-enchantment-effects}
+## Custom Enchantment Effects {#custom-enchantment-effects}
 
-先创建 `enchantment` 文件夹，然后在里面创建 `effect` 文件夹。 在里面，创建记录类 `LightningEnchantmentEffect`。
+Start by creating an `enchantment` folder, and within it, create an `effect` folder. Within that, we'll create the `LightningEnchantmentEffect` record.
 
-现在，创建构造器，并覆盖 `EnchantmentEntityEffect` 接口的方法。 还要创建 `CODEC` 变量以编码解码我们的效果，可以了解更多[关于 codec 的信息](../codecs)。
+Next, we can create a constructor and override the `EnchantmentEntityEffect` interface methods. We'll also create a `CODEC` variable to encode and decode our effect; you can read more about [Codecs here](../codecs).
 
-我们的大部分代码都将进入 `apply()` 事件，当魔咒生效的条件得到满足时，该事件就会被调用。 我们稍后会配置这个 `Effect` 以在实体被击中时调用，但现在，让我们编写简单的代码来实现用闪电击中目标。
+The bulk of our code will go into the `apply()` event, which is called when the criteria for your enchantment to work is met. We'll later configure this `Effect` to be called when an entity is hit, but for now, let's write simple code to strike the target with lightning.
 
 @[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/enchantment/effect/LightningEnchantmentEffect.java)
 
-这里，变量 `amount` 表示与附魔等级成比例的数值。 我们可以根据等级来修改魔咒的效果。 在上面的代码中，我们使用附魔的等级来决定生成多少闪电。
+Here, the `amount` variable indicates a value scaled to the level of the enchantment. We can use this to modify how effective the enchantment is based on level. In the code above, we are using the level of the enchantment to determine how many lightning strikes are spawned.
 
-## 注册魔咒效果 {#registering-the-enchantment-effect}
+## Registering the Enchantment Effect {#registering-the-enchantment-effect}
 
-就像我们的模组中的其他部分，我们将会把我们的 `EnchantmentEffect` 加入到 Minecraft 的注册表中。 为了实现这一点，添加一个叫做 `ModEnchantmentEffects`（或者你想叫什么就叫什么）的类，和一个辅助方法来注册我们的魔咒。 确保在你的主类中调用 `registerModEnchantmentEffects()` 方法，这个主类应该包含 `onInitialize()` 方法。
+Like every other component of your mod, we'll have to add this `EnchantmentEffect` to Minecraft's registry. To do so, add a class `ModEnchantmentEffects` (or whatever you want to name it) and a helper method to register the enchantment. Be sure to call the `registerModEnchantmentEffects()` in your main class, which contains the `onInitialize()` method.
 
 @[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/enchantment/ModEnchantmentEffects.java)
 
-## 创建魔咒 {#creating-the-enchantment}
+## Creating the Enchantment {#creating-the-enchantment}
 
-现在我们有了一个魔咒效果！ 最后一步是创建一个魔咒，应用我们自定义的效果。 这可以通过创建类似于 Minecraft 数据包中的 JSON 文件来实现，在这篇文档中，将向你展示如何使用 Fabric 的数据生成工具来动态生成 JSON。 要开始，请创建一个名为 `EnchantmentGenerator` 的类。
+Now we have an enchantment effect! The final step is to create an enchantment that applies our custom effect. While this can be done by creating a JSON file similar to those in datapacks, this guide will show you how to generate the JSON dynamically using Fabric's data generation tools. To begin, create an `ExampleModEnchantmentGenerator` class.
 
-在这个类中，我们先注册我们的魔咒对象，并使用 `configure()` 方法来在程序中创建 JSON。
+Within this class, we'll first register a new enchantment, and then use the `configure()` method to create our JSON programmatically.
 
-@[code transcludeWith=#entrypoint](@/reference/latest/src/client/java/com/example/docs/datagen/EnchantmentGenerator.java)
+@[code transcludeWith=#entrypoint](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModEnchantmentGenerator.java)
 
-在继续之前，应确保你的项目已为数据生成进行了配置。如果您不确定，请 [查看相关文档页面](../data-generation/setup)。
+Before proceeding, you should ensure your project is configured for data generation; if you are unsure, [view the respective docs page](../data-generation/setup).
 
-在最后，我们必须要告诉我们的模组去把 `EnchantmentGenerator` 加入到数据生成任务列表中。 为了实现这一点，只需要简单的把 `EnchantmentGenerator` 加入到 `onInitializeDataGenerator` 方法中。
+Lastly, we must tell our mod to add our `EnchantmentGenerator` to the list of data generation tasks. To do so, simply add the `EnchantmentGenerator` to this inside of the `onInitializeDataGenerator` method.
 
-@[code transclude={24-24}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code transcludeWith=:::custom-enchantments:register-generator](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-现在，当你运行你的模组的数据生成任务，附魔表 JSON 将会生成在 `generated` 文件夹内。 下面是一个例子：
+Now, when you run your mod's data generation task, enchantment JSONs will be generated inside the `generated` folder. An example can be seen below:
 
 @[code](@/reference/latest/src/main/generated/data/example-mod/enchantment/thundering.json)
 
-你需要在 `zh_cn.json` 中给你的自定义魔咒添加一个有意义的名字：
+You should also add translations to your `en_us.json` file to give your enchantment a readable name:
 
 ```json
-"enchantment.ExampleMod.thundering": "Thundering",
+"enchantment.example-mod.thundering": "Thundering",
 ```
 
-现在你应该有了一个可以正常工作的自定义附魔效果！ 附魔一个武器，然后攻击一个生物试试吧。 下面的视频里有一个例子：
+You should now have a working custom enchantment effect! Test it by enchanting a weapon with the enchantment and hitting a mob. An example is given in the following video:
 
-<VideoPlayer src="/assets/develop/enchantment-effects/thunder.webm">使用雷电（Thundering）魔咒</VideoPlayer>
+<VideoPlayer src="/assets/develop/enchantment-effects/thunder.webm">Using the Thundering Enchantment</VideoPlayer>

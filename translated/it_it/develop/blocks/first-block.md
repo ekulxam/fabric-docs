@@ -2,17 +2,18 @@
 title: Creare il Tuo Primo Blocco
 description: Impara come creare il tuo primo blocco personalizzato in Minecraft.
 authors:
+  - CelDaemon
   - Earthcomputer
   - IMB11
   - its-miroma
   - xEobardThawne
 ---
 
-I blocchi sono i blocchi di costruzione di Minecraft (perdona il gioco di parole) - proprio come tutto il resto di Minecraft, sono memorizzati in registry.
+I blocchi sono i blocchi di costruzione di Minecraft (perdona il gioco di parole) - proprio come tutto il resto di Minecraft, sono memorizzati in dei registri.
 
 ## Preparare la Tua Classe dei Blocchi {#preparing-your-blocks-class}
 
-Se hai già completato la pagina [Creare il Tuo Primo Oggetto](../items/first-item), questo processo ti sembrerà molto familiare - dovrai creare un metodo che registri il tuo blocco, e l'oggetto ad esso associato.
+Se hai già completato la pagina [Creare il Tuo Primo Oggetto](../items/first-item), questo processo ti sembrerà molto familiare - dovrai creare un metodo che registri il tuo blocco, e l'oggetto a esso associato.
 
 Dovresti mettere questo metodo in una classe chiamata `ModBlocks` (o qualsiasi altro nome).
 
@@ -22,10 +23,12 @@ Mojang fa qualcosa di simile con i suoi blocchi vanilla; informati riguardo alla
 
 Proprio come per gli oggetti, dovrai assicurarti che la classe sia caricata, in modo che tutti gli attributi statici contenenti le istanze dei tuoi blocchi siano inizializzati.
 
-Puoi fare questo creando un metodo fittizio `initialize`, che potrà essere richiamato nell'[initializer della tua mod](./getting-started/project-structure#entrypoints) per avviare l'inizializzazione statica.
+Puoi farlo creando un metodo fantoccio `initialize` che può essere chiamato nel tuo [inizializzatore della mod](../getting-started/project-structure#entrypoints) per far partire l'inizializzazione statica.
 
-:::info
-Se non sai cos'è l'inizializzazione statica, essa è il processo di inizializzazione degli attributi statici in una classe. Questo viene fatto quando la classe viene caricata dalla JVM, ed è fatto prima che qualsiasi istanza della classe venga creata.
+::: info
+
+If you are unaware of what static initialization is, it is the process of initializing static fields in a class. This is done when the class is loaded by the JVM, and is done before any instances of the class are created.
+
 :::
 
 ```java
@@ -38,46 +41,48 @@ public class ModBlocks {
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/block/ExampleModBlocks.java)
 
-## Creare e Registrare il Tuo Blocco {#creating-and-registering-your-block}
+## Creating And Registering Your Block {#creating-and-registering-your-block}
 
-In maniera del tutto simile agli oggetti, i blocchi accettano delle `AbstractBlock.Settings` nel costruttore. La classe indica proprietà specifiche del blocco, come i suoi effetti sonori e il livello di estrazione.
+Similarly to items, blocks take a `BlockBehavior.Properties` class in their constructor, which specifies properties about the block, such as its sound effects and mining level.
 
-Non tratteremo tutte le opzioni qui—puoi vedere la classe da solo per capirne le varie opzioni, che dovrebbero essere chiaramente comprensibili.
+We will not cover all the options here: you can view the class yourself to see the various options, which should be self-explanatory.
 
-Per questo esempio, creeremo un blocco semplice, con le proprietà della terra ma con un materiale diverso.
+For example purposes, we will be creating a simple block that has the properties of dirt, but is a different material.
 
-- Creiamo le nostre impostazioni del blocco in maniera simile a come abbiamo creato le impostazioni degli oggetti nel loro tutorial.
-- Diciamo al metodo `register` di creare un'istanza di `Block` dalle impostazioni del blocco chiamando il costruttore di `Block`.
+- We create our block settings in a similar way to how we created item settings in the item tutorial.
+- We tell the `register` method to create a `Block` instance from the block settings by calling the `Block` constructor.
 
-:::tip
-Puoi anche usare `AbstractBlock.Settings.copy(AbstractBlock block)` per copiare le impostazioni di un blocco esistente, in questo caso avremmo potuto usare `Blocks.DIRT` per copiare le impostazioni della terra, ma per questo esempio useremo il costruttore.
+::: tip
+
+You can also use `BlockBehavior.Properties.ofFullCopy(BlockBehavior block)` to copy the settings of an existing block, in this case, we could have used `Blocks.DIRT` to copy the settings of dirt, but for example purposes we'll use the builder.
+
 :::
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
-Per creare l'oggetto del blocco in automatico, possiamo passare `true` al parametro `shouldRegisterItem` del metodo `register` che abbiamo creato nel passaggio precedente.
+To automatically create the block item, we can pass `true` to the `shouldRegisterItem` parameter of the `register` method we created in the previous step.
 
-### Aggiungere l'Oggetto del Tuo Blocco a un Gruppo di Oggetti {#adding-your-block-s-item-to-an-item-group}
+### Adding Your Block's Item to a Creative Tab {#adding-your-block-s-item-to-a-creative-tab}
 
-Poiché il `BlockItem` viene creato e registrato in automatico, per aggiungerlo a un gruppo di oggetti devi usare il metodo `Block.asItem()` per ottenere l'istanza `BlockItem`.
+Since the `BlockItem` is automatically created and registered, to add it to a creative tab, you must use the `Block.asItem()` method to get the `BlockItem` instance.
 
-Per questo esempio, useremo un gruppo di oggetti personalizzato, che abbiamo creato nella pagina [Gruppi di Oggetti Personalizzati](../items/custom-item-groups).
+For this example, we will add the block to the `BUILDING_BLOCKS` tab. To instead add the block to a custom creative tab, see [Custom Creative Tabs](../items/custom-item-groups).
 
 @[code transcludeWith=:::6](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
-Dovresti mettere questo nella funzione `initialize()` della tua classe.
+You should place this within the `initialize()` function of your class.
 
-Dovresti ora notare che il tuo blocco è nell'inventario in creativa, e può essere posizionato nel mondo!
+You should now notice that your block is in the creative inventory, and can be placed in the world!
 
-![Blocco nel mondo senza né modello né texture](/assets/develop/blocks/first_block_0.png)
+![Block in world without suitable model or texture](/assets/develop/blocks/first_block_0.png)
 
-Ci sono alcuni problemi tuttavia - il blocco non ha nome, non ha texture e non ha modello né per il blocco né per l'oggetto.
+There are a few issues though - the block item is not named, and the block has no texture, block model or item model.
 
-## Aggiungere Traduzioni del Blocco {#adding-block-translations}
+## Adding Block Translations {#adding-block-translations}
 
-Per aggiungere una traduzione, devi creare una chiave di traduzione nel tuo file di traduzioni - `assets/example-mod/lang/en_us.json`.
+To add a translation, you must create a translation key in your translation file - `assets/example-mod/lang/en_us.json`.
 
-Minecraft userà questa traduzione nell'inventario in creativa e in altri posti in cui il nome del blocco viene mostrato, come nel feedback dei comandi.
+Minecraft will use this translation in the creative inventory and other places where the block name is displayed, such as command feedback.
 
 ```json
 {
@@ -85,87 +90,93 @@ Minecraft userà questa traduzione nell'inventario in creativa e in altri posti 
 }
 ```
 
-Per applicare le modifiche, puoi riavviare il gioco o costruire la tua mod e premere <kbd>F3</kbd>+<kbd>T</kbd> - e dovresti vedere che il blocco ha un nome nell'inventario in creative e in altri posti come nella schermata delle statistiche.
+You can either restart the game or build your mod and press <kbd>F3</kbd>+<kbd>T</kbd> to apply changes - and you should see that the block has a name in the creative inventory and other places such as the statistics screen.
 
-## Modelli e Texture {#models-and-textures}
+## Models and Textures {#models-and-textures}
 
-Tutte le texture dei blocchi si trovano nella cartella `assets/example-mod/textures/block` - ti forniamo una texture di esempio del blocco di "Terra Condensata", che sei libero di usare.
+All block textures can be found in the `assets/example-mod/textures/block` folder - an example texture for the "Condensed Dirt" block is free to use.
 
 <DownloadEntry visualURL="/assets/develop/blocks/first_block_1.png" downloadURL="/assets/develop/blocks/first_block_1_small.png">Texture</DownloadEntry>
 
-Per fare in modo che la texture sia visibile nel gioco, devi creare un modello del blocco, presenti nel file `assets/example-mod/models/block/condensed_dirt.json` per quanto riguarda il blocco di "Terra Condensata". Per questo blocco useremo il tipo di modello `block/cube_all`.
+To make the texture show up in-game, you must create a block model which can be found in the `assets/example-mod/models/block/condensed_dirt.json` file for the "Condensed Dirt" block. For this block, we're going to use the `block/cube_all` model type.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/block/condensed_dirt.json)
 
-Perché il blocco sia mostrato nell'inventario, dovrai creare una [Descrizione del Modello dell'Oggetto](../items/first-item#creating-the-item-model-description) che punti al modello del tuo blocco. Per questo esempio la descrizione del modello dell'oggetto per il blocco "Terra Condensata" si può trovare in `assets/example-mod/items/condensed_dirt.json`.
+For the block to show in your inventory, you will need to create a [Client Item](../items/first-item#creating-the-client-item) that points to your block model. For this example, the client item for the "Condensed Dirt" block can be found at `assets/example-mod/items/condensed_dirt.json`.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/items/condensed_dirt.json)
 
-:::tip
-Dovrai creare una descrizione del modello d'oggetto solo se hai registrato un `BlockItem` assieme al tuo blocco!
+::: tip
+
+You only need to create a client item if you've registered a `BlockItem` along with your block!
+
 :::
 
-Quando carichi il gioco, potresti notare che la texture è ancora mancante. Questo perché devi aggiungere la definizione degli stati del blocco.
+When you load into the game, you may notice that the texture is still missing. This is because you need to add a blockstate definition.
 
-## Creare la Definizione degli Stati del Blocco {#creating-the-block-state-definition}
+## Creating the Block State Definition {#creating-the-block-state-definition}
 
-La definizione degli stati del blocco è usata dal gioco per capire quale modello renderizzare in base allo stato corrente del blocco.
+The blockstate definition is used to instruct the game on which model to render based on the current state of the block.
 
-Per il blocco di esempio, che non ha stati complessi, basta una sola voce nella definizione.
+For the example block, which doesn't have a complex blockstate, only one entry is needed in the definition.
 
-Questo file si dovrebbe trovare nella cartella `assets/example-mod/blockstates`, e il suo nome dovrebbe corrispondere all'ID del blocco che hai usato quando l'hai registrato nella classe `ModBlocks`. Per esempio, se l'ID è `condensed_dirt`, il file dovrebbe chiamarsi `condensed_dirt.json`.
+This file should be located in the `assets/example-mod/blockstates` folder, and its name should match the block ID used when registering your block in the `ModBlocks` class. For instance, if the block ID is `condensed_dirt`, the file should be named `condensed_dirt.json`.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/blockstates/condensed_dirt.json)
 
-:::tip
-Gli stati dei blocchi sono davvero complessi, ed è per questo che gli tratteremo successivamente in una [loro pagina a parte](./blockstates).
+::: tip
+
+Blockstates are incredibly complex, which is why they will be covered next in [their own separate page](./blockstates).
+
 :::
 
-Riavviando il gioco o ricaricando con <kbd>F3</kbd>+<kbd>T</kbd> per applicare le modifiche - dovresti poter vedere la texture del blocco nell'inventario e fisicamente nel mondo:
+Restarting the game, or reloading via <kbd>F3</kbd>+<kbd>T</kbd> to apply changes - you should be able to see the block texture in the inventory and physically in the world:
 
-![Blocco nel mondo con texture e modello appropriati](/assets/develop/blocks/first_block_4.png)
+![Block in world with suitable texture and model](/assets/develop/blocks/first_block_4.png)
 
-## Aggiungere Drop al Blocco {#adding-block-drops}
+## Adding Block Drops {#adding-block-drops}
 
-Quando si rompe il blocco in sopravvivenza, potresti notare che il blocco non droppa - potresti volere questa funzionalità, ma per fare in modo che il blocco droppi come oggetto quando viene rotto devi implementarne la loot table - il file della loot table dovrebbe essere nella cartella `data/example-mod/loot_table/blocks/`.
+When breaking the block in survival, you may see that the block does not drop - you might want this functionality, however to make your block drop as an item on break you must implement its loot table - the loot table file should be placed in the `data/example-mod/loot_table/blocks/` folder.
 
-:::info
-Per comprendere le loot table nel profondo, fai riferimento alla pagina [Minecraft Wiki - Loot Tables](https://minecraft.wiki/w/Loot_table).
+::: info
+
+For a greater understanding of loot tables, you can refer to the [Minecraft Wiki - Loot Tables](https://minecraft.wiki/w/Loot_table) page.
+
 :::
 
 @[code](@/reference/latest/src/main/resources/data/example-mod/loot_tables/blocks/condensed_dirt.json)
 
-Questa loot table fornisce un solo drop come oggetto del blocco quando viene rotto, o distrutto da un'esplosione.
+This loot table provides a single item drop of the block item when the block is broken, and when it is blown up by an explosion.
 
-## Consigliare un'Utensile per la Raccolta {#recommending-a-harvesting-tool}
+## Recommending a Harvesting Tool {#recommending-a-harvesting-tool}
 
-Potresti anche volere che il tuo blocco sia ottenibile solo con un'utensile specifico - per esempio, più veloce da ottenere con una pala.
+You may also want your block to be harvestable only by a specific tool - for example, you may want to make your block faster to harvest with a shovel.
 
-Tutti i tag degli utensili dovrebbero essere nella cartella `data/minecraft/tags/block/mineable/` - e il nome del file dipende dal tipo di utensile usato, uno tra i seguenti:
+All the tool tags should be placed in the `data/minecraft/tags/block/mineable/` folder - where the name of the file depends on the type of tool used, one of the following:
 
 - `hoe.json`
 - `axe.json`
 - `pickaxe.json`
 - `shovel.json`
 
-I contenuti del file sono piuttosto semplici - è una lista di oggetti da aggiungere al tag.
+The contents of the file are quite simple - it is a list of items that should be added to the tag.
 
-Questo esempio aggiunge il blocco "Terra Condensata" al tag `shovel`.
+This example adds the "Condensed Dirt" block to the `shovel` tag.
 
 @[code](@/reference/latest/src/main/resources/data/minecraft/tags/mineable/shovel.json)
 
-Se desideri che un'utensile sia necessario per minare il blocco, dovrai aggiungere `.requiresTool()` alle impostazioni del tuo blocco, oltre che aggiungere il tag del livello di scavo appropriato.
+If you wish for a tool to be required to mine the block, you'll want to append `.requiresCorrectToolForDrops()` to your block settings, as well as add the appropriate mining level tag.
 
-## Livelli di Scavo {#mining-levels}
+## Mining Levels {#mining-levels}
 
-Similmente, il tag del livello di scavo si trova nella cartella `data/minecraft/tags/block/`, e segue il seguente formato:
+Similarly, the mining level tag can be found in the `data/minecraft/tags/block/` folder, and respects the following format:
 
-- `needs_stone_tool.json` - Almeno utensili di pietra
-- `needs_iron_tool.json` - Almeno utensili di ferro
-- `needs_diamond_tool.json` - Almeno utensili di diamante
+- `needs_stone_tool.json` - A minimum level of stone tools
+- `needs_iron_tool.json` - A minimum level of iron tools
+- `needs_diamond_tool.json` - A minimum level of diamond tools.
 
-Il file ha lo stesso formato di quello per la raccolta - una lista di oggetti da aggiungere al tag.
+The file has the same format as the harvesting tool file - a list of items to be added to the tag.
 
-## Note Aggiuntive {#extra-notes}
+## Extra Notes {#extra-notes}
 
-Se stai aggiungendo più blocchi alla tua mod, potresti voler usare la [Generazione di Dati](../data-generation/setup) per automatizzare il processo di creazione dei modelli di blocchi e oggetti, delle definizioni degli stati del blocco, e delle loot table.
+If you're adding multiple blocks to your mod, you may want to consider using [Data Generation](../data-generation/setup) to automate the process of creating block and item models, blockstate definitions, and loot tables.

@@ -13,7 +13,7 @@ authors:
 
 _Tater_ 라는 이름의 사용자 정의 피해 유형을 추가해 봅시다. 이는 피해 유형의 JSON 파일을 생성하며 시작됩니다. 이 파일은 모드 리소스의 `data` 디렉토리의 `damage_type` 폴더에 저장됩니다.
 
-```:no-line-numbers
+```text:no-line-numbers
 resources/data/example-mod/damage_type/tater.json
 ```
 
@@ -31,9 +31,10 @@ JSON 파일 구조에 대한 자세한 내용은 [Minecraft 위키 (영문)](htt
 
 ### 코드를 통해 피해 유형에 접근하기 {#accessing-damage-types-through-code}
 
-코드를 통해 추가한 사용자 정의 피해 유형에 접근하고 싶다면, `DamageSource` 인스턴스를 생성하기 위해 `RegistryKey`에 접근해야 합니다.
+When we need to access our custom damage type through code, we will use it's `ResourceKey` to build an instance
+of `DamageSource`.
 
-`RegistryKey` 는 다음 코드로 불러올 수 있습니다.
+The `ResourceKey` can be obtained as follows:
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/damage/ExampleModDamageTypes.java)
 
@@ -41,15 +42,15 @@ JSON 파일 구조에 대한 자세한 내용은 [Minecraft 위키 (영문)](htt
 
 피해 유형 사용의 예시를 만들어 보기 위해, 먼저 사용자 정의 블록 _Tater Block_을 추가해보겠습니다. _Tater Block_은 살아있는 엔티티가 밟으면 _Tater_ 피해를 입힙니다.
 
-피해를 주기 위해 먼저 `onSteppedOn` 메서드를 덮어(Override) 쓰겠습니다.
+You can override `stepOn` to inflict this damage.
 
 사용자 정의 피해 유형의 `DamageSource`를 생성하며 시작합니다.
 
-@[code lang=java transclude={21-24}](@/reference/latest/src/main/java/com/example/docs/damage/TaterBlock.java)
+@[code lang=java transclude={22-26}](@/reference/latest/src/main/java/com/example/docs/damage/TaterBlock.java)
 
-그리고, `entity.damage()` 메서드에 `DamageSource`와 피해 크기를 입력하여 호출합니다.
+그리고, `entity.damage()` 메소드에 `DamageSource`와 피해 크기를 입력하여 호출합니다.
 
-@[code lang=java transclude={25-25}](@/reference/latest/src/main/java/com/example/docs/damage/TaterBlock.java)
+@[code lang=java transclude={27-27}](@/reference/latest/src/main/java/com/example/docs/damage/TaterBlock.java)
 
 블록의 코드 전문은 다음과 같습니다.
 
@@ -63,9 +64,7 @@ JSON 파일 구조에 대한 자세한 내용은 [Minecraft 위키 (영문)](htt
 
 ```json
 {
-  // ...
-  "death.attack.tater": "%1$s died from Tater damage!",
-  // ...
+  "death.attack.tater": "%1$s died from Tater damage!"
 }
 ```
 
@@ -89,7 +88,7 @@ Tater 피해 유형을 `bypasses_armor` 피해 유형 태그에 추가해 봅시
 
 이러한 태그에 사용자 정의 피해 유형을 추가하려면, 먼저 `minecraft` 네임스페이스로 JSON 파일을 생성해야 합니다.
 
-```:no-line-numbers
+```text:no-line-numbers
 data/minecraft/tags/damage_type/bypasses_armor.json
 ```
 

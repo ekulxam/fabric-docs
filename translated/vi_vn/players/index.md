@@ -7,4 +7,4 @@ Phần này của Tài liệu Fabric dành riêng cho người chơi và quản 
 
 Phần này của Tài liệu Fabric dành riêng cho người chơi và quản trị viên máy chủ muốn tìm hiểu cách cài đặt, sử dụng và khắc phục sự cố Fabric.
 
-Bạn nên tham khảo các phần ở thanh bên để biết danh sách tất cả các hướng dẫn có sẵn.
+If you encounter any issues, please report them [on GitHub](https://github.com/FabricMC/fabric-docs) or ask for help on the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` or `#server-admin-support` channels.

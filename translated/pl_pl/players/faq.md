@@ -1,6 +1,6 @@
 ---
-title: Często zadawane pytania dla graczy
-description: Często zadawane pytania dla graczy i administratorów serwerów dotyczące Fabric.
+title: Frequently Asked Questions
+description: Questions about Fabric, frequently asked by players and server administrators.
 ---
 
 Istnieje wiele często zadawanych pytań, więc zebraliśmy je tutaj w listę.
@@ -11,17 +11,19 @@ Oficjalnie, Fabric obsługuje wszystkie wersje Minecraft począwszy od snapshota
 
 ## Skąd mogę pobrać mody do Fabric? {#where-can-i-download-published-fabric-mods}
 
-:::info
-Upewniaj się zawsze czy mody pochodzą z wiarygodnego źródła. Po więcej informacji sprawdź przewodnik na temat [znajdowania wiarygodnych modów](./finding-mods).
+::: info
+
+You should always check if mods are from a trustworthy source. Check out the [Finding Trustworthy Mods](./finding-mods) guide for more information.
+
 :::
 
-Większość twórców publikuje swoje mody na [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) i CurseForge, niektórzy mogą jednak zdecydować się na opublikowanie ich na swojej własnej stronie internetowej lub innych platformach, takich jak repozytorium GitHub.
+The majority of authors publish their mods to [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) and [CurseForge](https://www.curseforge.com/minecraft/search?class=mc-mods&gameVersionTypeId=4), however some may choose to upload them on their personal websites, or on other platforms, such as a GitHub repository.
 
-## Gdzie mogę znaleźć gotowe paczki modów dla Fabric? {#where-can-i-find-premade-fabric-modpacks}
+## Where Can I Find Pre-Made Fabric Modpacks? {#where-can-i-find-pre-made-fabric-modpacks}
 
-Gotowe paczki modów dla Fabric znajdziesz na różnych platformach, takich jak:
+You can find pre-made Fabric modpacks on a variety of platforms, such as:
 
 - [Modrinth](https://modrinth.com/modpacks?g=categories:%27fabric%27)
-- [CurseForge](https://www.curseforge.com/minecraft/search?class=modpacks\\&gameVersionTypeId=4)
+- [CurseForge](https://www.curseforge.com/minecraft/search?class=modpacks&gameVersionTypeId=4)
 - [Feed The Beast](https://www.feed-the-beast.com/ftb-app)
 - [Technic](https://www.technicpack.net/modpacks)

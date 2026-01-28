@@ -1,181 +1,253 @@
-# Pautas de Contribución para la Documentación de Fabric
+---
+title: Contribution Guidelines
+description: Pautas de Contribución para la Documentación de Fabric
+---
 
-Esta página web utiliza [VitePress](https://vitepress.dev/) para generar HTML estático a partir de varios archivos markdown. Debes familiarizarte con las extensiones de markdown que VitePress soporta [aquí](https://vitepress.dev/guide/markdown#features).
+Esta página web utiliza [VitePress](https://vitepress.dev/) para generar HTML estático a partir de varios archivos markdown. You should familiarize yourself with the [Markdown extensions that VitePress supports](https://vitepress.dev/guide/markdown#features).
 
-## Índice de Contenido
+There are three ways you can contribute to this website:
 
 - [Pautas de Contribución para la Documentación de Fabric](#fabric-documentation-contribution-guidelines)
-  - [Como Contribuir](#how-to-contribute)
-  - [Estructura de Contribuciones](#contributing-framework)
-  - [Contribuir Contenido](#contributing-content)
-    - [Pautas de Estilo](#style-guidelines)
-    - [Guias para Expansiones](#guidance-for-expansion)
-    - [Verificación de Contenido](#content-verification)
-    - [Limpieza](#cleanup)
-  - [Traducir la Documentación](#translating-documentation)
+- [Contribuir Contenido](#contributing-content)
+- [Estructura de Contribuciones](#contributing-framework)
 
-## Como Contribuir
+All contributions must follow our [style guidelines](#style-guidelines).
 
-Es recomendado que crees una nueva rama en tu bifurcación del repositorio por cada solicitud de extracción que crees. Esto facilita el manejo de multiples solicitudes de extracción al mismo tiempo.
+## [Traducir la Documentación](#translating-documentation)
 
-**Si quieres tener una vista previa de tus cambios localmente, necesitarás instalar [Node.js 18+](https://nodejs.org/en/)**
+Si quieres traducir esta documentación a tu idioma, puedes hacer esto en la [página de Crowdin de Fabric](https://crowdin.com/project/fabricmc).
 
-Antes de correr cualquiera de estos comandos, asegúrate de correr `npm install` para instalar todas las dependencias.
+<!-- markdownlint-disable titlecase-rule -->
 
-**Ejecutar el servidor de desarrollo:**
+## <Badge type="tip">new-content</Badge> Contributing Content {#contributing-content}
 
-Esto te permitirá ver una vista previa de tus cambios localmente en `localhost:3000`.
+<!-- markdownlint-enable titlecase-rule -->
+
+Content contributions are the main way to contribute to the Fabric Documentation.
+
+All content contributions go through the following stages, each of which is associated with a label:
+
+1. <Badge type="tip">locally</Badge> Prepare your changes and push a PR
+2. <Badge type="tip">stage:expansion</Badge>: Guidance for Expansion if needed
+3. <Badge type="tip">stage:verification</Badge>: Content verification
+4. <Badge type="tip">stage:cleanup</Badge>: Grammar, Linting...
+5. <Badge type="tip">stage:ready</Badge>: Ready to be merged!
+
+All content must follow our [style guidelines](#style-guidelines).
+
+### 1. Prepare Your Changes {#1-prepare-your-changes}
+
+This website is open-source, and it is developed in a GitHub repository, which means that we rely on the GitHub flow:
+
+1. [Fork the GitHub repository](https://github.com/FabricMC/fabric-docs/fork)
+2. Create a new branch on your fork
+3. Make your changes on that branch
+4. Open a Pull Request to the original repository
+
+You can read more about the [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow).
+
+You can either make changes from the web UI on GitHub, or you can develop and preview the website locally.
+
+#### Cloning Your Fork {#clone-your-fork}
+
+If you want to develop locally, you will need to install [Git](https://git-scm.com/).
+
+After that, clone your fork of the repository with:
+
+```sh
+# make sure to replace "your-username" with your actual username
+git clone https://github.com/your-username/fabric-docs.git
+```
+
+#### Installing Dependencies {#install-dependencies}
+
+If you want to preview your changes locally, you will need to install [Node.js 18+](https://nodejs.org/en/).
+
+After that, make sure to install all dependencies with:
+
+```sh
+npm install
+```
+
+#### Running the Development Server {#run-the-development-server}
+
+This will allow you to preview your changes locally at `localhost:5173` and will automatically reload the page when you make changes.
 
 ```sh
 npm run dev
 ```
 
-**Construyendo la página web:**
+Now you can open and browse the website from the browser by visiting `http://localhost:5173`.
 
-Esto compilará todos los archivos markdown en archivos HTML estáticos, los cuales estarán en `.vitepress/dist`
+#### Building the Website {#building-the-website}
+
+This will compile all Markdown files into static HTML files and place them in `.vitepress/dist`:
 
 ```sh
 npm run build
 ```
 
-**Viendo la vista previa de la página web:**
+#### Previewing the Built Website {#previewing-the-built-website}
 
-Esto ejecutará un servidor local en el puerto 3000 usando el contenido encontrado en `.vitepress/dist`
+This will start a local server on port `4173` serving the content found in `.vitepress/dist`:
 
 ```sh
 npm run preview
 ```
 
-## Estructura de Contribuciones
+#### Opening a Pull Request {#opening-a-pull-request}
 
-Cualquier solicitud de extracción que modifique la estructura interna de la página web debe ser etiquetada con la etiqueta `framework`.
+Once you're happy with your changes, you may `push` your changes:
 
-En realidad solo deberías realizar solicitudes de extracción para la estructura después de consultar con el equipo de documentación en el servidor de [Discord de Fabric](https://discord.gg/v6v4pMv) o mediante una propuesta.
+```sh
+git add .
+git commit -m "Description of your changes"
+git push
+```
 
-**Nota: Modificar la configuración de los archivos de la barra lateral o la barra de navegación no cuenta como una solicitud de extracción de estructura.**
+Then, follow the link in the output of `git push` to open a PR.
 
-## Contribuir Contenido
+### 2. <Badge type="tip">stage:expansion</Badge> Guidance for Expansion if Needed {#2-guidance-for-expansion-if-needed}
 
-La contribución de contenido es la manera principal para contribuir a la Documentación de Fabric.
+If the documentation team thinks that you could expand upon your pull request, a member of the team will add the <Badge type="tip">stage:expansion</Badge> label to your pull request alongside a comment explaining what they think you could expand upon. If you agree with the suggestion, you can expand upon your pull request.
 
-Todo el contenido debe seguir nuestras pautas de estilo.
+If you do not want to expand upon your pull request, but you are happy for someone else to expand upon it at a later date, you should create an issue on the [Issues page](https://github.com/FabricMC/fabric-docs/issues) and explain what you think could be expanded upon. The documentation team will then add the <Badge type="tip">help-wanted</Badge> label to your PR.
 
-### Pautas de Estilo
+### 3. <Badge type="tip">stage:verification</Badge> Content Verification {#3-content-verification}
 
-Todas las páginas de la Documentación de Fabric deben seguir las pautas de estilo. Si no estás seguro sobre cualquier cosa, puedes preguntar en el servidor de [Discord de Fabric](https://discord.gg/v6v4pMv) o mediante las Discusiones de Github.
+This is the most important stage as it ensures that the content is accurate and follows the Fabric Documentation style guide.
 
-La guía de estilo es la siguiente:
+In this stage, the following questions should be answered:
 
-1. Todas las páginas deben tener un título y una descripción como o en el asunto.
+- Is all of the content correct?
+- Is all of the content up-to-date?
+- Does the content cover all cases, such as different operating systems?
 
-   ```md
-   ---
-   title: Este es el título de la página
-   description: Esta es la descripción de la página
-   authors:
-     - UsuarioDeGithubAquí
-   ---
+### 4. <Badge type="tip">stage:cleanup</Badge> Cleanup {#4-cleanup}
 
-   # ...
-   ```
+In this stage, the following happens:
 
-2. Si quieres crear o modificar páginas que contengan código, debes colocar el código en un lugar apropiado dentro del mod de referencia (localizado en el folder `/reference` del repositorio). Luego, utiliza la [funcionalidad de fragmentos de código ofrecida por VitePress](https://vitepress.dev/guide/markdown#import-code-snippets) para adjuntar el código, o si necesitas mayor control, puedes usar la [funcionalidad de transcluir de `markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
+- Fixing of any grammar issues using [LanguageTool](https://languagetool.org/)
+- Linting of all Markdown files using [`markdownlint`](https://github.com/DavidAnson/markdownlint)
+- Formatting of all Java code using [Checkstyle](https://checkstyle.sourceforge.io/)
+- Other miscellaneous fixes or improvements
 
-   **Por ejemplo:**
+## <Badge type="tip">framework</Badge> Contributing Framework {#contributing-framework}
 
-   ```md
-   <<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21 java}
-   ```
+Framework refers to the internal structure of the website, any pull requests that modify the framework of the website will be labeled with the <Badge type="tip">framework</Badge> label.
 
-   Esto adjuntará las líneas 15-21 del archivo `ExampleMod.java` del mod de referencia.
+You should really only make framework pull requests after consulting with the documentation team on the [Fabric Discord](https://discord.fabricmc.net/) or via an issue.
 
-   El fragmento de código resultante se verá así:
+::: info
 
-   ```java
-     @Override
-     public void onInitialize() {
-       // This code runs as soon as Minecraft is in a mod-load-ready state.
-       // However, some things (like resources) may still be uninitialized.
-       // Proceed with mild caution.
+Modifying sidebar files and the navigation bar configuration does not count as a framework pull request.
 
-       LOGGER.info("Hello Fabric world!");
-     }
-   ```
+:::
 
-   **Ejemplo de translcuir:**
+## Style Guidelines {#style-guidelines}
 
-   ```md
-   @[code transcludeWith=#test_transclude](@/reference/.../blah.java)
-   ```
+If you are unsure about anything, you can ask in the [Fabric Discord](https://discord.fabricmc.net/) or via GitHub Discussions.
 
-   Esto adjuntará las secciones de `blah.java` marcadas con la etiqueta `#test_transclude`.
+### Write the Original in American English {#write-the-original-in-american-english}
 
-   Por ejemplo:
+All original documentation is written in English, following the American rules of grammar.
 
-   ```java
-   public final String test = "Bye World!"
+### Add Data to the Frontmatter {#add-data-to-the-frontmatter}
 
-   // #test_transclude
-   public void test() {
-     System.out.println("Hello World!");
-   }
-   // #test_transclude
-   ```
+Each page must have a `title` and a `description` in the frontmatter.
 
-   Solo se adjuntará el código entre las etiquetas de `#test_transclude`.
+Remember to also add your GitHub username to `authors` in the frontmatter of the Markdown file! This way we can give you proper credit.
 
-   ```java
-   public void test() {
-     System.out.println("Hello World!");
-   }
-   ```
+```yaml
+---
+title: Title of the Page
+description: This is the description of the page.
+authors:
+  - your-username
+---
+```
 
-3. Toda la documentación original está escrita en Inglés, usando las reglas gramáticas del dialecto Estadounidense. Aunque puedes usar [LanguageTool](https://languagetool.org/) para verificar tu gramática mientras que escribes, no te estreses mucho por ello. Nuestro equipo de documentación verificará y corregirá la gramática durante la etapa de limpieza. Sin embargo, puedes ahorrarnos tiempo tomando esfuerzo en escribir bien.
+### Add Anchors to Headings {#add-anchors-to-headings}
 
-4. Si estás creando una nueva sección, debes crear una nueva barra lateral en el folder de `.vitepress/sidebars` y agregarla en el archivo `config.mts`. Si necesitas ayuda con esto, puedes preguntar en el canal de `#docs` en el servidor de [Discord de Fabric](https://discord.gg/v6v4pMv).
+Each heading must have an anchor, which is used to link to that heading:
 
-5. Cuando crees una nueva página, debes agregarla a la barra lateral correspondiente en el folder de `.vitepress/sidebars`. De nuevo, si necesitas ayuda, pregunta en el servidor de Discord de Fabric, en el canal de `#docs`.
+```md
+## This Is a Heading {#this-is-a-heading}
+```
 
-6. Cualquier imagen debe ser colocada en un lugar apropiado en el folder de `/assets`.
+The anchor must use lowercase characters, numbers and dashes.
 
-7. ⚠️ **Cuando enlaces a otras páginas, usa links relativos.** ⚠️
+### Place Code Within the Example Mod {#place-code-within-the-example-mod}
 
-   Esto es debido al sistema de versiones presente, el cual procesará los links para agregar la versión antes. Si usas links absolutos, el número de versión no será agregado al link.
+If you create or modify pages containing code, place the code in an appropriate location within the example mod (located in the `/reference` folder of the repository). Then, use the [code snippet feature offered by VitePress](https://vitepress.dev/guide/markdown#import-code-snippets) to embed the code.
 
-   Por ejemplo, para una página en el folder de `/players`, enlazar a la página de `installing-fabric` encontrada en `/players/installing-fabric.md` requerirá de lo siguiente:
+For example, to highlight lines 15-21 of the `ExampleMod.java` file from the mod:
 
-   ```md
-   [Esto es un link a otra página](./installing-fabric)
-   ```
+::: code-group
 
-   **NO** hagas lo siguiente:
+```md
+<<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21}
+```
 
-   ```md
-   [Esto es un link a otra página](/players/installing-fabric)
-   ```
+<<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21}[java]
 
-Todas las contribuciones de contenido pasa por tres etapas:
+:::
 
-1. Guías para expansiones (si es posible)
-2. Verificación de Contenido
-3. Limpieza (Gramática etc.)
+If you need a greater span of control, you can use the [transclude feature from `markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
 
-### Guías para Expansiones
+For example, this will embed the sections of the file above that are marked with the `#entrypoint` tag:
 
-Si el equipo de documentación piensa que puedes expandir tu solicitud de extracción en cuanto al contenido, un miembro del equipo añadirá la etiqueta `expansion` a tu solicitud de extracción junto con un comentario explicando lo que el miembro de equipo piensa que puedes hacer para expandir tu solicitud. Si estás de acuerdo con la sugerencia, puedes expandir tu solicitud de extracción.
+::: code-group
 
-**No te sientas presionado en expandir tu solicitud de extracción.** Si no quieres expandirla, simplemente puedes pedir que se te remueva la etiqueta de `expansion`.
+```md
+@[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
+```
 
-Si no quieres expandir tu solicitud de extracción, pero quisieras que otra persona lo expanda después, es mejor crear una propuesta en la [Página de Propuestas](https://github.com/FabricMC/fabric-docs/issues) y explicar lo que quisieras que se expanda.
+@[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
 
-### Verificación de Contenido
+:::
 
-Esta etapa es la más importante, ya que asegura que el contenido es correcto y sigue las Pautas de Estilo de Documentación de Fabric.
+### Create a Sidebar for Each New Section {#create-a-sidebar-for-each-new-section}
 
-### Limpieza
+If you're creating a new section, you should create a new sidebar in the `.vitepress/sidebars` folder and add it to the `i18n.mts` file.
 
-¡En esta etapa, el equipo de documentación arreglará problemas con la gramática y hará cualquier otros cambios lingüísticos necesarios antes de aceptar la solicitud de extracción!
+If you need assistance with this, please ask in the [Fabric Discord](https://discord.fabricmc.net/)'s `#docs` channel.
 
-## Traducir la Documentación
+### Add New Pages to the Relevant Sidebars {#add-new-pages-to-the-relevant-sidebars}
 
-Si quieres traducir esta documentación a tu idioma, puedes hacer esto en la [página de Crowdin de Fabric](https://crowdin.com/project/fabricmc).
+When creating a new page, you should add it to the relevant sidebar in the `.vitepress/sidebars` folder.
+
+Again, if you need assistance, ask in the Fabric Discord in the `#docs` channel.
+
+### Place Media in `/assets` {#place-media-in-assets}
+
+Any images should be placed in a suitable place in the `/public/assets` folder.
+
+### Use Relative Links! {#use-relative-links}
+
+This is because of the versioning system in place, which will process the links to add the version beforehand. If you use absolute links, the version number will not be added to the link.
+
+You must also not add the file extension to the link either.
+
+For example, to link to the page found in `/players/index.md` from the page `/develop/index.md`, you would have to do the following:
+
+::: code-group
+
+```md:no-line-numbers [✅ Correct]
+This is a relative link!
+[Page](../players/index)
+```
+
+```md:no-line-numbers [❌ Wrong]
+This is an absolute link.
+[Page](/players/index)
+```
+
+```md:no-line-numbers [❌ Wrong]
+This relative link has the file extension.
+[Page](../players/index.md)
+```
+
+:::
+
+<!---->

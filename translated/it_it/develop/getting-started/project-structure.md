@@ -20,10 +20,12 @@ Gli attributi più importanti nel file `fabric.mod.json` sono:
 - `depends`: Le mod da cui la tua mod dipende.
 - `mixins`: I mixin che la tua mod fornisce.
 
-Puoi trovare un esempio del file `fabric.mod.json` sotto - questo è il file `fabric.mod.json` per il progetto di riferimento su cui è basato questo sito di documentazione.
+You can see an example `fabric.mod.json` file below - this is the `fabric.mod.json` file for the mod that powers this documentation site.
 
-:::details `fabric.mod.json` del Progetto di Riferimento
+:::details `fabric.mod.json` of the Example Mod
+
 @[code lang=json](@/reference/latest/src/main/resources/fabric.mod.json)
+
 :::
 
 ## Entrypoint {#entrypoints}
@@ -47,7 +49,7 @@ Nella cartella `src/main/resources` si memorizzano le risorse che la tua mod usa
 
 È anche la posizione di `fabric.mod.json` e di qualsiasi file di configurazione mixin che la tua mod usa.
 
-Le risorse sono memorizzate in una struttura che rispecchia la struttura dei pacchetti risorse - per esempio, una texture per un blocco verrebbe memorizzata in `assets/example-mod/textures/block/block.png`.
+Assets are stored in a structure that mirrors the structure of resource packs - for example, a texture for a block would be stored in `assets/example-mod/textures/block/block.png`.
 
 ## `src/client/resources` {#src-client-resources}
 

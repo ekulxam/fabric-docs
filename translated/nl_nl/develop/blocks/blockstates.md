@@ -13,7 +13,7 @@ Een block staat is een stukje data gekoppeld aan een enkel blok in de Minecraft 
 
 Je kunt je dus wel inbeelden waarom ze zo handig zijn - ze vermijden de noodzaak om gegevens in een blok entiteit op te slaan - wat de wereld grootte verkleint en TPS-problemen voorkomt!
 
-Blok staat definities kunnen gevonden worden in de `assets/<mod id here>/blockstates` folder.
+Blockstate definitions are found in the `assets/example-mod/blockstates` folder.
 
 ## Voorbeeld: Pilaar Blok {#pillar-block}
 
@@ -21,15 +21,15 @@ Blok staat definities kunnen gevonden worden in de `assets/<mod id here>/blockst
 
 Minecraft heeft al een paar zelfgemaakte classen die je gemakkelijk bepaalde types blok laat maken - dit voorbeeld gaat over het maken van een blok met de `axis` (as) eigenschap door een "Gecondenseerde Eiken Boomstam" blok te maken.
 
-Met de vanilla class `PillarBlock` kan het blok in de X-, Y- of Z-as worden geplaatst.
+The vanilla `RotatedPillarBlock` class allows the block to be placed in the X, Y or Z axis.
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
 Pilaren hebben twee texturen, de bovenkant en de zijkant - ze maken gebruik van het `block/cube_collumn` model.
 
-Zoals gewoonlijk, met alle blok texturen, kunnen de textuurbestanden worden gevonden in `assets/<mod id here>/textures/block`
+As always, with all block textures, the texture files can be found in `assets/example-mod/textures/block`
 
-<DownloadEntry type="Textures" visualURL="/assets/develop/blocks/blockstates_0_large.png" downloadURL="/assets/develop/blocks/condensed_oak_log_textures.zip" />
+<DownloadEntry visualURL="/assets/develop/blocks/blockstates_0_large.png" downloadURL="/assets/develop/blocks/condensed_oak_log_textures.zip">Textures</DownloadEntry>
 
 Omdat de pilaar twee posities heeft, horizontaal en verticaal, zullen we twee verschillende modelbestanden moeten maken:
 
@@ -38,14 +38,14 @@ Omdat de pilaar twee posities heeft, horizontaal en verticaal, zullen we twee ve
 
 Hier een voorbeeld van het bestand `condensed_oak_log_horizontal.json`:
 
-@[code](@/reference/latest/src/main/resources/assets/example-mod/models/block/condensed_oak_log_horizontal.json)
-
----
+@[code](@/reference/latest/src/main/generated/assets/example-mod/models/block/condensed_oak_log_horizontal.json)
 
 ::: info
-Remember, blockstate files can be found in the `assets/<mod id here>/blockstates` folder, the name of the blockstate file should match the block ID used when registering your block in the `ModBlocks` class. For instance, if the block ID is `condensed_oak_log`, the file should be named `condensed_oak_log.json`.
+
+Remember, blockstate files can be found in the `assets/example-mod/blockstates` folder, the name of the blockstate file should match the block ID used when registering your block in the `ModBlocks` class. For instance, if the block ID is `condensed_oak_log`, the file should be named `condensed_oak_log.json`.
 
 Voor een meer diepgaande blik op alle modificaties die beschikbaar zijn in de blockstate-bestanden, ga naar de pagina [Minecraft Wiki - Models (Block States)](https://minecraft.wiki/w/Tutorials/Models#Block_states).
+
 :::
 
 Vervolgens zullen we een blok staat bestand moeten maken. Het blok staat bestand is waar de magie gebeurt: pilaren hebben drie assen, dus we zullen specifieke modellen gebruiken voor de volgende situaties:
@@ -54,7 +54,7 @@ Vervolgens zullen we een blok staat bestand moeten maken. Het blok staat bestand
 - `axis=y` - Wanneer het blok langs de Y-as wordt geplaatst, gebruiken we het normale verticale model.
 - `axis=z` - Wanneer het blok langs de Z-as wordt geplaatst, roteren we het model in de positieve X-richting.
 
-@[code](@/reference/latest/src/main/resources/assets/example-mod/blockstates/condensed_oak_log.json)
+@[code](@/reference/latest/src/main/generated/assets/example-mod/blockstates/condensed_oak_log.json)
 
 Zoals altijd moet je een vertaling voor uw blok maken, en een voorwerp model dat de "parent" is van een van de twee modellen.
 
@@ -68,11 +68,11 @@ Dit voorbeeld creëert een unieke boolean eigenschap met de naam `activated` - w
 
 ### Het maken van De Eigenschap {#creating-the-property}
 
-Ten eerste moet je de eigenschap zelf maken - sinds dit een boolean is, zullen we de `BooleanProperty.of` methode gebruiken.
+Firstly, you'll need to create the property itself - since this is a boolean, we'll use the `BooleanProperty.create` method.
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/block/custom/PrismarineLampBlock.java)
 
-Vervolgens moeten we de eigenschap toevoegen aan de blok staat manager in de methode `appendProperties`. Je zult de methode moeten overschrijven om toegang te krijgen tot de builder:
+Next, we have to append the property to the blockstate manager in the `createBlockStateDefinition` method. Je zult de methode moeten overschrijven om toegang te krijgen tot de builder:
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/block/custom/PrismarineLampBlock.java)
 
@@ -80,21 +80,17 @@ Je moet ook een standaardstaat instellen voor de eigenschap `activated` in de co
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/block/custom/PrismarineLampBlock.java)
 
-:::warning
-Vergeet niet om je blok te registreren met de zelfgemaakte class in plaats val `Block`!
-:::
+### Het Visualiseren van De Eigenschap {#visualizing-the-property}
 
-### Het Gebruik van De Eigenschap {#using-the-property}
-
-In dit voorbeeld wordt de boolean eigenschap `activated` omgedraaid wanneer de speler interactie heeft met het blok. We kunnen hiervoor de `onUse` methode overschrijven:
+In dit voorbeeld wordt de boolean eigenschap `activated` omgedraaid wanneer de speler interactie heeft met het blok. We can override the `useWithoutItem` method for this:
 
 @[code transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/block/custom/PrismarineLampBlock.java)
 
-### Het Visualiseren van De Eigenschap {#visualizing-the-property}
+### Het Gebruik van De Eigenschap {#using-the-property}
 
 Voordat je het blok staat bestand maakt, moet je texturen opgeven voor zowel de geactiveerde als de gedeactiveerde staten van het blok, evenals voor het blokmodel.
 
-<DownloadEntry type="Textures" visualURL="/assets/develop/blocks/blockstates_2_large.png" downloadURL="/assets/develop/blocks/prismarine_lamp_textures.zip" />
+<DownloadEntry visualURL="/assets/develop/blocks/blockstates_2_large.png" downloadURL="/assets/develop/blocks/prismarine_lamp_textures.zip">Textures</DownloadEntry>
 
 Gebruik je kennis van blokmodellen om twee modellen voor het blok te maken: één voor de geactiveerde staat en één voor de gedeactiveerde staat. Zodra je dat gedaan hebt, kun je het blok staat bestand gaan maken.
 
@@ -104,22 +100,24 @@ Als je meerdere eigenschappen hebt voor een blok, moet je met alle mogelijke com
 
 Omdat dit blok maar twee mogelijke varianten heeft, omdat er maar een eigenschap is (`activated`), zal de blok staat JSON er ongeveer zo uitzien:
 
-@[code](@/reference/latest/src/main/resources/assets/example-mod/blockstates/prismarine_lamp.json)
+@[code](@/reference/latest/src/main/generated/assets/example-mod/blockstates/prismarine_lamp.json)
 
----
+::: tip
+
+Don't forget to add a [Client Item](../items/first-item#creating-the-client-item) for the block so that it will show in the inventory!
+
+:::
 
 Omdat het voorbeeldblok een lamp is, zullen we er ook voor moeten zorgen dat het licht uitstraalt als de eigenschap `activated` waar is. Dit kan worden gedaan via de blokinstellingen die aan de constructor worden doorgegeven bij het registreren van het blok.
 
-U kunt de `luminance`-methode gebruiken om het lichtniveau in te stellen dat door het blok wordt uitgezonden. We kunnen een statische methode maken in de `PrismarineLampBlock` class om het lichtniveau terug te geven op basis van de `activated`-eigenschap, en dit doorgeven als een methodereferentie naar de `luminance`-methode:
+You can use the `lightLevel` method to set the light level emitted by the block, we can create a static method in the `PrismarineLampBlock` class to return the light level based on the `activated` property, and pass it as a method reference to the `lightLevel` method:
 
 @[code transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/block/custom/PrismarineLampBlock.java)
 
 @[code transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
----
-
 <!-- Note: This block can be a great starter for a redstone block interactivity page, maybe triggering the blockstate based on redstone input? -->
 
 Zodra je klaar bent met alles, zal het resultaat er ongeveer zo uitzien:
 
-<VideoPlayer src="/assets/develop/blocks/blockstates_3.webm" title="Prismarine Lamp Block in-game" />
+<VideoPlayer src="/assets/develop/blocks/blockstates_3.webm">Prismarine Lamp Block in-game</VideoPlayer>

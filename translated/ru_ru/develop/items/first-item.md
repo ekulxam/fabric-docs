@@ -14,7 +14,7 @@ authors:
 
 ## Подготовка класса вашего предмета {#preparing-your-items-class}
 
-Для упрощения регистрации предметов вы можете создать метод, принимающий строковый идентификатор, некоторые настройки предмета и фабрику для создания экземпляра `Item`.
+To simplify the registering of items, you can create a method that accepts a string identifier, some item properties and a factory to create the `Item` instance.
 
 Этот метод будет создавать предмет с данным идентификатором и регистрировать его с помощью реестра предметов игры.
 
@@ -24,61 +24,65 @@ Mojang уже сделали это со своими предметами! За
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Обратите внимание на использование интерфейса [`Function`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html) в качестве фабрики, которая позже позволит нам указать, как мы хотим создать наш предмет из настроек с помощью `Item::new`.
+Notice how we're using a `GenericItem`, which allows us to use the same method `register` for registering any type of item that extends `Item`. We're also using a [`Function`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html) interface for the factory, which allows us to specify how we want our item to be created given the item properties.
 
 ## Регистрация предмета {#registering-an-item}
 
 Теперь вы можете зарегистрировать предмет, используя метод.
 
-Метод регистрации принимает экземпляр класса `Item.Settings` в качестве параметра. Этот класс позволяет вам настраивать свойства предмета через различные методы.
+The register method takes in an instance of the `Item.Properties` class as a parameter. Этот класс позволяет вам настраивать свойства предмета через различные методы.
 
 ::: tip
-If you want to change your item's stack size, you can use the `maxCount` method in the `Item.Settings` class.
+
+If you want to change your item's stack size, you can use the `stacksTo` method in the `Item.Properties` class.
 
 Это не сработает, если вы пометили предмет как повреждаемый, потому что размер для повреждаемых предметов всегда равен 1, для предотвращения эксплойтов дублирования.
+
 :::
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-`Item::new` говорит функции регистрации создать экземпляр `Item` из `Item.Settings`, вызывая конструктор `Item` (`new Item(...)`), принимающий `Item.Settings` в качестве параметра.
+`Item::new` tells the register function to create an `Item` instance from an `Item.Properties` by calling the `Item` constructor (`new Item(...)`), which takes an `Item.Properties` as a parameter.
 
-Однако, если вы сейчас попытаетесь запустить измененный клиент, то увидите, что наш предмет еще не существует в игре! Это происходит потому, что вы не инициализировали класс статически.
+However, if you now try to run the modified client, you can see that our item doesn't exist in-game yet! This is because you didn't statically initialize the class.
 
-Чтобы сделать это, вы можете добавить в свой класс общедоступный статический метод инициализации и вызвать его из вашего класса [инициализатор мода](../getting-started/project-structure#entrypoints). На данный момент этот метод может остаться пустым.
+To do this, you can add a public static initialize method to your class and call it from your [mod's initializer](../getting-started/project-structure#entrypoints) class. Currently, this method doesn't need anything inside it.
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ExampleModItems.java)
 
-Вызов метода класса статически инициализирует его, если он не был ранее загружен — это означает, что оцениваются все `статические` поля. Вот для чего нужен этот фиктивный метод `initialize`.
+Calling a method on a class statically initializes it if it hasn't been previously loaded - this means that all `static` fields are evaluated. This is what this dummy `initialize` method is for.
 
-## Добавление предмета к группе предметов {#adding-the-item-to-an-item-group}
+## Adding the Item to a Creative Tab {#adding-the-item-to-a-creative-tab}
 
-:::info
-Если вы хотите добавить предмет в собственную `ItemGroup`, ознакомьтесь со страницей [Собственные группы предмета](./custom-item-groups) для получения дополнительной информации.
+::: info
+
+If you want to add the item to a custom `CreativeModeTab`, check out the [Custom Creative Tabs](./custom-item-groups) page for more information.
+
 :::
 
-Для примера мы добавим этот элемент в `ItemGroup` "ингредиенты", вам нужно будет использовать события групп предметов из Fabric API, а именно `ItemGroupEvents.modifyEntriesEvent`
+For example purposes, we will add this item to the ingredients `CreativeModeTab`, you will need to use Fabric API's creative tab events - specifically `ItemGroupEvents.modifyEntriesEvent`
 
-Это может быть сделано в методе `initialize` вашего класса.
+This can be done in the `initialize` method of your items class.
 
 @[code transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Запустив игру, вы можете увидеть, что наш предмет зарегистрирован и находится в категории предметов "ингредиенты":
+Loading into the game, you can see that our item has been registered, and is in the Ingredients creative tab:
 
-![Предмет в группе ингредиентов](/assets/develop/items/first_item_0.png)
+![Item in the ingredients group](/assets/develop/items/first_item_0.png)
 
-Однако, не хватает следующего:
+However, it's missing the following:
 
-- Модель предмета
-- Текстура
-- Перевод(название)
+- Item Model
+- Texture
+- Translation (name)
 
-## Наименование предмета {#naming-the-item}
+## Naming The Item {#naming-the-item}
 
-Сейчас у предмета нет перевода, поэтому вам необходимо его добавить. Ключ перевода уже предоставлен Minecraft: `item.example-mod.suspicious_substance`.
+The item currently doesn't have a translation, so you will need to add one. The translation key has already been provided by Minecraft: `item.example-mod.suspicious_substance`.
 
-Создайте новый файл JSON: `src/main/resources/assets/example-mod/lang/en_us.json` и введите ключ перевода, а также его значение:
+Create a new JSON file at: `src/main/resources/assets/example-mod/lang/en_us.json` and put in the translation key, and its value:
 
 ```json
 {
@@ -86,84 +90,102 @@ If you want to change your item's stack size, you can use the `maxCount` method 
 }
 ```
 
-Вы можете перезапустить игру или создать свой мод и нажать <kbd>F3</kbd>+<kbd>T</kbd>, чтобы применить изменения.
+You can either restart the game or build your mod and press <kbd>F3</kbd>+<kbd>T</kbd> to apply changes.
 
-## Добавление текстуры и модели {#adding-a-texture-and-model}
+## Adding a Client Item, Texture and Model {#adding-a-client-item-texture-and-model}
 
-Чтобы задать вашему предмету текстуру и модель, просто создайте изображение текстуры 16x16 для вашего предмета и сохраните его по адресу`assets/example-mod/textures/item`. Назовите файл текстуры, так же как предмет, но c расширением `.png`.
+For your item to have a proper appearance, it requires:
 
-В качестве примера вы можете использовать этот пример текстуры для `suspicious_substance.png`
+- [An item texture](https://minecraft.wiki/w/Textures#Items)
+- [An item model](https://minecraft.wiki/w/Model#Item_models)
+- [A client item](https://minecraft.wiki/w/Items_model_definition)
 
-<DownloadEntry visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png">Текстура</DownloadEntry>
+### Adding a Texture {#adding-a-texture}
 
-При перезапуске/перезагрузке игры вы должны увидеть, что у предмета по-прежнему нет текстуры, это потому, что вам нужно будет добавить модель, использующую эту текстуру.
+::: info
 
-Вы собираетесь создать простую модель «item/generated», которая принимает на входе только текстуру и ничего больше.
+For more information on this topic, see the [Item Models](./item-models) page.
 
-Создайте модель JSON в папке `assets/example-mod/models/item` с тем же именем, что и у элемента; `suspicious_substance.json`
+:::
+
+To give your item a texture and model, simply create a 16x16 texture image for your item and save it in the `assets/example-mod/textures/item` folder. Name the texture file the same as the item's identifier, but with a `.png` extension.
+
+For example purposes, you can use this example texture for `suspicious_substance.png`
+
+<DownloadEntry visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png">Texture</DownloadEntry>
+
+### Adding a Model {#adding-a-model}
+
+When restarting/reloading the game - you should see that the item still has no texture, that's because you will need to add a model that uses this texture.
+
+You're going to create a simple `item/generated` model, which takes in an input texture and nothing else.
+
+Create the model JSON in the `assets/example-mod/models/item` folder, with the same name as the item; `suspicious_substance.json`
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/item/suspicious_substance.json)
 
-### Разбор модели JSON {#breaking-down-the-model-json}
+#### Breaking Down the Model JSON {#breaking-down-the-model-json}
 
-- `parent`: Это родительская модель, от которой будет унаследована данная модель. В данном случае это модель `item/generated`.
-- `textures`: Здесь вы определяете текстуры для модели. Ключ `layer0` — это текстура, которую будет использовать модель.
+- `parent`: This is the parent model that this model will inherit from. In this case, it's the `item/generated` model.
+- `textures`: This is where you define the textures for the model. The `layer0` key is the texture that the model will use.
 
-Большинство элементов будут использовать модель `item/generated` в качестве родительской, поскольку это простая модель, которая просто отображает текстуру.
+Most items will use the `item/generated` model as their parent, as it's a simple model that just displays the texture.
 
-Существуют альтернативы, такие как `item/handheld`, которые используются для предметов, которые "удерживаются" в руке игрока, таких как инструменты.
+There are alternatives, such as `item/handheld` which is used for items that are "held" in the player's hand, such as tools.
 
-## Создание описания модели предмета {#creating-the-item-model-description}
+### Creating the Client Item {#creating-the-client-item}
 
-Minecraft автоматически не узнает, где можно найти файлы модели вашего предмета, вам нужно предоставить описание модели предмета.
+Minecraft doesn't automatically know where your items' model files can be found, we need to provide a client item.
 
-Создайте JSON-файл описания предмета в `assets/example-mod/items` с тем же именем файла, что и идентификатор предмета: `suspicious_substance.json`.
+Create the client item JSON in the `assets/example-mod/items`, with the same file name as the identifier of the item: `suspicious_substance.json`.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/items/suspicious_substance.json)
 
-### Разбивка описания модели предмета JSON {#breaking-down-the-item-model-description-json}
+#### Breaking Down the Client Item JSON {#breaking-down-the-client-item-json}
 
-- `model`: это свойство, содержащее ссылку на нашу модель.
-  - `type`: это тип нашей модели. Для большинства предметов это должно быть `minecraft:model`
-  - `model`: это идентификатор модели. Он должен иметь следующую форму: `example-mod:item/item_name`
+- `model`: This is the property that contains the reference to our model.
+  - `type`: This is the type of our model. For most items, this should be `minecraft:model`
+  - `model`: This is the model's identifier. It should have this form: `example-mod:item/item_name`
 
-Теперь ваш предмет в игре должен выглядеть так:
+Your item should now look like this in-game:
 
 ![Item with correct model](/assets/develop/items/first_item_2.png)
 
-## Сделать предмет компостируемым или топливом {#making-the-item-compostable-or-a-fuel}
+## Making the Item Compostable or a Fuel {#making-the-item-compostable-or-a-fuel}
 
-API Fabric предоставляет различные реестры, которые можно использовать для добавления дополнительных свойств к вашему элементу.
+Fabric API provides various registries that can be used to add additional properties to your item.
 
-Например, если вы хотите сделать свой предмет компостируемым, то вы можете использовать `CompostableItemRegistry`:
+For example, if you want to make your item compostable, you can use the `CompostingChanceRegistry`:
 
-@[code transcludeWith=:::_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-В качестве альтернативы, если вы хотите превратить свой предмет в топливо, вы можете использовать событие `FuelRegistryEvents.BUILD`:
+Alternatively, if you want to make your item a fuel, you can use the `FuelRegistryEvents.BUILD` event:
 
-@[code transcludeWith=:::_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-## Добавление рецепта создания {#adding-a-basic-crafting-recipe}
+## Adding a Basic Crafting Recipe {#adding-a-basic-crafting-recipe}
 
 <!-- In the future, an entire section on recipes and recipe types should be created. For now, this suffices. -->
 
-Если вы хотите добавить рецепт создания вашего предмета, вам необходимо поместить JSON-файл рецепта в папку `data/example-mod/recipe`.
+If you want to add a crafting recipe for your item, you will need to place a recipe JSON file in the `data/example-mod/recipe` folder.
 
-Для получения дополнительной информации о формате рецепта, посетите эти ресурсы:
+For more information on the recipe format, check out these resources:
 
 - [Recipe JSON Generator](https://crafting.thedestruc7i0n.ca/)
 - [Minecraft Wiki - Recipe JSON](https://minecraft.wiki/w/Recipe#JSON_Format)
 
-## Пользовательские подсказки {#custom-tooltips}
+## Custom Tooltips {#custom-tooltips}
 
-Если вы хотите, чтобы у вашего элемента была настраиваемая подсказка, вам нужно будет создать класс, расширяющий `Item`, и переопределить метод `appendTooltip`.
+If you want your item to have a custom tooltip, you will need to create a class that extends `Item` and override the `appendHoverText` method.
 
-:::info
-В этом примере используется класс `LightningStick`, созданный на странице [Взаимодействия пользовательских элементов](./custom-item-interactions).
+::: info
+
+This example uses the `LightningStick` class created in the [Custom Item Interactions](./custom-item-interactions) page.
+
 :::
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-Каждый вызов `add()` добавляет одну строку в подсказку.
+Each call to `accept()` will add one line to the tooltip.
 
 ![Tooltip Showcase](/assets/develop/items/first_item_3.png)

@@ -9,31 +9,31 @@ authors:
 
 Компоненты данных заменяют данные NBT из предыдущих версий структурированными типами данных, которые можно применять к `ItemStack` для хранения постоянных данных об этом стеке. Компоненты данных имеют пространство имен, что означает, что мы можем реализовать собственные компоненты данных для хранения пользовательских данных о `ItemStack` и доступа к ним позже. Полный список компонентов данных vanilla можно найти на этой [странице вики Minecraft](https://minecraft.wiki/w/Data_component_format#List_of_components).
 
-Наряду с регистрацией пользовательских компонентов на этой странице рассматривается общее использование API компонентов, которое также применимо к ванильным компонентам. Вы можете просмотреть и получить доступ к определениям всех ванильных компонентов в классе `DataComponentTypes`.
+Наряду с регистрацией пользовательских компонентов на этой странице рассматривается общее использование API компонентов, которое также применимо к ванильным компонентам. You can see and access the definitions of all vanilla components in the `DataComponents` class.
 
 ## Регистрация компонента {#registering-a-component}
 
-Как и все остальное в вашем моде, вам необходимо зарегистрировать свой пользовательский компонент с помощью `ComponentType`. Этот тип компонента принимает универсальный аргумент, содержащий тип значения вашего компонента. Мы более подробно рассмотрим это далее, когда будем рассматривать [базовые](#basic-data-components) и [расширенные](#advanced-data-components) компоненты.
+As with anything else in your mod you will need to register your custom component using a `DataComponentType`. Этот тип компонента принимает универсальный аргумент, содержащий тип значения вашего компонента. Мы более подробно рассмотрим это далее, когда будем рассматривать [базовые](#basic-data-components) и [расширенные](#advanced-data-components) компоненты.
 
-Выберите подходящий класс для размещения этого кода. В этом примере мы создадим новый пакет с именем `component` и класс, содержащий все типы наших компонентов, с именем `ModComponents`. Убедитесь, что вы вызвали `ModComponents.initialize()` в вашем [инициализаторе мода](./getting-started/project-structure#entrypoints).
+Выберите подходящий класс для размещения этого кода. В этом примере мы создадим новый пакет с именем `component` и класс, содержащий все типы наших компонентов, с именем `ModComponents`. Убедитесь, что вы вызвали `ModComponents.initialize()` в инициализаторе вашего [мода](../getting-started/project-structure#entrypoints).
 
 @[code transcludeWith=::1](@/reference/latest/src/main/java/com/example/docs/component/ModComponents.java)
 
 Это базовый шаблон для регистрации типа компонента:
 
 ```java
-public static final ComponentType<?> MY_COMPONENT_TYPE = Registry.register(
-    Registries.DATA_COMPONENT_TYPE,
-    Identifier.of(ExampleMod.MOD_ID, "my_component"),
-    ComponentType.<?>builder().codec(null).build()
+public static final DataComponentType<?> MY_COMPONENT_TYPE = Registry.register(
+    BuiltInRegistries.DATA_COMPONENT_TYPE,
+    Identifier.fromNamespaceAndPath(ExampleMod.MOD_ID, "my_component"),
+    DataComponentType.<?>builder().persistent(null).build()
 );
 ```
 
 Здесь есть несколько вещей, на которые стоит обратить внимание. В первой и четвертой строках вы можете увидеть `?`. Он будет заменен типом значения вашего компонента. Мы скоро это заполним.
 
-Во-вторых, вы должны предоставить `Идентификатор`, содержащий предполагаемый идентификатор вашего компонента. Это пространство имен с идентификатором вашего мода.
+Secondly, you must provide an `Identifier` containing the intended ID of your component. Это пространство имен с идентификатором вашего мода.
 
-Наконец, у нас есть `ComponentType.Builder`, который создает фактический экземпляр `ComponentType` и регистрируется. Здесь содержится еще одна важная деталь, которую нам нужно будет обсудить: `Codec` вашего компонента. В настоящее время это поле пустое, но мы скоро его заполним.
+Lastly, we have a `DataComponentType.Builder` that creates the actual `DataComponentType` instance that's being registered. Здесь содержится еще одна важная деталь, которую нам нужно будет обсудить: `Codec` вашего компонента. В настоящее время это поле пустое, но мы скоро его заполним.
 
 ## Базовые компоненты данных {#basic-data-components}
 
@@ -43,7 +43,7 @@ public static final ComponentType<?> MY_COMPONENT_TYPE = Registry.register(
 
 @[code transcludeWith=::2](@/reference/latest/src/main/java/com/example/docs/component/ModComponents.java)
 
-Вы можете видеть, что теперь мы передаем `<Integer>` в качестве нашего универсального типа, указывая, что этот компонент будет сохранен как одно значение `int`. В качестве нашего кодека мы используем предоставленный кодек `Codec.INT`. Для таких простых компонентов, как этот, можно обойтись использованием базовых кодеков, но для более сложных сценариев может потребоваться специальный кодек (об этом мы кратко поговорим позже).
+Вы можете видеть, что теперь мы передаем `<Integer>` в качестве нашего универсального типа, указывая, что этот компонент будет сохранен как одно значение `int`. For our codec, we are using the provided `ExtraCodecs.POSITIVE_INT` codec. Для таких простых компонентов, как этот, можно обойтись использованием базовых кодеков, но для более сложных сценариев может потребоваться специальный кодек (об этом мы кратко поговорим позже).
 
 Если вы запустите игру, вы сможете ввести такую ​​команду:
 
@@ -60,27 +60,25 @@ public static final ComponentType<?> MY_COMPONENT_TYPE = Registry.register(
 Не забудьте, как обычно, зарегистрировать элемент в классе `ModItems`.
 
 ```java
-public static final Item COUNTER = register(new CounterItem(
-    new Item.Settings()
-), "counter");
+public static final Item COUNTER = register("counter", CounterItem::new, new Item.Properties());
 ```
 
 Мы добавим код подсказки, чтобы отображать текущее значение количества кликов при наведении курсора на наш предмет в инвентаре. Мы можем использовать метод `get()` в нашем `ItemStack`, чтобы получить значение нашего компонента следующим образом:
 
 ```java
-int clickCount = stack.get(ModComponents.CLICK_COUNT_COMPONENT);
+int count = stack.get(ModComponents.CLICK_COUNT_COMPONENT);
 ```
 
-Это вернет текущее значение компонента как тип, который мы определили при регистрации нашего компонента. Затем мы можем использовать это значение для добавления записи всплывающей подсказки. Добавьте эту строку в метод `appendTooltip` в классе `CounterItem`:
+Это вернет текущее значение компонента как тип, который мы определили при регистрации нашего компонента. Затем мы можем использовать это значение для добавления записи всплывающей подсказки. Add this line to the `appendHoverText` method in the `CounterItem` class:
 
 ```java
-public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-    int count = stack.get(ModComponents.CLICK_COUNT_COMPONENT);
-    tooltip.add(Text.translatable("item.example-mod.counter.info", count).formatted(Formatting.GOLD));
+public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+  int count = stack.get(ModComponents.CLICK_COUNT_COMPONENT);
+  textConsumer.accept(Component.translatable("item.example-mod.counter.info", count).withStyle(ChatFormatting.GOLD));
 }
 ```
 
-Не забудьте обновить свой языковой файл (`/assets/example-mod/lang/en_us.json`) и добавить в него следующие две строки:
+Не забудьте обновить ваш lang-файл (`/assets/example-mod/lang/en_us.json`) и добавить эти две строки:
 
 ```json
 {
@@ -102,9 +100,9 @@ public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> to
 Однако если вы дадите себе новый предмет Counter _без_ пользовательского компонента, игра вылетит при наведении курсора на предмет в инвентаре. В отчете о сбое вы должны увидеть такую ​​ошибку:
 
 ```log
-java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "net.minecraft.item.ItemStack.get(net.minecraft.component.ComponentType)" is null
-        at com.example.docs.item.custom.CounterItem.appendTooltip(LightningStick.java:45)
-        at net.minecraft.item.ItemStack.getTooltip(ItemStack.java:767)
+java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "net.minecraft.world.item.ItemStack.get(net.minecraft.core.component.DataComponentType)" is null
+        at com.example.docs.item.custom.CounterItem.appendHoverText(LightningStick.java:45)
+        at net.minecraft.world.item.ItemStack.getTooltipLines(ItemStack.java:767)
 ```
 
 As expected, since the `ItemStack` doesn't currently contain an instance of our custom component, calling `stack.get()` with our component type will return `null`.
@@ -113,130 +111,132 @@ As expected, since the `ItemStack` doesn't currently contain an instance of our 
 
 ### Установка значения компонента по умолчанию {#setting-default-value}
 
-Когда вы регистрируете свой элемент и передаете объект `Item.Settings` в конструктор элемента, вы также можете предоставить список компонентов по умолчанию, которые применяются ко всем новым элементам. Если вернуться к нашему классу `ModItems`, где мы регистрируем `CounterItem`, мы можем добавить значение по умолчанию для нашего пользовательского компонента. Добавьте это, чтобы для новых элементов отображалось количество «0».
+When you register your item and pass a `Item.Properties` object to your item constructor, you can also provide a list of default components that are applied to all new items. Если вернуться к нашему классу `ModItems`, где мы регистрируем `CounterItem`, мы можем добавить значение по умолчанию для нашего пользовательского компонента. Добавьте это, чтобы для новых элементов отображалось количество «0».
 
-@[code transcludeWith=::_13](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=::\_13](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
 При создании нового элемента он автоматически применит наш пользовательский компонент с заданным значением.
 
-:::warning
-Используя команды, можно удалить компонент по умолчанию из `ItemStack`. Вам следует обратиться к следующим двум разделам, чтобы правильно обработать ситуацию, когда компонент отсутствует в вашем изделии.
+::: warning
+
+Using commands, it is possible to remove a default component from an `ItemStack`. You should refer to the next two sections to properly handle a scenario where the component is not present on your item.
+
 :::
 
-### Чтение со значением по умолчанию {#reading-default-value}
+### Reading with a Default Value {#reading-default-value}
 
-Кроме того, при чтении значения компонента мы можем использовать метод `getOrDefault()` нашего объекта `ItemStack`, чтобы вернуть указанное значение по умолчанию, если компонент отсутствует в стеке. Это защитит от любых ошибок, возникающих из-за отсутствия какого-либо компонента. Мы можем настроить код нашей подсказки следующим образом:
-
-```java
-int clickCount = stack.getOrDefault(ModComponents.CLICK_COUNT_COMPONENT, 0);
-```
-
-Как видите, этот метод принимает два аргумента: тип нашего компонента, как и раньше, и значение по умолчанию, которое будет возвращаться, если компонент отсутствует.
-
-### Проверка существования компонента {#checking-if-component-exists}
-
-Вы также можете проверить наличие определенного компонента в `ItemStack`, используя метод `contains()`. Он принимает тип компонента в качестве аргумента и возвращает `true` или `false` в зависимости от того, содержит ли стек этот компонент.
+In addition, when reading the component value, we can use the `getOrDefault()` method on our `ItemStack` object to return a specified default value if the component is not present on the stack. This will safeguard against any errors resulting from a missing component. We can adjust our tooltip code like so:
 
 ```java
-boolean exists = stack.contains(ModComponents.CLICK_COUNT_COMPONENT);
+int count = stack.getOrDefault(ModComponents.CLICK_COUNT_COMPONENT, 0);
 ```
 
-### Исправление ошибки {#fixing-the-error}
+As you can see, this method takes two arguments: our component type like before, and a default value to return if the component is not present.
 
-Мы выберем третий вариант. Поэтому наряду с добавлением значения компонента по умолчанию мы также проверим, присутствует ли компонент в стеке, и покажем подсказку только в том случае, если это так.
+### Checking if a Component Exists {#checking-if-component-exists}
+
+You can also check for the existence of a specific component on an `ItemStack` using the `has()` method. This takes the component type as an argument and returns `true` or `false` depending on whether the stack contains that component.
+
+```java
+boolean exists = stack.has(ModComponents.CLICK_COUNT_COMPONENT);
+```
+
+### Fixing the Error {#fixing-the-error}
+
+We're going to go with the third option. So along with adding a default component value, we'll also check if the component is present on the stack and only show the tooltip if it is.
 
 @[code transcludeWith=::3](@/reference/latest/src/main/java/com/example/docs/item/custom/CounterItem.java)
 
-Запустите игру снова и наведите курсор на предмет без компонента. Вы должны увидеть надпись «Использовано 0 раз», и игра больше не будет вылетать.
+Start the game again and hover over the item without the component, you should see that it displays "Used 0 times" and no longer crashes the game.
 
-![Подсказка с сообщением «Использовано 0 раз»](/assets/develop/items/custom_component_2.png)
+![Tooltip showing "Used 0 times"](/assets/develop/items/custom_component_2.png)
 
-Попробуйте создать свой счетчик, удалив наш пользовательский компонент. Для этого можно использовать следующую команду:
+Try giving yourself a Counter with our custom component removed. You can use this command to do so:
 
 ```mcfunction
 /give @p example-mod:counter[!example-mod:click_count]
 ```
 
-При наведении курсора на этот элемент подсказка должна отсутствовать.
+When hovering over this item, the tooltip should be missing.
 
-![Встречный элемент без подсказки](/assets/develop/items/custom_component_7.png)
+![Counter item with no tooltip](/assets/develop/items/custom_component_7.png)
 
-## Обновление значения компонента {#setting-component-value}
+## Updating Component Value {#setting-component-value}
 
-Теперь попробуем обновить значение нашего компонента. Мы собираемся увеличивать количество кликов каждый раз, когда используем наш элемент Counter. Чтобы изменить значение компонента в `ItemStack`, мы используем метод `set()` следующим образом:
+Now let's try updating our component value. We're going to increase the click count each time we use our Counter item. To change the value of a component on an `ItemStack` we use the `set()` method like so:
 
 ```java
 stack.set(ModComponents.CLICK_COUNT_COMPONENT, newValue);
 ```
 
-Он принимает тип нашего компонента и значение, которое мы хотим ему присвоить. В данном случае это будет наше новое количество кликов. Этот метод также возвращает старое значение компонента (если оно присутствует), что может быть полезно в некоторых ситуациях. Например:
+This takes our component type and the value we want to set it to. In this case it will be our new click count. This method also returns the old value of the component (if one is present) which may be useful in some situations. For example:
 
 ```java
 int oldValue = stack.set(ModComponents.CLICK_COUNT_COMPONENT, newValue);
 ```
 
-Давайте настроим новый метод `use()` для считывания старого количества кликов, увеличения его на единицу, а затем установки обновленного количества кликов.
+Let's set up a new `use()` method to read the old click count, increase it by one, and then set the updated click count.
 
 @[code transcludeWith=::2](@/reference/latest/src/main/java/com/example/docs/item/custom/CounterItem.java)
 
-Теперь попробуйте запустить игру и щелкнуть правой кнопкой мыши, держа в руке предмет Counter. Если вы откроете свой инвентарь и снова посмотрите на предмет, вы увидите, что показатель использования увеличился пропорционально количеству кликов по нему.
+Now try starting the game and right-clicking with the Counter item in your hand. If you open up your inventory and look at the item again you should see that the usage number has gone up by the amount of times you've clicked it.
 
-![Подсказка с надписью «Использовано 8 раз»](/assets/develop/items/custom_component_3.png)
+![Tooltip showing "Used 8 times"](/assets/develop/items/custom_component_3.png)
 
-## Удаление значения компонента {#removing-component-value}
+## Removing Component Value {#removing-component-value}
 
-Вы также можете удалить компонент из `ItemStack`, если он больше не нужен. Это делается с помощью метода `remove()`, который принимает тип вашего компонента.
+You can also remove a component from your `ItemStack` if it is no longer needed. This is done by using the `remove()` method, which takes in your component type.
 
 ```java
 stack.remove(ModComponents.CLICK_COUNT_COMPONENT);
 ```
 
-Этот метод также возвращает значение компонента до его удаления, поэтому его можно использовать следующим образом:
+This method also returns the value of the component before being removed, so you can also use it as follows:
 
 ```java
 int oldCount = stack.remove(ModComponents.CLICK_COUNT_COMPONENT);
 ```
 
-## Расширенные компоненты данных {#advanced-data-components}
+## Advanced Data Components {#advanced-data-components}
 
-Возможно, вам придется хранить несколько атрибутов в одном компоненте. В качестве простого примера компонент `minecraft:food` хранит несколько значений, связанных с едой, таких как `nutrition`, `saturation`, `eat_seconds` и другие. В этом руководстве мы будем называть их «композитными» компонентами.
+You may need to store multiple attributes in a single component. As a vanilla example, the `minecraft:food` component stores several values related to food, such as `nutrition`, `saturation`, `eat_seconds` and more. In this guide we'll refer to them as "composite" components.
 
-Для составных компонентов необходимо создать класс `record` для хранения данных. Это тип, который мы зарегистрируем в нашем типе компонента, и то, что мы будем читать и записывать при взаимодействии с `ItemStack`. Начнем с создания нового класса записи в пакете `component`, который мы создали ранее.
+For composite components, you must create a `record` class to store the data. This is the type we'll register in our component type and what we'll read and write when interacting with an `ItemStack`. Start by making a new record class in the `component` package we made earlier.
 
 ```java
 public record MyCustomComponent() {
 }
 ```
 
-Обратите внимание, что после имени класса стоят скобки. Здесь мы определяем список свойств, которые должен иметь наш компонент. Давайте добавим число с плавающей точкой и логическое значение с именами `температура` и `сожженный` соответственно.
+Notice that there's a set of brackets after the class name. This is where we define the list of properties we want our component to have. Let's add a float and a boolean called `temperature` and `burnt` respectively.
 
 @[code transcludeWith=::1](@/reference/latest/src/main/java/com/example/docs/component/MyCustomComponent.java)
 
-Поскольку мы определяем пользовательскую структуру данных, для нашего варианта использования не будет готового `Кодека`, как в случае с [базовым компонентом](#basic-data-components). Это значит, что нам придется создать собственный кодек. Давайте определим его в нашем классе записи, используя `RecordCodecBuilder`, на который мы сможем ссылаться после регистрации компонента. Более подробную информацию об использовании `RecordCodecBuilder` можно найти в [этом разделе страницы Кодеки](../codecs#merging-codecs-for-record-like-classes).
+Since we are defining a custom data structure, there won't be a pre-existing `Codec` for our use case like with the [basic component](#basic-data-components). This means we're going to have to construct our own codec. Let's define one in our record class using a `RecordCodecBuilder` which we can reference once we register the component. For more details on using a `RecordCodecBuilder` you can refer to [this section of the Codecs page](../codecs#merging-codecs-for-record-like-classes).
 
 @[code transcludeWith=::2](@/reference/latest/src/main/java/com/example/docs/component/MyCustomComponent.java)
 
-Вы можете видеть, что мы определяем список пользовательских полей на основе примитивных типов `Codec`. Однако мы также сообщаем ей, как называются наши поля, используя `fieldOf()`, а затем используем `forGetter()`, чтобы сообщить игре, какой атрибут нашей записи следует заполнить.
+You can see that we are defining a list of custom fields based on the primitive `Codec` types. However, we are also telling it what our fields are called using `fieldOf()`, and then using `forGetter()` to tell the game which attribute of our record to populate.
 
-Вы также можете определить необязательные поля, используя `optionalFieldOf()` и передав значение по умолчанию в качестве второго аргумента. Любые поля, не отмеченные как необязательные, будут обязательными при настройке компонента с помощью `/give`, поэтому обязательно отметьте все необязательные аргументы как таковые при создании кодека.
+You can also define optional fields by using `optionalFieldOf()` and passing a default value as the second argument. Any fields not marked optional will be required when setting the component using `/give` so make sure you mark any optional arguments as such when creating your codec.
 
-Наконец, мы вызываем `apply()` и передаем конструктор нашей записи. Более подробную информацию о создании кодеков и более сложных вариантах использования можно найти на странице [Кодеки](../codecs).
+Finally, we call `apply()` and pass our record's constructor. For more details on how to construct codecs and more advanced use cases, be sure to read the [Codecs](../codecs) page.
 
-Регистрация составного компонента аналогична предыдущей. Мы просто передаем наш класс записи как универсальный тип, а наш пользовательский `Codec` — в метод `codec()`.
+Registering a composite component is similar to before. We just pass our record class as the generic type, and our custom `Codec` to the `codec()` method.
 
 @[code transcludeWith=::3](@/reference/latest/src/main/java/com/example/docs/component/ModComponents.java)
 
-Теперь начинайте игру. Попробуйте применить компонент с помощью команды `/give`. Значения составных компонентов передаются как объект, заключенный в `{}`. Если вы поставите пустые фигурные скобки, вы увидите сообщение об ошибке, сообщающее, что требуемый ключ `temperature` отсутствует.
+Now start the game. Using the `/give` command, try applying the component. Composite component values are passed as an object enclosed with `{}`. If you put blank curly brackets, you'll see an error telling you that the required key `temperature` is missing.
 
-![Дайте команду, показывающую отсутствующий ключ "температура"](/assets/develop/items/custom_component_4.png)
+![Give command showing missing key "temperature"](/assets/develop/items/custom_component_4.png)
 
-Добавьте значение температуры к объекту, используя синтаксис `temperature:8.2`. При желании можно также передать значение для `burnt`, используя тот же синтаксис, но либо `true`, либо `false`. Теперь вы должны увидеть, что команда действительна и может предоставить вам элемент, содержащий компонент.
+Add a temperature value to the object using the syntax `temperature:8.2`. You can also optionally pass a value for `burnt` using the same syntax but either `true` or `false`. You should now see that the command is valid, and can give you an item containing the component.
 
-![Верная команда give, показывающая оба свойства](/assets/develop/items/custom_component_5.png)
+![Valid give command showing both properties](/assets/develop/items/custom_component_5.png)
 
-### Получение, настройка и удаление дополнительных компонентов {#getting-setting-removing-advanced-comps}
+### Getting, Setting and Removing Advanced Components {#getting-setting-removing-advanced-comps}
 
-Использование компонента в коде такое же, как и раньше. Использование `stack.get()` вернет экземпляр вашего класса `record`, который затем можно использовать для чтения значений. Поскольку записи доступны только для чтения, вам потребуется создать новый экземпляр записи, чтобы обновить значения.
+Using the component in code is the same as before. Using `stack.get()` will return an instance of your `record` class, which you can then use to read the values. Since records are read-only, you will need to create a new instance of your record to update the values.
 
 ```java
 // read values of component
@@ -256,14 +256,16 @@ if (stack.contains(ModComponents.MY_CUSTOM_COMPONENT)) {
 stack.remove(ModComponents.MY_CUSTOM_COMPONENT);
 ```
 
-Вы также можете задать значение по умолчанию для составного компонента, передав объект компонента в `Item.Settings`. Например:
+You can also set a default value for a composite component by passing a component object to your `Item.Properties`. For example:
 
 ```java
-public static final Item COUNTER = register(new CounterItem(
-    new Item.Settings().component(ModComponents.MY_CUSTOM_COMPONENT, new MyCustomComponent(0.0f, false))
-), "counter");
+public static final Item COUNTER = register(
+    "counter",
+    CounterItem::new,
+    new Item.Properties().component(ModComponents.MY_CUSTOM_COMPONENT, new MyCustomComponent(0.0f, false))
+);
 ```
 
-Теперь вы можете хранить пользовательские данные в `ItemStack`. Используйте ответственно!
+Now you can store custom data on an `ItemStack`. Use responsibly!
 
-![Элемент, показывающий подсказки для количества кликов, температуры и сожженного](/assets/develop/items/custom_component_6.png)
+![Item showing tooltips for click count, temperature and burnt](/assets/develop/items/custom_component_6.png)

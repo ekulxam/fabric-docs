@@ -2,9 +2,11 @@
 title: Создание вашего первого блока
 description: Научитесь создавать собственные блоки в Minecraft.
 authors:
+  - CelDaemon
+  - Earthcomputer
   - IMB11
-  - xEobardThawne
   - its-miroma
+  - xEobardThawne
 ---
 
 Блоки являются основой строительства в Minecraft. Как и всё здесь, блоки хранятся в реестрах.
@@ -21,10 +23,12 @@ authors:
 
 Как и в случае с предметами, необходимо убедиться, что класс загружен, чтобы все статические поля с экземплярами ваших блоков были инициализированы.
 
-Вы можете сделать это, создав фиктивный метод `initialize`, который можно вызвать в вашем [инициализаторе мода](./getting-started/project-structure#entrypoints) для запуска статической инициализации.
+Это можно сделать, создав пустой метод `initialize`, который может быть вызван в [инициализаторе](../getting-started/project-structure#entrypoints) вашего мода, чтобы запустить статическую инициализацию.
 
-:::info
-Если вы не знаете, что такое статическая инициализация, это процесс инициализации статических полей в классе. Она выполняется, когда JVM загружает класс, и завершается до создания какого-либо экземпляра класса.
+::: info
+
+If you are unaware of what static initialization is, it is the process of initializing static fields in a class. This is done when the class is loaded by the JVM, and is done before any instances of the class are created.
+
 :::
 
 ```java
@@ -37,46 +41,48 @@ public class ModBlocks {
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/block/ExampleModBlocks.java)
 
-## Создание и регистрация вашего блока {#creating-and-registering-your-block}
+## Создание И Регистрирование Вашего Блока {#creating-and-registering-your-block}
 
-Подобно предметам, блоки имеют в своем конструкторе класс `Blocks.Settings`, который определяет такие свойства блока как его звуковые эффекты и уровень добычи.
+Similarly to items, blocks take a `BlockBehavior.Properties` class in their constructor, which specifies properties about the block, such as its sound effects and mining level.
 
-Мы не будем рассматривать здесь все настройки, вы можете сами заглянуть в класс, чтобы увидеть их варианты, которые говорят сами за себя.
+We will not cover all the options here: you can view the class yourself to see the various options, which should be self-explanatory.
 
-Для примера мы создадим простой блок, который имеет свойства земли, но представляет другой материал.
+For example purposes, we will be creating a simple block that has the properties of dirt, but is a different material.
 
-- Нам нужен `RegistryKey<Block>`, который используется как уникальный идентификатор нашего блока, он передается в Registry.register в предыдущем методе утилиты.
-- `RegistryKey<Block>` также требуется сборщику `AbstractBlock.Settings`.
+- We create our block settings in a similar way to how we created item settings in the item tutorial.
+- We tell the `register` method to create a `Block` instance from the block settings by calling the `Block` constructor.
 
-:::tip
-Вы можете использовать `AbstractBlock.Settings.copy(AbstractBlock block)`, чтобы скопировать параметры существующего блока. В данном случае мы могли бы использовать `Blocks.DIRT` для копирования параметров блока земли, но для примера мы используем конструктор.
+::: tip
+
+You can also use `BlockBehavior.Properties.ofFullCopy(BlockBehavior block)` to copy the settings of an existing block, in this case, we could have used `Blocks.DIRT` to copy the settings of dirt, but for example purposes we'll use the builder.
+
 :::
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
-Поскольку `BlockItem` был создан и зарегистрирован автоматически, для добавления его в группу элементов необходимо использовать метод `Block.asItem()` для получения экземпляра `BlockItem`.
+To automatically create the block item, we can pass `true` to the `shouldRegisterItem` parameter of the `register` method we created in the previous step.
 
-### Добавление предмета вашего блока в группу предметов {#adding-your-block-s-item-to-an-item-group}
+### Adding Your Block's Item to a Creative Tab {#adding-your-block-s-item-to-a-creative-tab}
 
-Для автоматического создания предмета блока мы можем передать `true` параметру `shouldRegisterItem` метода `register`, который мы создали на предыдущем шаге.
+Since the `BlockItem` is automatically created and registered, to add it to a creative tab, you must use the `Block.asItem()` method to get the `BlockItem` instance.
 
-Для этого примера мы используем пользовательскую группу предметов, созданную на странице [Собственные вкладки предметов](../items/custom-item-groups).
+For this example, we will add the block to the `BUILDING_BLOCKS` tab. To instead add the block to a custom creative tab, see [Custom Creative Tabs](../items/custom-item-groups).
 
 @[code transcludeWith=:::6](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
-Вы должны поместить это в функцию `initialize()` в ваш класс.
+You should place this within the `initialize()` function of your class.
 
-После этого ваш блок появится в творческом инвентаре, и вы сможете разместить его в мире!
+You should now notice that your block is in the creative inventory, and can be placed in the world!
 
-![Блок в мире без подходящей модели или текстуры](/assets/develop/blocks/first_block_0.png)
+![Block in world without suitable model or texture](/assets/develop/blocks/first_block_0.png)
 
-Осталось несколько проблем: предмет блока не имеет названия, а блок не имеет текстуры, модели блока и модели предмета.
+There are a few issues though - the block item is not named, and the block has no texture, block model or item model.
 
-## Добавление переводов блоков {#adding-block-translations}
+## Adding Block Translations {#adding-block-translations}
 
-Чтобы добавить перевод, необходимо создать ключ перевода в файле перевода - `assets/example-mod/lang/en_us.json`.
+To add a translation, you must create a translation key in your translation file - `assets/example-mod/lang/en_us.json`.
 
-Minecraft будет использовать этот перевод в творческом инвентаре и других местах, где отображается название блока, например, в качестве ответе команды.
+Minecraft will use this translation in the creative inventory and other places where the block name is displayed, such as command feedback.
 
 ```json
 {
@@ -84,87 +90,93 @@ Minecraft будет использовать этот перевод в тво�
 }
 ```
 
-Вы можете перезапустить игру или создать свой мод и нажать <kbd>F3</kbd>+<kbd>T</kbd>, чтобы применить изменения — и вы увидите, что у блока есть имя в творческом инвентаре и других местах, таких как экран статистики.
+You can either restart the game or build your mod and press <kbd>F3</kbd>+<kbd>T</kbd> to apply changes - and you should see that the block has a name in the creative inventory and other places such as the statistics screen.
 
-## Модели и текстуры {#models-and-textures}
+## Models and Textures {#models-and-textures}
 
-Все текстуры блоков можно найти в папке `assets/example-mod/textures/block` - пример текстуры для блока «Condensed Dirt» доступен для бесплатного использования.
+All block textures can be found in the `assets/example-mod/textures/block` folder - an example texture for the "Condensed Dirt" block is free to use.
 
-<DownloadEntry visualURL="/assets/develop/blocks/first_block_1.png" downloadURL="/assets/develop/blocks/first_block_1_small.png">Текстура</DownloadEntry>
+<DownloadEntry visualURL="/assets/develop/blocks/first_block_1.png" downloadURL="/assets/develop/blocks/first_block_1_small.png">Texture</DownloadEntry>
 
-Чтобы текстура отображалась в игре, вы должны создать блочную модель, которую можно найти в файле `assets/example-mod/models/block/condensed_dirt.json` для блока "Condensed Dirt". Для этого блока мы будем использовать тип модели `block/cube_all`.
+To make the texture show up in-game, you must create a block model which can be found in the `assets/example-mod/models/block/condensed_dirt.json` file for the "Condensed Dirt" block. For this block, we're going to use the `block/cube_all` model type.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/block/condensed_dirt.json)
 
-Чтобы блок отображался в вашем инвентаре, вам необходимо создать [Описание модели предмета](../items/first-item#creating-the-item-model-description), которое указывает на вашу модель блока. В этом примере описание модели элемента для блока "Condensed Dirt" можно найти по адресу `assets/example-mod/items/condensed_dirt.json`.
+For the block to show in your inventory, you will need to create a [Client Item](../items/first-item#creating-the-client-item) that points to your block model. For this example, the client item for the "Condensed Dirt" block can be found at `assets/example-mod/items/condensed_dirt.json`.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/items/condensed_dirt.json)
 
-:::tip
-Вам нужно создать описание модели элемента только в том случае, если вы зарегистрировали `BlockItem` вместе со своим блоком!
+::: tip
+
+You only need to create a client item if you've registered a `BlockItem` along with your block!
+
 :::
 
-При загрузке игры вы можете заметить, что текстура по-прежнему отсутствует. Это связано с тем, что вам необходимо добавить определение состояния блока.
+When you load into the game, you may notice that the texture is still missing. This is because you need to add a blockstate definition.
 
-## Создание определения состояния блока {#creating-the-block-state-definition}
+## Creating the Block State Definition {#creating-the-block-state-definition}
 
-Определение blockstate используется для указания игре, какую модель следует визуализировать на основе текущего состояния блока.
+The blockstate definition is used to instruct the game on which model to render based on the current state of the block.
 
-Для примера блок, который не имеет сложного состояния, в определении требуется только одна запись.
+For the example block, which doesn't have a complex blockstate, only one entry is needed in the definition.
 
-Этот файл должен находиться в папке `assets/example-mod/blockstates`, а его имя должно совпадать с идентификатором блока, использованным при регистрации вашего блока в классе `ModBlocks`. Например, если идентификатор блока — `condensed_dirt`, файл должен называться `condensed_dirt.json`.
+This file should be located in the `assets/example-mod/blockstates` folder, and its name should match the block ID used when registering your block in the `ModBlocks` class. For instance, if the block ID is `condensed_dirt`, the file should be named `condensed_dirt.json`.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/blockstates/condensed_dirt.json)
 
-:::tip
-Состояния блоков невероятно сложны, поэтому они будут рассмотрены далее на [отдельной странице] (./blockstates).
+::: tip
+
+Blockstates are incredibly complex, which is why they will be covered next in [their own separate page](./blockstates).
+
 :::
 
-Перезапуск игры или перезагрузка через <kbd>F3</kbd>+<kbd>T</kbd> для применения изменений — вы сможете увидеть текстуру блока в инвентаре и физически в мире:
+Restarting the game, or reloading via <kbd>F3</kbd>+<kbd>T</kbd> to apply changes - you should be able to see the block texture in the inventory and physically in the world:
 
 ![Block in world with suitable texture and model](/assets/develop/blocks/first_block_4.png)
 
-## Добавление выпадения для блоков {#adding-block-drops}
+## Adding Block Drops {#adding-block-drops}
 
-При разрушении блока в режиме выживания вы можете увидеть, что блок не выпадает. Возможно для этого вам понадобится эта функция, однако, чтобы блок выпадал как предмет при разрушении, необходимо реализовать его таблицу добычи. Файл таблицы добычи должен быть помещен в папку `data/example-mod/loot_table/blocks/`.
+When breaking the block in survival, you may see that the block does not drop - you might want this functionality, however to make your block drop as an item on break you must implement its loot table - the loot table file should be placed in the `data/example-mod/loot_table/blocks/` folder.
 
-:::info
-Для более глубокого понимания таблиц добычи вы можете обратиться к официальной странице [Minecraft Wiki - Loot Tables](https://minecraft.wiki/w/Loot_table).
+::: info
+
+For a greater understanding of loot tables, you can refer to the [Minecraft Wiki - Loot Tables](https://minecraft.wiki/w/Loot_table) page.
+
 :::
 
 @[code](@/reference/latest/src/main/resources/data/example-mod/loot_tables/blocks/condensed_dirt.json)
 
-В таблице добычи указано, какой предмет выпадет из блока, когда блок сломан и когда он взорван взрывом.
+This loot table provides a single item drop of the block item when the block is broken, and when it is blown up by an explosion.
 
-## Рекомендация по выбору инструмента для сбора {#recommending-a-harvesting-tool}
+## Recommending a Harvesting Tool {#recommending-a-harvesting-tool}
 
-Вы также можете захотеть, чтобы ваш блок можно было собирать только определенным инструментом — например, вы можете захотеть ускорить сбор с помощью лопаты.
+You may also want your block to be harvestable only by a specific tool - for example, you may want to make your block faster to harvest with a shovel.
 
-Все теги инструментов должны быть помещены в папку `data/minecraft/tags/block/mineable/`, где имя файла зависит от типа используемого инструмента, одного из следующих:
+All the tool tags should be placed in the `data/minecraft/tags/block/mineable/` folder - where the name of the file depends on the type of tool used, one of the following:
 
 - `hoe.json`
 - `axe.json`
 - `pickaxe.json`
 - `shovel.json`
 
-Содержимое файла довольно простое — это список элементов, которые следует добавить в теге.
+The contents of the file are quite simple - it is a list of items that should be added to the tag.
 
-В этом примере, блок «Condensed Dirt» добавляется к тегу `shovel`.
+This example adds the "Condensed Dirt" block to the `shovel` tag.
 
 @[code](@/reference/latest/src/main/resources/data/minecraft/tags/mineable/shovel.json)
 
-Если вы хотите, чтобы для добычи блока требовался инструмент, вам нужно добавить `.requiresTool()` к настройкам вашего блока, а также добавить соответствующий тег уровня добычи.
+If you wish for a tool to be required to mine the block, you'll want to append `.requiresCorrectToolForDrops()` to your block settings, as well as add the appropriate mining level tag.
 
-## Уровни добычи {#mining-levels}
+## Mining Levels {#mining-levels}
 
-Аналогично тег уровня добычи можно найти в папке `data/minecraft/tags/block/`, он имеет следующий формат:
+Similarly, the mining level tag can be found in the `data/minecraft/tags/block/` folder, and respects the following format:
 
-- `needs_stone_tool.json` - Минимальный уровень: каменные инструменты
-- `needs_iron_tool.json` - Минимальный уровень: железные инструменты
-- `needs_diamond_tool.json` - Минимальный уровень: алмазные инструменты.
+- `needs_stone_tool.json` - A minimum level of stone tools
+- `needs_iron_tool.json` - A minimum level of iron tools
+- `needs_diamond_tool.json` - A minimum level of diamond tools.
 
-Файл имеет тот же формат, что и файл инструмента для сбора — список элементов, которые необходимо добавить в теге.
+The file has the same format as the harvesting tool file - a list of items to be added to the tag.
 
-## Дополнительные заметки {#extra-notes}
+## Extra Notes {#extra-notes}
 
-Если вы добавляете в свой мод несколько блоков, вы можете рассмотреть возможность использования [Генерации данных](../data-generation/setup) для автоматизации процесса создания моделей блоков и элементов, определений состояний блоков и таблиц добычи.
+If you're adding multiple blocks to your mod, you may want to consider using [Data Generation](../data-generation/setup) to automate the process of creating block and item models, blockstate definitions, and loot tables.

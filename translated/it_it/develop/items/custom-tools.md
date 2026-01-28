@@ -24,6 +24,10 @@ Il costruttore di `ToolMaterial` accetta i parametri seguenti, in questo ordine:
 | `enchantmentValue`        | L'"incantabilità" degli utensili fatti di questo `ToolMaterial`.                                                                                                             |
 | `repairItems`             | Tutti gli oggetti in questo tag possono essere usati per riparare utensili di questo `ToolMaterial` in un'incudine.                                                          |
 
+Per questo esempio, useremo lo stesso oggetto di riparo che useremo per l'armatura. Definiamo il riferimento di tag come segue:
+
+@[code transcludeWith=:::repair_tag](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
+
 Se fai fatica a determinare valori adatti per ciascuno dei parametri numerici, considera le costanti dei materiali di utensili vanilla, tra cui `ToolMaterial.STONE` o `ToolMaterial.DIAMOND`.
 
 ## Creare Oggetti per gli Utensili {#creating-tool-items}
@@ -34,7 +38,7 @@ Con la stessa funzione di utilità della guida [Creare il Tuo Primo Oggetto](./f
 
 I due valori float (`1f, 1f`) fanno riferimento al danno in attacco dell'utensile e alla sua velocità d'attacco rispettivamente.
 
-Ricorda di aggiungerli ad un gruppo di oggetti se vuoi accedere ad essi dall'inventario in creativa!
+Remember to add them to a creative tab if you want to access them from the creative inventory!
 
 @[code transcludeWith=:::8](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 

@@ -2,8 +2,10 @@
 title: Maak Je Eerste Voorwerp
 description: Leer hoe je een simpel voorwerp registreert en hoe je textureert, modelleert en een benoemt.
 authors:
-  - IMB11
   - dicedpixels
+  - Earthcomputer
+  - IMB11
+  - RaphProductions
 ---
 
 Op deze pagina maak je kennis met enkele belangrijke concepten met betrekking tot voorwerpen, en hoe je ze kunt registreren, texturen, modelleren en benoemen.
@@ -12,7 +14,7 @@ Als je het nog niet wist: alles in Minecraft wordt opgeslagen in registers, en v
 
 ## Je Voorwerpen-klasse Voorbereiden {#preparing-your-items-class}
 
-Om de registratie van items te vereenvoudigen, kunt u een methode maken die een exemplaar van een item en een string-ID accepteert.
+To simplify the registering of items, you can create a method that accepts a string identifier, some item properties and a factory to create the `Item` instance.
 
 Met deze methode wordt een item gemaakt met de opgegeven identificatie en wordt dit geregistreerd bij het voorwerpregister van het spel.
 
@@ -22,128 +24,168 @@ Mojang doet dit ook voor hun voorwerpen! Neem maar eens een kijkje naar de `Item
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
+Notice how we're using a `GenericItem`, which allows us to use the same method `register` for registering any type of item that extends `Item`. We're also using a [`Function`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html) interface for the factory, which allows us to specify how we want our item to be created given the item properties.
+
 ## Het Registreren van een Voorwerp {#registering-an-item}
 
 Je kunt nu een voorwerp registreren met de methode.
 
-De voorwerpconstructor neemt een exemplaar van de `Items.Settings` klasse als een parameter. Met deze klasse kun je de eigenschappen van het voorwerp configureren via verschillende bouwermethodes.
+The register method takes in an instance of the `Item.Properties` class as a parameter. Met deze klasse kun je de eigenschappen van het voorwerp configureren via verschillende bouwermethodes.
 
 ::: tip
-If you want to change your item's stack size, you can use the `maxCount` method in the `Items.Settings`/`FabricItemSettings` class.
+
+If you want to change your item's stack size, you can use the `stacksTo` method in the `Item.Properties` class.
 
 Dit werkt niet als je het item als beschadigbaar hebt gemarkeerd, omdat de stapelgrootte voor beschadigbare items altijd 1 is om duplicatie-exploits te voorkomen.
+
 :::
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Als je echter in het spel gaat, kun je zien dat ons item niet bestaat! Dit komt omdat u de klasse niet statisch initialiseert.
+`Item::new` tells the register function to create an `Item` instance from an `Item.Properties` by calling the `Item` constructor (`new Item(...)`), which takes an `Item.Properties` as a parameter.
 
-Om dit te doen, kunt u een openbare statische initialisatiemethode aan uw klasse toevoegen en deze vanuit uw klasse `ModInitializer` aanroepen. Momenteel heeft deze methode niets nodig.
+However, if you now try to run the modified client, you can see that our item doesn't exist in-game yet! This is because you didn't statically initialize the class.
+
+To do this, you can add a public static initialize method to your class and call it from your [mod's initializer](../getting-started/project-structure#entrypoints) class. Currently, this method doesn't need anything inside it.
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ExampleModItems.java)
 
-Het aanroepen van een methode voor een klasse initialiseert deze statisch als deze nog niet eerder is geladen - dit betekent dat alle `static` velden worden geëvalueerd. Dit is waar de dummy `initialize` voor is.
+Calling a method on a class statically initializes it if it hasn't been previously loaded - this means that all `static` fields are evaluated. This is what this dummy `initialize` method is for.
 
-## Het Voorwerp Toevoegen aan een Voorwerpgroep {#adding-the-item-to-an-item-group}
+## Adding the Item to a Creative Tab {#adding-the-item-to-a-creative-tab}
 
-:::info
-Als je het item wilt toevoegen aan een aangepaste `ItemGroup`, ga dan naar de pagina [Aangepaste Voorwerpgroepen](./custom-item-groups) voor meer informatie.
+::: info
+
+If you want to add the item to a custom `CreativeModeTab`, check out the [Custom Creative Tabs](./custom-item-groups) page for more information.
+
 :::
 
-We zullen dit item bijvoorbeeld toevoegen aan de ingrediënten `ItemGroup`, u zult de voorwerpgroepgebeurtenissen van Fabric API moeten gebruiken - met name `ItemGroupEvents.modifyEntriesEvent`
+For example purposes, we will add this item to the ingredients `CreativeModeTab`, you will need to use Fabric API's creative tab events - specifically `ItemGroupEvents.modifyEntriesEvent`
 
-Dit kan gedaan worden in de `initialize`-methode van uw voorwerpen klasse.
+This can be done in the `initialize` method of your items class.
 
 @[code transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Als je het spel inlaadt, kun je zien dat ons item is geregistreerd en zich in de voorwerpgroep Ingrediënten bevindt:
+Loading into the game, you can see that our item has been registered, and is in the Ingredients creative tab:
 
 ![Item in the ingredients group](/assets/develop/items/first_item_0.png)
 
-Echter mist het het volgende:
+However, it's missing the following:
 
-- Voorwerpmodel
-- Textuur
-- Vertaling (Naam)
+- Item Model
+- Texture
+- Translation (name)
 
-## Het Voorwerp Benoemen {#naming-the-item}
+## Naming The Item {#naming-the-item}
 
-Momenteel heeft het voorwerp geen vertaling, dus je zult er een moeten toevoegen. De vertaalsleutel is al door Minecraft verstrekt: `item.example-mod.suspicious_substance`.
+The item currently doesn't have a translation, so you will need to add one. The translation key has already been provided by Minecraft: `item.example-mod.suspicious_substance`.
 
-Maak een nieuw JSON-bestand in: `src/main/resources/assets/<mod id here>/lang/nl_nl.json` (`en_us.json` voor Engels) en plaats de vertaalsleutel en de waarde ervan:
+Create a new JSON file at: `src/main/resources/assets/example-mod/lang/en_us.json` and put in the translation key, and its value:
 
 ```json
 {
-    "item.example-mod.suspicious_substance": "Suspicious Substance"
+  "item.example-mod.suspicious_substance": "Suspicious Substance"
 }
 ```
 
-Je kunt het spel opnieuw starten of je mod bouwen en op <kbd>F3</kbd>+<kbd>T</kbd> drukken om de wijzigingen toe te passen.
+You can either restart the game or build your mod and press <kbd>F3</kbd>+<kbd>T</kbd> to apply changes.
 
-## Een Textuur en Model Toevoegen {#adding-a-texture-and-model}
+## Adding a Client Item, Texture and Model {#adding-a-client-item-texture-and-model}
 
-Om je voorwerp een ​​textuur en model te geven, maak je eenvoudig een textuurafbeelding van 16x16 pixels voor uw item en slaat u deze op in de map `assets/<mod id here>/textures/item`. Geef het textuurbestand dezelfde naam als de ID van het voorwerp, maar met de extensie `.png`.
+For your item to have a proper appearance, it requires:
 
-Je kunt deze voorbeeldtextuur bijvoorbeeld gebruiken voor `suspicious_substance.png`
+- [An item texture](https://minecraft.wiki/w/Textures#Items)
+- [An item model](https://minecraft.wiki/w/Model#Item_models)
+- [A client item](https://minecraft.wiki/w/Items_model_definition)
 
-<DownloadEntry type="Texture" visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png" />
+### Adding a Texture {#adding-a-texture}
 
-Bij het herstarten/herladen van het spel zou je moeten zien dat het voorwerp nog steeds geen textuur heeft, dat komt omdat je een model moet toevoegen dat deze textuur gebruikt.
+::: info
 
-Je gaat een eenvoudig `item/generated`-model maken, dat een invoertextuur bevat en niets anders.
+For more information on this topic, see the [Item Models](./item-models) page.
 
-Maak de model-JSON in de map `assets/<mod id here>/models/item`, met dezelfde naam als het item; `suspicious_substance.json`
+:::
 
-@[code](@/reference/latest/src/main/resources/assets/example-mod/models/item/suspicious_substance.json)
+To give your item a texture and model, simply create a 16x16 texture image for your item and save it in the `assets/example-mod/textures/item` folder. Name the texture file the same as the item's identifier, but with a `.png` extension.
 
-### Het Model-JSON Afbreken {#breaking-down-the-model-json}
+For example purposes, you can use this example texture for `suspicious_substance.png`
 
-- `parent`: Dit is het ouder model wat dit model van zal erven. In dit geval is het het `item/generated`-model.
-- `textures`: Dit is waar je de texturen voor het model definieert. De `layer0`-sleutel is de textuur wat het voorwerpmodel zal gebruiken.
+<DownloadEntry visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png">Texture</DownloadEntry>
 
-De meeste voorwerpen zullen `item/generated` als ouder hebben, omdat het een eenvoudig model is wat alleen maar de textuur weergeeft.
+### Adding a Model {#adding-a-model}
 
-Er zijn alternatieven, zoals `item/handheld`, wat gebruikt wordt voor voorwerpen die vastgehouden worden in de spelers handen, zoals gereedschappen.
+When restarting/reloading the game - you should see that the item still has no texture, that's because you will need to add a model that uses this texture.
 
-Je voorwerp moet er nu zo uitzien in het spel:
+You're going to create a simple `item/generated` model, which takes in an input texture and nothing else.
+
+Create the model JSON in the `assets/example-mod/models/item` folder, with the same name as the item; `suspicious_substance.json`
+
+@[code](@/reference/latest/src/main/generated/assets/example-mod/models/item/suspicious_substance.json)
+
+#### Breaking Down the Model JSON {#breaking-down-the-model-json}
+
+- `parent`: This is the parent model that this model will inherit from. In this case, it's the `item/generated` model.
+- `textures`: This is where you define the textures for the model. The `layer0` key is the texture that the model will use.
+
+Most items will use the `item/generated` model as their parent, as it's a simple model that just displays the texture.
+
+There are alternatives, such as `item/handheld` which is used for items that are "held" in the player's hand, such as tools.
+
+### Creating the Client Item {#creating-the-client-item}
+
+Minecraft doesn't automatically know where your items' model files can be found, we need to provide a client item.
+
+Create the client item JSON in the `assets/example-mod/items`, with the same file name as the identifier of the item: `suspicious_substance.json`.
+
+@[code](@/reference/latest/src/main/generated/assets/example-mod/items/suspicious_substance.json)
+
+#### Breaking Down the Client Item JSON {#breaking-down-the-client-item-json}
+
+- `model`: This is the property that contains the reference to our model.
+  - `type`: This is the type of our model. For most items, this should be `minecraft:model`
+  - `model`: This is the model's identifier. It should have this form: `example-mod:item/item_name`
+
+Your item should now look like this in-game:
 
 ![Item with correct model](/assets/develop/items/first_item_2.png)
 
-## Het Voorwerp Composteerbaar of een Brandstof Maken {#making-the-item-compostable-or-a-fuel}
+## Making the Item Compostable or a Fuel {#making-the-item-compostable-or-a-fuel}
 
-Fabric API biedt verschillende registers die kunnen worden gebruikt om extra eigenschappen aan je voorwerp toe te voegen.
+Fabric API provides various registries that can be used to add additional properties to your item.
 
-Als je je voorwerp bijvoorbeeld composteerbaar wilt maken, kun je het `CompostableItemRegistry` gebruiken:
+For example, if you want to make your item compostable, you can use the `CompostingChanceRegistry`:
 
-@[code transcludeWith=:::_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Als je van je voorwerp een ​​brandstof wilt maken, kun je ook de klasse `FuelRegistry` gebruiken:
+Alternatively, if you want to make your item a fuel, you can use the `FuelRegistryEvents.BUILD` event:
 
-@[code transcludeWith=:::_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-## Een Basisrecept Toevoegen {#adding-a-basic-crafting-recipe}
+## Adding a Basic Crafting Recipe {#adding-a-basic-crafting-recipe}
 
 <!-- In the future, an entire section on recipes and recipe types should be created. For now, this suffices. -->
 
-Als u een recept voor uw item wilt toevoegen, moet u een JSON-receptbestand in de map `data/<mod id here>/recipe` plaatsen.
+If you want to add a crafting recipe for your item, you will need to place a recipe JSON file in the `data/example-mod/recipe` folder.
 
-Voor meer informatie over het receptformaat kunt u deze bronnen raadplegen:
+For more information on the recipe format, check out these resources:
 
-- [Recept JSON Generator](https://crafting.thedestruc7i0n.ca/)
+- [Recipe JSON Generator](https://crafting.thedestruc7i0n.ca/)
 - [Minecraft Wiki - Recipe JSON](https://minecraft.wiki/w/Recipe#JSON_Format)
 
-## Aangepaste Tooltips {#custom-tooltips}
+## Custom Tooltips {#custom-tooltips}
 
-Als je wilt dat je voorwerp een ​​aangepaste tooltip heeft, moet je een klasse maken die `Item` uitbreidt en de methode `appendTooltip` overschrijft.
+If you want your item to have a custom tooltip, you will need to create a class that extends `Item` and override the `appendHoverText` method.
 
-:::info
-In dit voorbeeld wordt de klasse `LightningStick` gebruikt die is gemaakt op de pagina [Aangepaste Voorwerpinteracties](./custom-item-interactions).
+::: info
+
+This example uses the `LightningStick` class created in the [Custom Item Interactions](./custom-item-interactions) page.
+
 :::
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-Elke aanroep van `add()` zal één regel aan de tooltip toevoegen.
+Each call to `accept()` will add one line to the tooltip.
 
 ![Tooltip Showcase](/assets/develop/items/first_item_3.png)

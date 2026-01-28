@@ -7,7 +7,7 @@ authors:
 
 Durante la solución de problemas, muchas veces es necesario proveer los logs para ayudar a identificar la causa del problema.
 
-## ¿Porqué debería subir los logs?
+## ¿Porqué debería subir los logs? ¿Porqué debería subir los logs?
 
 Subir los logs le permite a otros ayudarte a solucionar tus problemas más rápido comparado a simplemente pegar los logs en un chat o en una publicación de foro. También te permite compartir tus logs con otros sin tener que copiar y pegarlos.
 
@@ -19,7 +19,7 @@ Los reportes de crasheo son generados automáticamente cuando tu juego crashea. 
 
 Para más información sobre los reportes de crasheo, visita [Reportes de Crasheo](./crash-reports).
 
-## Encontrar los Logs
+## Subir Logs
 
 Esta guía cubre el launcher oficial de Minecraft (comúnmente referido como el "launcher vanilla") - para launchers de terceros, puedes consultar su documentación.
 
@@ -27,15 +27,15 @@ El folder del juego puede ser encontrado en los siguientes lugares dependiendo d
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft
 ```
 
@@ -43,7 +43,7 @@ El folder del juego puede ser encontrado en los siguientes lugares dependiendo d
 
 El log más recient se llama `latest.log`, mientras que logs anteriores utilizan un patrón de nombramiento como este: `aaaa-mm-dd_numero.log.gz`.
 
-## Subir Logs
+## Uploading Logs Online {#uploading-logs-online}
 
 Los logs pueden ser subidos en una variedad de servicios, como:
 

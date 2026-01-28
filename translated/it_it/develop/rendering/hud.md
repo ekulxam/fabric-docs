@@ -6,50 +6,52 @@ authors:
   - kevinthegreat1
 ---
 
-Abbiamo già parlato brevemente di come renderizzare cose sulla HUD nelle pagine [Concetti di Rendering di Base](./basic-concepts) e [Usare il Drawing Context](./draw-context), per cui in questa pagina ci concentreremo sull'API Hud e sul parametro `HudRenderCallback`.
+We already briefly touched on rendering things to the HUD in the [Basic Rendering Concepts](./basic-concepts) page and [Using The Drawing Context](./draw-context), so on this page we'll stick to the Hud API and the `DeltaTracker` parameter.
 
 ## `HudRenderCallback` {#hudrendercallback}
 
-:::warning
-Nel passato Fabric ha fornito `HudRenderCallback` per renderizzare al HUD. A causa di alcuni cambiamenti al rendering nel HUD, questo evento è diventato estremamente limitato, ed è deprecato dalla versione 0.116 dell'API di Fabric. Il suo uso è fortemente sconsigliato.
+::: warning
+
+Previously, Fabric provided `HudRenderCallback` to render to the HUD. Due to changes to HUD rendering, this event became extremely limited and is deprecated since Fabric API 0.116. Usage is strongly discouraged.
+
 :::
 
-## `HudLayerRegistrationCallback` {#hudlayerregistrationcallback}
+## `HudElementRegistry` {#hudelementregistry}
 
-Fabric fornisce l'API Hud per renderizzare e sovrapporre elementi nella HUD.
+Fabric provides the Hud API to render and layer elements on the HUD.
 
-Per iniziare, dobbiamo registrare un listener a `HudLayerRegistrationCallback` che registri i tuoi strati. Ogni strato è un `IdentifiedLayer`, ovver un `LayeredDrawer.Layer` vanilla collegato a un `Identifier`. Un'istanza di `LayeredDrawer.Layer` è solitamente una lambda che accetta un `DrawContext` e un'istanza di `RenderTickCounter` come parametro. Leggi `HudLayerRegistrationCallback` e le Javadoc correlate per maggiori dettagli sull'uso dell'API.
+To start, we need to register a listener to `HudElementRegistry` which registers your elements. Each element is a `HudElement`. A `HudElement` instance is usually a lambda that takes a `GuiGraphics` and a `DeltaTracker` instance as parameters. See `HudElementRegistry` and related Javadocs for more details on how to use the API.
 
-Il contesto di disegno può essere usato per accedere a varie utilità di rendering fornite dal gioco, e per accedere allo stack di matrici puro. Dovresti dare un'occhiata alla pagina [Usare il Contesto di Disegno](./draw-context) per saperne di più riguardo al contesto di disegno.
+The draw context can be used to access the various rendering utilities provided by the game, and access the raw matrix stack. You should check out the [Draw Context](./draw-context) page to learn more about the draw context.
 
-### Contatore di Tick di Render {#render-tick-counter}
+### Delta Tracker {#delta-tracker}
 
-La classe `RenderTickCounter` ti permette di ottenere il valore corrente di `tickDelta`. `tickDelta` è l'"avanzamento" tra il tick del gioco precedente e quello successivo.
+The `DeltaTracker` class allows you to retrieve the current `gameTimeDeltaPartialTick` value. `gameTimeDeltaPartialTick` is the "progress" between the last game tick and the next game tick.
 
-Per esempio, ipotizzando uno scenario a 200 FPS, il gioco esegue un nuovo tick più o meno ogni 10 frame. A ogni frame, `tickDelta` indica quanto siamo distanti tra un tick e l'altro. Nel corso di 11 frame, potresti ottenere:
+For example, if we assume a 200 FPS scenario, the game runs a new tick roughly every 10 frames. Each frame, `gameTimeDeltaPartialTick` represents how far we are between the last tick and the next. Over 11 frames, you might see:
 
-| Frame | `tickDelta`                     |
-| :---: | ------------------------------- |
-|  `1`  | `1`: Nuovo tick |
-|  `2`  | `1/10 = 0.1`                    |
-|  `3`  | `2/10 = 0.2`                    |
-|  `4`  | `3/10 = 0.3`                    |
-|  `5`  | `4/10 = 0.4`                    |
-|  `6`  | `5/10 = 0.5`                    |
-|  `7`  | `6/10 = 0.6`                    |
-|  `8`  | `7/10 = 0.7`                    |
-|  `9`  | `8/10 = 0.8`                    |
-|  `10` | `9/10 = 0.9`                    |
-|  `11` | `1`: Nuovo tick |
+| Frame | `gameTimeDeltaPartialTick`    |
+| :---: | ----------------------------- |
+|  `1`  | `1`: New tick |
+|  `2`  | `1/10 = 0.1`                  |
+|  `3`  | `2/10 = 0.2`                  |
+|  `4`  | `3/10 = 0.3`                  |
+|  `5`  | `4/10 = 0.4`                  |
+|  `6`  | `5/10 = 0.5`                  |
+|  `7`  | `6/10 = 0.6`                  |
+|  `8`  | `7/10 = 0.7`                  |
+|  `9`  | `8/10 = 0.8`                  |
+|  `10` | `9/10 = 0.9`                  |
+|  `11` | `1`: New tick |
 
-In pratica, dovresti solo usare `tickDelta` quando le tue animazioni dipendono dai tick di Minecraft. Per animazioni basate sul tempo usa `Util.getMeasuringTimeMs()`, che misura il tempo del mondo reale.
+You can retrieve `gameTimeDeltaPartialTick` by calling `deltaTracker.getGameTimeDeltaPartialTick(false)`, where the boolean parameter is `ignoreFreeze`, which essentially just allows you to ignore whenever players use the `/tick freeze` command.
 
-Puoi ottenere `tickDelta` chiamando `renderTickCounter.getTickDelta(false)`, dove il parametro booleano è `ignoreFreeze`, che in sostanza ti permette semplicemente d'ignorare l'utilizzo del giocatore del comando `/tick freeze`.
+In practice, you should only use `gameTimeDeltaPartialTick` when your animations depend on Minecraft's ticks. For time-based animations, use `Util.getMillis()`, which measures real-world time.
 
-In questo esempio, useremo `Util.getMeasuringTimeMs()` per interpolare linearmente il colore di un quadrato che viene renderizzato nel HUD.
+In this example, we'll use `Util.getMillis()` to linearly interpolate the color of a square that is being rendered to the HUD.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/HudRenderingEntrypoint.java)
 
-![Interpolare un colore nel tempo](/assets/develop/rendering/hud-rendering-deltatick.webp)
+![Lerping a color over time](/assets/develop/rendering/hud-rendering-deltatick.webp)
 
-Perché non provi a usare `tickDelta` e a vedere cosa succede all'animazione quando esegui il comando `/tick freeze`? Dovresti vedere che l'animazione si congela appena `tickDelta` diventa una costante (supponendo di aver passato `false` come parametro di `RenderTickCounter#getTickDelta`)
+Why don't you try use `gameTimeDeltaPartialTick` and see what happens to the animation when you run the `/tick freeze` command? You should see the animation freeze in place as `gameTimeDeltaPartialTick` becomes constant (assuming you have passed `false` as the parameter to `DeltaTracker#getGameTimeDeltaPartialTick`)

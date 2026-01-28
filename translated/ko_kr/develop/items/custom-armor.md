@@ -11,11 +11,11 @@ authors:
 
 기술적으로, 갑옷 재료를 위해 새로운 클래스를 필수적으로 만들어야 하는 것은 아니지만, 필요한 정적 필드를 고려했을 때 좋은 습관이라고 할 수 있습니다.
 
-예제에서는, `GuiditeArmorMaterial` 클래스에 정적 필드를 저장합니다.
+For this example, we'll create a `GuiditeArmorMaterial` class to store our static fields.
 
 ### 기본 내구도 {#base-durability}
 
-이 상수 값은 갑옷 아이템을 추가할 때 `Item.Settings#maxDamage(int damageValue)` 메소드에 사용됩니다. 이후 `ArmorMaterial` 객체를 생성할 때 생성자의 매개 변수에도 입력해야 합니다.
+This constant will be used in the `Item.Properties#maxDamage(int damageValue)` method when creating our armor items, it is also required as a parameter in the `ArmorMaterial` constructor when we create our `ArmorMaterial` object later.
 
 @[code transcludeWith=:::base_durability](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
 
@@ -48,6 +48,10 @@ authors:
 | `repairIngredient`    | 모루에서 이 재료로 만들어진 갑옷을 수리할 때 사용할 수 있는 아이템의 태그.                                                                                              |
 | `assetId`             | 레지스트리 키는 나중에 `ArmorMaterial` 생성자에 입력할 것입니다.                                                                                              |
 
+We define the repair ingredient tag reference as follows:
+
+@[code transcludeWith=:::repair_tag](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
+
 매개 변수의 값을 결정하는 것이 어렵다면, 위에서 언급한 것 처럼 `ArmorMaterials` 인터페이스에 있는 바닐라 `ArmorMaterial` 인스턴스를 참고할 수 있습니다.
 
 ## 갑옷 아이템 추가하기 {#creating-the-armor-items}
@@ -56,13 +60,13 @@ authors:
 
 물론, 모든 종류의 갑옷을 만들 필요는 없습니다. 부츠나 레깅스만 있어도 되죠. 거북 등딱지는 투구만 있기 때문에, 이러한 상황의 좋은 예시라고 할 수 있습니다.
 
-`ToolMaterial`과는 다르게, `ArmorMaterial`은 아이템의 내구도에 대한 정보는 저장되지 않습니다. 때문에 갑옷 아이템을 등록할 때 `Item.Settings`에 직접 기본 내구도를 입력해야 합니다.
+`ToolMaterial`과는 다르게, `ArmorMaterial`은 아이템의 내구도에 대한 정보는 저장되지 않습니다. For this reason the base durability needs to be manually added to the armor items' `Item.Properties` when registering them.
 
-이전에 생성해 두었던 `BASE_DURABILITY` 상수 필드를 `Item.Settings#maxDamage`에 입력하여 내구도를 설정할 수 있습니다.
+This is achieved by passing the `BASE_DURABILITY` constant we created previously into the `maxDamage` method in the `Item.Properties` class.
 
 @[code transcludeWith=:::6](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-추가한 갑옷을 크리에이티브 보관함에서 찾으려면 **아이템을 아이템 그룹에 추가해야** 합니다.
+You will also need to **add the items to a creative tab** if you want them to be accessible from the creative inventory.
 
 모든 아이템이 그렇듯, 번역 키도 추가해야 합니다.
 
@@ -78,45 +82,49 @@ authors:
 
 <DownloadEntry visualURL="/assets/develop/items/armor_0.png" downloadURL="/assets/develop/items/example_armor_item_textures.zip">아이템 텍스처</DownloadEntry>
 
-:::info
-헬멧 뿐만 아니라, 모든 아이템에 대한 JSON 모델 파일을 만들어야 합니다. 다른 아이템 모델에도 똑같이 적용됩니다.
+::: info
+
+You will need model JSON files for all the items, not just the helmet, it's the same principle as other item models.
+
 :::
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/item/guidite_helmet.json)
 
-보시다시피, 인게임에서 방어구 아이템은 적절한 모델을 가져야 합니다.
+As you can see, in-game the armor items should have suitable models:
 
-![갑옷 아이템 모델](/assets/develop/items/armor_1.png)
+![Armor item models](/assets/develop/items/armor_1.png)
 
-### 갑옷 텍스처 {#armor-textures}
+### Armor Textures {#armor-textures}
 
-개체가 갑옷을 착용하더라도, 아무것도 보이지 않을 것입니다. 착용 모델 정의와 텍스처가 없기 때문입니다.
+When an entity wears your armor, nothing will be shown. This is because you're missing textures and the equipment model definitions.
 
-![착용 모델이 적용되지 않은 플레이어](/assets/develop/items/armor_2.png)
+![Broken armor model on player](/assets/develop/items/armor_2.png)
 
-갑옷 텍스처는 두 가지 레이어로 이루어지며, 두 레이어 모두 존재해야 합니다.
+There are two layers for the armor texture, both must be present.
 
-위에서 `ArmorMaterial` 생성자에 입력했던 `RegistryKey<EquipmentAsset>` 필드 `GUIDITE_ARMOR_MATERIAL_KEY`를 사용할 때입니다. 재료와 비슷한 이름으로 설정하는 것이 좋기 때문에, 예제에서는 `guidite.png`로 설정합니다.
+Previously, we created a `ResourceKey<EquipmentAsset>` constant called `GUIDITE_ARMOR_MATERIAL_KEY` which we passed into our `ArmorMaterial` constructor. It's recommended to name the texture similarly, so in our case, `guidite.png`
 
-- `assets/example-mod/textures/entity/equipment/humanoid/guidite.png` - 상의와 부츠 텍스처가 저장됩니다.
-- `assets/example-mod/textures/entity/equipment/humanoid_leggings/guidite.png` - 레깅스의 텍스처가 저장됩니다.
+- `assets/example-mod/textures/entity/equipment/humanoid/guidite.png` - Contains upper body and boot textures.
+- `assets/example-mod/textures/entity/equipment/humanoid_leggings/guidite.png` - Contains legging textures.
 
-<DownloadEntry downloadURL="/assets/develop/items/example_armor_layer_textures.zip">Guidite 갑옷 모델 텍스처</DownloadEntry>
+<DownloadEntry downloadURL="/assets/develop/items/example_armor_layer_textures.zip">Guidite Armor Model Textures</DownloadEntry>
 
-:::tip
-모드를 1.21.4로 업데이트하고 있다면, `humanoid` 폴더는 `layer0.png` 갑옷 텍스처, `humanoid_leggings` 폴더는 `layer1.png` 갑옷 텍스처가 저장된다고 할 수 있습니다.
+::: tip
+
+If you're updating to 1.21.11 from an older version of the game, the `humanoid` folder is where your `layer0.png` armor texture goes, and the `humanoid_leggings` folder is where your `layer1.png` armor texture goes.
+
 :::
 
-이제, 착용 모델 정의를 만들 차례입니다. `assets/example-mod/equipment` 폴더에 추가할 것입니다.
+Next, you'll need to create an associated equipment model definition. These go in the `/assets/example-mod/equipment/` folder.
 
-위에서 생성했던 `RegistryKey<EquipmentAsset>` 상수가 JSON 파일의 이름을 결정하게 됩니다. 예제에서는, `guidite.json`입니다.
+The `ResourceKey<EquipmentAsset>` constant we created earlier will determine the name of the JSON file. In this case, it'll be `guidite.json`.
 
-예제에서는 "인간형" 갑옷(헬멧, 흉갑, 레깅스, 부츠 등)만 추가했기 때문에, 모델 정의는 다음과 같은 형태로 이루어집니다:
+Since we only plan to add "humanoid" (helmet, chestplate, leggings, boots etc.) armor pieces, our equipment model definition will look like this:
 
 @[code](@/reference/latest/src/main/resources/assets/example-mod/equipment/guidite.json)
 
-텍스처와 착용 모델 정의를 모두 추가했다면, 개체가 갑옷을 착용하면 다음과 같이 보일 것입니다:
+With the textures and equipment model definition present, you should be able to see your armor on entities that wear it:
 
-![갑옷 모델이 작동중인 플레이어](/assets/develop/items/armor_3.png)
+![Working armor model on player](/assets/develop/items/armor_3.png)
 
 <!-- TODO: A guide on creating equipment for dyeable armor could prove useful. -->

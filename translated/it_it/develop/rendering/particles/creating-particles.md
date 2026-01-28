@@ -26,45 +26,51 @@ Dopo aver registrato la particella nell'initializer della tua mod, dovrai anche 
 In questo esempio, stiamo registrando la nostra particella dal lato client. Stiamo dando un po' di movimento alla particella usando la fabbrica della particella della barra dell'End. Questo vuol dire che la nostra particella si muoverà proprio come una particella di una barra dell'End.
 
 ::: tip
+
 You can see all the particle factories by looking at all the implementations of the `ParticleFactory` interface. This is helpful if you want to use another particle's behaviour for your own particle.
 
-- Scorciatoia di IntelliJ: Ctrl+Alt+B
-- Scorciatoia di Visual Studio Code: Ctrl+F12
-  :::
+- IntelliJ's hotkey: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>B</kbd>
+- Visual Studio Code's hotkey: <kbd>Ctrl</kbd>+<kbd>F12</kbd>
 
-## Creare un File JSON e Aggiungere le Texture {#creating-a-json-file-and-adding-textures}
+:::
 
-Dovrai creare 2 cartelle all'interno della cartella `resources/assets/example-mod/`.
+## Creating a JSON File and Adding Textures {#creating-a-json-file-and-adding-textures}
 
-| Percorso della Cartella | Spiegazione                                                                                     |
-| ----------------------- | ----------------------------------------------------------------------------------------------- |
-| `/textures/particle`    | La cartella `particle` conterrà tutte le texture per tutte le tue particelle.   |
-| `/particles`            | La cartella `particles` conterrà tutti i file json per tutte le tue particelle. |
+You will need to create 2 folders in your `resources/assets/example-mod/` folder.
 
-Per questo esempio, avremo una sola texture in `textures/particle` chiamata "sparkle_particle_texture.png".
+| Folder Path          | Explanation                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| `/textures/particle` | The `particle` folder will contain all the textures for all of your particles.       |
+| `/particles`         | The `particles` folder will contain all of the json files for all of your particles. |
 
-Dopo, crea un nuovo file JSON in `particles` con lo stesso nome del percorso JSON che hai usato quando hai registrato il tuo ParticleType. Per questo esempio, dovremo creare `sparkle_particle.json`. Questo file è importante perché fa conoscere a Minecraft quali texture dovrebbe usare la nostra particella.
+For this example, we will have only one texture in `textures/particle` called "sparkle_particle_texture.png".
+
+Next, create a new JSON file in `particles` with the same name as the JSON path that you used when registering your ParticleType. For this example, we will need to create `sparkle_particle.json`. This file is important because it lets Minecraft know which textures our particle should use.
 
 @[code lang=json](@/reference/latest/src/main/resources/assets/example-mod/particles/sparkle_particle.json)
 
-:::tip
-Puoi aggiungere altre texture al vettore `textures` per creare un animazione per la particella. La particella scorrerà attraverso le texture nel vettore, iniziando dalla prima.
+::: tip
+
+You can add more textures to the `textures` array to create a particle animation. The particle will cycle through the textures in the array, starting with the first texture.
+
 :::
 
-## Testare la Nuova Particella {#testing-the-new-particle}
+## Testing the New Particle {#testing-the-new-particle}
 
-Una volta completato il file JSON e salvato il tuo lavoro, puoi aprire Minecraft e testare tutto!
+Once you have completed the JSON file and saved your work, you are good to load up Minecraft and test everything out!
 
-Puoi controllare se tutto ha funzionato scrivendo il comando seguente:
+You can see if everything has worked by typing the following command:
 
 ```mcfunction
 /particle example-mod:sparkle_particle ~ ~1 ~
 ```
 
-![Dimostrazione della particella](/assets/develop/rendering/particles/sparkle-particle-showcase.png)
+![Showcase of the particle](/assets/develop/rendering/particles/sparkle-particle-showcase.png)
 
-:::info
-La particella comparirà all'interno del giocatore con questo comando. Probabilmente dovrai camminare all'indietro per vederla effettivamente.
+::: info
+
+The particle will spawn inside the player with this command. You will likely need to walk backwards to actually see it.
+
 :::
 
-In alternativa, puoi anche usare un blocco comandi per far apparire la particella usando lo stesso comando.
+Alternatively, you can also use a command block to summon the particle with the exact same command.

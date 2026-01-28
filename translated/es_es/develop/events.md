@@ -2,17 +2,17 @@
 title: Eventos
 description: Una guía para usar los eventos ofrecidos por el Fabric API.
 authors:
-  - dicedpixels
-  - mkpoli
   - daomephsta
-  - solidblock
+  - dicedpixels
   - draylar
   - jamieswhiteshirt
-  - PhoenixVX
   - Juuxel
-  - YanisBft
   - liach
+  - mkpoli
   - natanfudge
+  - PhoenixVX
+  - solidblock
+  - YanisBft
 authors-nogithub:
   - stormyfabric
 ---
@@ -31,13 +31,9 @@ Un callback es una porción de código pasada como un argumento a un evento. Cua
 
 ### Interfaces de Callbacks
 
-Cada evento tiene su propia interfaz de callback, convencionalmente llamada `<EventName>Callback`. Los callbacks son registrados llamando el método `register()` en una instancia del evento, con una instancia de la interfaz del callback como el argumento.
+Each event has a corresponding callback interface. Los callbacks son registrados llamando el método `register()` en una instancia del evento, con una instancia de la interfaz del callback como el argumento.
 
-Todas las interfaces de callbacks para eventos proveídas por el Fabric API pueden ser encontradas en el paquete `net.fabricmc.fabric.api.event`.
-
-## Detectando Eventos
-
-### Un Ejemplo Sencillo
+## Listening to Events {#listening-to-events}
 
 Este ejemplo registra un `AttackBlockCallback` para atacar el jugador cuando este golpea bloques que no sueltan un item cuando son minados con la mano.
 
@@ -53,7 +49,7 @@ Agregaremos huevos al loot table del bloque de mena de hierro.
 
 #### Detectando el Cargado de Loot Tables
 
-El Fabric API tiene un evento que es llamado cuando los loot tables son cargados, llamado `LootTableEvents.MODIFY`. Puedes registrar un callback para el evento en tu inicializador de mod. Verifiquemos también que el loot table actual sea el del bloque de mena de hierro.
+El Fabric API tiene un evento que es llamado cuando los loot tables son cargados, llamado `LootTableEvents.MODIFY`. You can register a callback for it in your [mod's initializer](./getting-started/project-structure#entrypoints). Verifiquemos también que el loot table actual sea el del bloque de mena de hierro.
 
 @[code lang=java transclude={38-40}](@/reference/latest/src/main/java/com/example/docs/event/ExampleModEvents.java)
 

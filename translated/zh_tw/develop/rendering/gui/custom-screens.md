@@ -5,58 +5,62 @@ authors:
   - IMB11
 ---
 
-:::info
-這篇教學只包含一般介面，不包含同步介面 `HandledScreen`，一般畫面只會在客戶端顯示，不會與伺服器同步。
+<!---->
+
+::: info
+
+This page refers to normal screens, not handled ones - these screens are the ones that are opened by the player on the client, not the ones that are handled by the server.
+
 :::
 
-畫面就是玩家可以互動的圖形介面，例如：主畫面，暫停選單。
+Screens are essentially the GUIs that the player interacts with, such as the title screen, pause screen etc.
 
-你可以建立自己的畫面來顯示自訂內容、設定等。
+You can create your own screens to display custom content, a custom settings menu, or more.
 
-## 創建一個畫面 {#creating-a-screen}
+## Creating a Screen {#creating-a-screen}
 
-創建一個畫面會需要繼承（extend）`Screen` 類別和重寫 （override）`init` 函式，你也可以重寫（override）`render` 函式，但請確保呼叫父類函式（super），不然背景以及畫面元件不會被顯示。
+To create a screen, you need to extend the `Screen` class and override the `init` method - you may optionally override the `render` method as well - but make sure to call it's super method or it wont render the background, widgets etc.
 
-請注意：
+You should take note that:
 
-- 畫面元件不應該在建構子裡被創造，因為畫面還沒建構完成，部分變數（例如：寬度 `width`、高度 `height`）還無法被存取或是不準確。
-- `init` 函式是在畫面被創建時呼叫的，所以創建畫面元件最適合在裡面執行。
-  - `addDrawableChild`函式負責顯示畫面元件，他可以顯示任何可以被繪製（drawable）的畫面元件。
-- `render` 函式每幀都會被執行，在函式中可以獲取圖形繪器 `DrawContext` 和滑鼠位置 `mouseX` `mouseY`。
+- Widgets are not being created in the constructor because the screen is not yet initialized at that point - and certain variables, such as `width` and `height`, are not yet available or not yet accurate.
+- The `init` method is called when the screen is being initialized, and it is the best place to create widgets.
+  - You add widgets using the `addRenderableWidget` method, which accepts any drawable widget.
+- The `render` method is called every frame - you can access the draw context, and the mouse position from this method.
 
-我們將創建一個簡單的畫面，畫面包含一個按鈕和一串標示。
+As an example, we can create a simple screen that has a button and a label above it.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
-![自訂畫面 1](/assets/develop/rendering/gui/custom-1-example.png)
+![Custom Screen 1](/assets/develop/rendering/gui/custom-1-example.png)
 
-## 打開畫面 {#opening-the-screen}
+## Opening the Screen {#opening-the-screen}
 
-你可以透過 `MinecraftClient` 的 `setScreen` 函式來打開自訂畫面，開啟的方法可以有很多（例如：按鍵，指令，封包）。
+You can open the screen using the `Minecraft`'s `setScreen` method - you can do this from many places, such as a key binding, a command, or a client packet handler.
 
 ```java
-MinecraftClient.getInstance().setScreen(
-  new CustomScreen(Text.empty())
+Minecraft.getInstance().setScreen(
+  new CustomScreen(Component.empty())
 );
 ```
 
-## 關閉畫面 {#closing-the-screen}
+## Closing the Screen {#closing-the-screen}
 
-如果你想要關閉畫面回到遊戲，可以使用 `setScreen(null)` 函式。
+If you want to close the screen, simply set the screen to `null`:
 
 ```java
-MinecraftClient.getInstance().setScreen(null);
+Minecraft.getInstance().setScreen(null);
 ```
 
-如果你想要回到上一個畫面，在現在的畫面的建構子裡傳入上一個畫面，並將它保存到參數裡，然後在 `close` 函式裡呼叫 `setScreen(/* 剛剛保存的畫面 */)` 。
+If you want to be fancy, and return to the previous screen, you can pass the current screen into the `CustomScreen` constructor and store it in a field, then use it to return to the previous screen when the `close` method is called.
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
-這樣當你在開啟新的畫面時，你可以把現在的畫面傳入建構子中，然後在 `CustomScreen#Close` 執行時，就可以回到上個畫面了。
+Now, when opening the custom screen, you can pass the current screen as the second argument - so when you call `CustomScreen#close` - it will return to the previous screen.
 
 ```java
-Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-MinecraftClient.getInstance().setScreen(
-  new CustomScreen(Text.empty(), currentScreen)
+Screen currentScreen = Minecraft.getInstance().currentScreen;
+Minecraft.getInstance().setScreen(
+  new CustomScreen(Component.empty(), currentScreen)
 );
 ```

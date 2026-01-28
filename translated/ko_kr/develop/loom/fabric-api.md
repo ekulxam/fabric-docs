@@ -16,7 +16,7 @@ Loom은 데이터 생성과 테스트 등 Fabric API의 일부 기능의 구성�
 
 ## 데이터 생성 {#data-gen}
 
-데이터 생성 방법에 대한 단계적 설명서는, [데이터 생성 시작하기](data-generation/setup)를 참조해야 합니다. 가장 기본적인 데이터 생성 구성은 다음 코드로 할 수 있습니다:
+For a step-by-step guide on how to use data generation, see the [Data Generation Setup](../data-generation/setup) page. 가장 기본적인 데이터 생성 구성은 다음 코드로 할 수 있습니다:
 
 ```groovy
 fabricApi {

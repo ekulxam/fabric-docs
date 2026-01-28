@@ -11,11 +11,11 @@ Un'armatura fornisce al giocatore una difesa migliore contro attacchi di mob e d
 
 Tecnicamente, non serve una classe apposita per il materiale della tua armatura, ma comunque è buona pratica data la quantità di attributi statici di cui avrai bisogno.
 
-Per questo esempio, creeremo una classe `GuiditeArmorMaterial` che memorizzi i nostri attributi statici.
+For this example, we'll create a `GuiditeArmorMaterial` class to store our static fields.
 
 ### Durabilità di Base {#base-durability}
 
-Questa costante verrà usata nel metodo `Item.Settings#maxDamage(int damageValue)` quando si creano gli oggetti della nostra armatura, ed è anche necessaria come parametro nel costruttore `ArmorMaterial` quando creeremo successivamente il nostro oggetto `ArmorMaterial`.
+This constant will be used in the `Item.Properties#maxDamage(int damageValue)` method when creating our armor items, it is also required as a parameter in the `ArmorMaterial` constructor when we create our `ArmorMaterial` object later.
 
 @[code transcludeWith=:::base_durability](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
 
@@ -48,6 +48,10 @@ Il costruttore di `ArmorMaterial` accetta i parametri seguenti, in questo ordine
 | `repairIngredient`    | Un tag di oggetti che rappresenta tutti gli oggetti che possono essere usati per riparare gli oggetti dell'armatura di questo materiale in un'incudine.                                                                                                                      |
 | `assetId`             | Una chiave di registry `EquipmentAsset`, questa dovrebbe essere la costante di chiave di registry per l'asset indossato creata in precedenza.                                                                                                                                |
 
+Definiamo il riferimento di tag dell'ingrediente di riparo come segue:
+
+@[code transcludeWith=:::repair_tag](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
+
 Se fai fatica a determinare valori adatti per ciascuno di questi parametri, puoi consultare le istanze dei `ArmorMaterial` vanilla che trovi nell'interfaccia `ArmorMaterials`.
 
 ## Creare gli Oggetti dell'Armatura {#creating-the-armor-items}
@@ -56,13 +60,13 @@ Ora che hai registrato il materiale, puoi creare gli oggetti dell'armatura nella
 
 Ovviamente, un set di armatura non deve per forza essere completo, puoi avere un set con solo stivali, o solo gambiere... - il carapace di tartaruga vanilla è un buon esempio di un set di armatura con elementi mancanti.
 
-A differenza di `ToolMaterial`, `ArmorMaterial` non memorizza alcuna informazione riguardo alla durabilità degli oggetti. Per questo motivo la durabilità di base deve essere aggiunta manualmente a `Item.Settings` degli oggetti dell'armatura quando li si registra.
+A differenza di `ToolMaterial`, `ArmorMaterial` non memorizza alcuna informazione riguardo alla durabilità degli oggetti. For this reason the base durability needs to be manually added to the armor items' `Item.Properties` when registering them.
 
-Questo si ottiene passando la costante `BASE_DURABILITY` che abbiamo creato sopra nel metodo `maxDamage` nella classe `Item.Settings`.
+This is achieved by passing the `BASE_DURABILITY` constant we created previously into the `maxDamage` method in the `Item.Properties` class.
 
 @[code transcludeWith=:::6](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Dovrai anche **aggiungere gli oggetti ad un gruppo** se vorrai che essi siano accessibili dall'inventario in creativa.
+You will also need to **add the items to a creative tab** if you want them to be accessible from the creative inventory.
 
 Come per tutti gli oggetti, dovresti creare chiavi di traduzione anche per questi.
 
@@ -78,45 +82,49 @@ Come esempio, puoi usare le seguenti texture e modelli JSON come riferimento.
 
 <DownloadEntry visualURL="/assets/develop/items/armor_0.png" downloadURL="/assets/develop/items/example_armor_item_textures.zip">Texture degli Oggetti</DownloadEntry>
 
-:::info
-Ti serviranno modelli in file JSON per tutti gli oggetti, non solo l'elmo, stesso principio di altri modelli di oggetti.
+::: info
+
+You will need model JSON files for all the items, not just the helmet, it's the same principle as other item models.
+
 :::
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/item/guidite_helmet.json)
 
-Come puoi notare, gli oggetti dell'armatura avranno i modelli appropriati nel gioco:
+As you can see, in-game the armor items should have suitable models:
 
-![Modelli degli oggetti dell'armatura](/assets/develop/items/armor_1.png)
+![Armor item models](/assets/develop/items/armor_1.png)
 
-### Texture dell'Armatura {#armor-textures}
+### Armor Textures {#armor-textures}
 
-Quando un'entità indossa la tua armatura, non si vedrà nulla. Questo perché ti mancano le definizioni di texture e di modello indossato.
+When an entity wears your armor, nothing will be shown. This is because you're missing textures and the equipment model definitions.
 
-![Modello di armatura corrotto su un giocatore](/assets/develop/items/armor_2.png)
+![Broken armor model on player](/assets/develop/items/armor_2.png)
 
-Ci sono due strati per le texture dell'armatura, entrambi devono essere presenti.
+There are two layers for the armor texture, both must be present.
 
-Abbiamo prima creato una costante `RegistryKey<EquipmentAsset>` chiamata `GUIDITE_ARMOR_MATERIAL_KEY`, che avevamo passato nel nostro costruttore `ArmorMaterial`. Si consiglia di nominare la texture similmente, per cui nel nostro caso sarà `guidite.png`
+Previously, we created a `ResourceKey<EquipmentAsset>` constant called `GUIDITE_ARMOR_MATERIAL_KEY` which we passed into our `ArmorMaterial` constructor. It's recommended to name the texture similarly, so in our case, `guidite.png`
 
-- `assets/example-mod/textures/entity/equipment/humanoid/guidite.png` - Contiene texture della parte superiore del corpo e degli stivali.
-- `assets/example-mod/textures/entity/equipment/humanoid_leggings/guidite.png` - Contiene texture per il gambiere.
+- `assets/example-mod/textures/entity/equipment/humanoid/guidite.png` - Contains upper body and boot textures.
+- `assets/example-mod/textures/entity/equipment/humanoid_leggings/guidite.png` - Contains legging textures.
 
-<DownloadEntry downloadURL="/assets/develop/items/example_armor_layer_textures.zip">Texture dei Modelli delle Armature in Guidite</DownloadEntry>
+<DownloadEntry downloadURL="/assets/develop/items/example_armor_layer_textures.zip">Guidite Armor Model Textures</DownloadEntry>
 
-:::tip
-Se stai passando a 1.21.4 da una versione meno recente del gioco, è nella cartella `humanoid` che si mette la tua texture d'armatura `layer0.png`, mentre la cartella `humanoid_leggings` contiene la tua texture `layer1.png`.
+::: tip
+
+If you're updating to 1.21.11 from an older version of the game, the `humanoid` folder is where your `layer0.png` armor texture goes, and the `humanoid_leggings` folder is where your `layer1.png` armor texture goes.
+
 :::
 
-Poi, dovrai creare una definizione del modello indossato ad essa associata. Queste vanno nella cartella `/assets/example-mod/equipment/`.
+Next, you'll need to create an associated equipment model definition. These go in the `/assets/example-mod/equipment/` folder.
 
-La costante `RegistryKey<EquipmentAsset>` creata più sopra determinerà il nome del file JSON. In questo caso sarà `guidite.json`.
+The `ResourceKey<EquipmentAsset>` constant we created earlier will determine the name of the JSON file. In this case, it'll be `guidite.json`.
 
-Poiché vogliamo solo aggiungere i pezzi d'armatura "umanoidi" (elmo, corazza, gambiere, stivali...), la definizione del nostro modello indossato sarà come segue:
+Since we only plan to add "humanoid" (helmet, chestplate, leggings, boots etc.) armor pieces, our equipment model definition will look like this:
 
 @[code](@/reference/latest/src/main/resources/assets/example-mod/equipment/guidite.json)
 
-Quando sia le texture sia le definizioni dei modelli indossati sono presenti, dovresti poter vedere la tua armatura sulle entità che la indossano:
+With the textures and equipment model definition present, you should be able to see your armor on entities that wear it:
 
-![Modello di armatura funzionante su un giocatore](/assets/develop/items/armor_3.png)
+![Working armor model on player](/assets/develop/items/armor_3.png)
 
 <!-- TODO: A guide on creating equipment for dyeable armor could prove useful. -->

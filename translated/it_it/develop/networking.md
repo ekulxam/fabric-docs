@@ -43,145 +43,176 @@ Quando lo stato non è sincronizzato tra client e server, possono verificarsi pr
 
 ### Definire un Payload {#defining-a-payload}
 
-:::info
-Un payload sono i dati che vengono inviati in un pacchetto.
+::: info
+
+A payload is the data that is sent within a packet.
+
 :::
 
-Questo può essere fatto creando un `Record` Java con un parametro `BlockPos` che implementi `CustomPayload`.
+This can be done by creating a Java `Record` with a `BlockPos` parameter that implements `CustomPacketPayload`.
 
 @[code lang=java transcludeWith=:::summon_Lightning_payload](@/reference/latest/src/main/java/com/example/docs/networking/basic/SummonLightningS2CPayload.java)
 
-Allo stesso tempo, abbiamo definito:
+At the same time, we've defined:
 
-- Un `Identifier` utilizzato per identificare il payload del nostro pacchetto. Per questo esempio, il nostro identificatore sarà `example-mod:summon_lightning`.
+- An `Identifier` used to identify our packet's payload. For this example our identifier will be
+  `example-mod:summon_lightning`.
 
 @[code lang=java transclude={13-13}](@/reference/latest/src/main/java/com/example/docs/networking/basic/SummonLightningS2CPayload.java)
 
-- Un'istanza pubblica statica di `CustomPayload.Id` per identificare in modo univoco questo payload personalizzato. Faremo riferimento a questo ID sia nel codice comune che in quello client.
+- A public static instance of `CustomPayload.Id` to uniquely identify this custom payload. We will be referencing this
+  ID in both our common and client code.
 
 @[code lang=java transclude={14-14}](@/reference/latest/src/main/java/com/example/docs/networking/basic/SummonLightningS2CPayload.java)
 
-- Un'istanza pubblica statica di `PacketCodec` affinché il gioco sappia come serializzare/deserializzare i contenuti del pacchetto.
+- A public static instance of a `StreamCodec` so that the game knows how to serialize/deserialize the contents of the
+  packet.
 
 @[code lang=java transclude={15-15}](@/reference/latest/src/main/java/com/example/docs/networking/basic/SummonLightningS2CPayload.java)
 
-Abbiamo anche fatto override di `getId` per restituire l'ID del nostro payload.
+We have also overridden `type` to return our payload ID.
 
 @[code lang=java transclude={17-20}](@/reference/latest/src/main/java/com/example/docs/networking/basic/SummonLightningS2CPayload.java)
 
-### Registrare un Payload {#registering-a-payload}
+### Registering a Payload {#registering-a-payload}
 
-Prima di inviare un pacchetto con il nostro payload personalizzato, dobbiamo registrarlo.
+Before we send a packet with our custom payload, we need to register it on both physical sides.
 
-:::info
-`S2C` e `C2S` sono due suffissi comunemente usati, e che significano rispettivamente _Server-to-Client_ e _Client-to-Server_.
+::: info
+
+`S2C` and `C2S` are two common suffixes that mean _Server-to-Client_ and _Client-to-Server_ respectively.
+
 :::
 
-Questo si può fare nel nostro **initializer comune** usando `PayloadTypeRegistry.playS2C().register` che accetta un `CustomPayload.Id` e un `PacketCodec`.
+This can be done in our **common initializer** by using `PayloadTypeRegistry.playS2C().register` which takes in a
+`CustomPayload.Id` and a `StreamCodec`.
 
 @[code lang=java transclude={25-25}](@/reference/latest/src/main/java/com/example/docs/networking/basic/ExampleModNetworkingBasic.java)
 
-Esiste un metodo simile per registrare i payload da client a server: `PayloadTypeRegistry.playC2S().register`.
+A similar method exists to register client-to-server payloads: `PayloadTypeRegistry.playC2S().register`.
 
-### Inviare un Pacchetto al Client {#sending-a-packet-to-the-client}
+### Sending a Packet to the Client {#sending-a-packet-to-the-client}
 
-Per inviare un pacchetto con il nostro payload personalizzato, possiamo usare `ServerPlayNetworking.send` che accetta un `ServerPlayerEntity` e un `CustomPayload`.
+To send a packet with our custom payload, we can use `ServerPlayNetworking.send` which takes in a `ServerPlayerEntity`
+and a `CustomPayload`.
 
-Iniziamo creando il nostro oggetto Lightning Tater. Puoi fare override di `use` per attivare un'azione quando l'oggetto viene utilizzato.
-In questo caso, inviamo pacchetti ai giocatori nel mondo del server.
+Let's start by creating our Lightning Tater item. You can override `use` to trigger an action when the item is used.
+In this case, let's send packets to the players in the server level.
 
 @[code lang=java transcludeWith=:::lightning_tater_item](@/reference/latest/src/main/java/com/example/docs/networking/basic/LightningTaterItem.java)
 
-Esaminiamo il codice sopra.
+Let's examine the code above.
 
-Inviamo pacchetti solo quando l'azione viene avviata sul server, uscendo anticipatamente con un controllo `isClient`:
+We only send packets when the action is initiated on the server, by returning early with a `isClient` check:
 
 @[code lang=java transclude={22-24}](@/reference/latest/src/main/java/com/example/docs/networking/basic/LightningTaterItem.java)
 
-Creiamo un'istanza del payload con la posizione dell'utente:
+We create an instance of the payload with the user's position:
 
 @[code lang=java transclude={26-26}](@/reference/latest/src/main/java/com/example/docs/networking/basic/LightningTaterItem.java)
 
-Infine, otteniamo i giocatori nel mondo del server tramite `PlayerLookup` e inviamo un pacchetto a ciascun giocatore.
+Finally, we get the players in the server level through `PlayerLookup` and send a packet to each player.
 
 @[code lang=java transclude={28-30}](@/reference/latest/src/main/java/com/example/docs/networking/basic/LightningTaterItem.java)
 
-:::info
-L'API di Fabric fornisce `PlayerLookup`, una serie di funzioni ausiliarie che andranno a cercare i giocatori in un server.
+::: info
 
-Un termine usato di frequente per descrivere la funzionalità di questi metodi è "_tracking_" (_tracciamento_). Ciò significa che un'entità o un chunk sul server sono noti al client di un giocatore (all'interno della sua distanza di visualizzazione), e che l'entità o l'entità-blocco dovrebbe notificare i client che la stanno tracciando di eventuali cambiamenti.
+Fabric API provides `PlayerLookup`, a collection of helper functions that will look up players in a server.
 
-Il tracciamento è un concetto importante per un networking efficiente, così che solo i giocatori necessari vengano notificati dei cambiamenti tramite l'invio di pacchetti.
+A term frequently used to describe the functionality of these methods is "_tracking_". It means that an entity or a
+chunk
+on the server is known to a player's client (within their view distance) and the entity or block entity should notify
+tracking clients of changes.
+
+Tracking is an important concept for efficient networking, so that only the necessary players are notified of changes by
+sending packets.
+
 :::
 
-### Ricevere un Pacchetto sul Client {#receiving-a-packet-on-the-client}
+### Receiving a Packet on the Client {#receiving-a-packet-on-the-client}
 
-Per ricevere un pacchetto inviato da un server sul client, devi specificare come gestirai il pacchetto in arrivo.
+To receive a packet sent from a server on the client, you need to specify how you will handle the incoming packet.
 
-Questo si può fare nell'**initializer del client**, chiamando `ClientPlayNetworking.registerGlobalReceiver` e passando un `CustomPayload.Id` e un `PlayPayloadHandler`, che è un'interfaccia funzionale.
+This can be done in the **client initializer**, by calling `ClientPlayNetworking.registerGlobalReceiver` and passing a
+`CustomPayload.Id` and a `PlayPayloadHandler`, which is a Functional Interface.
 
-In questo caso, definiremo l'azione da attivare all'interno dell'implementazione di `PlayPayloadHandler` (come espressione lambda).
+In this case, we'll define the action to trigger within the implementation of `PlayPayloadHandler` implementation (as a
+lambda expression).
 
 @[code lang=java transcludeWith=:::client_global_receiver](@/reference/latest/src/client/java/com/example/docs/network/basic/ExampleModNetworkingBasicClient.java)
 
-Esaminiamo il codice sopra.
+Let's examine the code above.
 
-Possiamo accedere ai dati dal nostro payload chiamando i metodi getter del Record. In questo caso `payload.pos()`, che può poi essere usato per ottenere le coordinate `x`, `y` e `z`.
+We can access the data from our payload by calling the Record's getter methods. In this case `payload.pos()`. Which then
+can be used to get the `x`, `y` and `z` positions.
 
 @[code lang=java transclude={32-32}](@/reference/latest/src/client/java/com/example/docs/network/basic/ExampleModNetworkingBasicClient.java)
 
-Infine, creiamo una `LightningEntity` e aggiungiamola al mondo.
+Finally, we create a `LightningBolt` and add it to the level.
 
 @[code lang=java transclude={33-38}](@/reference/latest/src/client/java/com/example/docs/network/basic/ExampleModNetworkingBasicClient.java)
 
-Ora, aggiungendo questa mod a un server, e quando un giocatore usa il nostro oggetto Lightning Tater, ogni giocatore vedrà un fulmine colpire la posizione dell'utente.
+Now, if you add this mod to a server and when a player uses our Lightning Tater item, every player will see lightning
+striking at the user's position.
 
-<VideoPlayer src="/assets/develop/networking/summon-lightning.webm">Evocazione di un lampo con una Lightning Tater</VideoPlayer>
+<VideoPlayer src="/assets/develop/networking/summon-lightning.webm">Summon lightning using Lightning Tater</VideoPlayer>
 
-### Inviare un Pacchetto al Server {#sending-a-packet-to-the-server}
+### Sending a Packet to the Server {#sending-a-packet-to-the-server}
 
-Come per l'invio di un pacchetto al client, iniziamo creando un payload personalizzato. Questa volta, quando un giocatore usa una Patata Velenosa su un'entità vivente, chiediamo al server di applicare l'effetto Luminescenza su di essa.
+Just like sending a packet to the client, we start by creating a custom payload. This time, when a player uses a
+Poisonous Potato on a living entity, we request the server to apply the Glowing effect to it.
 
 @[code lang=java transcludeWith=:::give_glowing_effect_payload](@/reference/latest/src/main/java/com/example/docs/networking/basic/GiveGlowingEffectC2SPayload.java)
 
-Passiamo il codec appropriato insieme a un riferimento al metodo per ottenere il valore dal Record per costruire questo codec.
+We pass in the appropriate codec along with a method reference to get the value from the Record to build this codec.
 
-Poi registriamo il nostro payload nel nostro **initializer comune**. Ma, questa volta, come payload _Client-to-Server_, utilizzando `PayloadTypeRegistry.playC2S().register`.
+Then we register our payload in our **common initializer**. However, this time as _Client-to-Server_ payload by using
+`PayloadTypeRegistry.playC2S().register`.
 
 @[code lang=java transclude={26-26}](@/reference/latest/src/main/java/com/example/docs/networking/basic/ExampleModNetworkingBasic.java)
 
-Per inviare un pacchetto, aggiungiamo un'azione per quando il giocatore usa una Patata Velenosa. Utilizzeremo l'evento `UseEntityCallback` per mantenere il codice conciso.
+To send a packet, let's add an action when the player uses a Poisonous Potato. We'll be using the `UseEntityCallback`
+event to
+keep things concise.
 
-Registriamo l'evento nel nostro **initializer del client**, e usiamo `isClient()` per assicurarci che l'azione venga attivata solo sul client logico.
+We register the event in our **client initializer**, and we use `isClientSide()` to ensure that the action is only triggered
+on the logical client.
 
 @[code lang=java transcludeWith=:::use_entity_callback](@/reference/latest/src/client/java/com/example/docs/network/basic/ExampleModNetworkingBasicClient.java)
 
-Creiamo un'istanza del nostro `GiveGlowingEffectC2SPayload` con gli argomenti necessari. In questo caso, l'ID di rete dell'entità bersaglio.
+We create an instance of our `GiveGlowingEffectC2SPayload` with the necessary arguments. In this case, the network ID
+of
+the targeted entity.
 
 @[code lang=java transclude={51-51}](@/reference/latest/src/client/java/com/example/docs/network/basic/ExampleModNetworkingBasicClient.java)
 
-Infine, inviamo un pacchetto al server chiamando `ClientPlayNetworking.send` con l'istanza del nostro `GiveGlowingEffectC2SPayload`.
+Finally, we send a packet to the server by calling `ClientPlayNetworking.send` with the instance of our
+`GiveGlowingEffectC2SPayload`.
 
 @[code lang=java transclude={52-52}](@/reference/latest/src/client/java/com/example/docs/network/basic/ExampleModNetworkingBasicClient.java)
 
-### Ricevere un Pacchetto sul Server {#receiving-a-packet-on-the-server}
+### Receiving a Packet on the Server {#receiving-a-packet-on-the-server}
 
-Questo può essere fatto nell'**initializer comune**, chiamando `ServerPlayNetworking.registerGlobalReceiver` e passando un `CustomPayload.Id` e un `PlayPayloadHandler`.
+This can be done in the **common initializer**, by calling `ServerPlayNetworking.registerGlobalReceiver` and passing a
+`CustomPayload.Id` and a `PlayPayloadHandler`.
 
 @[code lang=java transcludeWith=:::server_global_receiver](@/reference/latest/src/main/java/com/example/docs/networking/basic/ExampleModNetworkingBasic.java)
 
-:::info
-È importante che convalidare il contenuto del pacchetto lato server.
+::: info
 
-In questo caso, verifichiamo se l'entità esiste in base al suo ID di rete.
+It is important that you validate the content of the packet on the server side.
+
+In this case, we validate if the entity exists based on its network ID.
 
 @[code lang=java transclude={30-30}](@/reference/latest/src/main/java/com/example/docs/networking/basic/ExampleModNetworkingBasic.java)
 
-Inoltre, l'entità-bersaglio deve essere un'entità vivente, e limitiamo la distanza tra il giocatore e l'entità-bersaglio a 5.
+Additionally, the targeted entity has to be a living entity, and we restrict the range of the target entity from the
+player to 5.
 
 @[code lang=java transclude={32-32}](@/reference/latest/src/main/java/com/example/docs/networking/basic/ExampleModNetworkingBasic.java)
+
 :::
 
-Ora, quando un giocatore cerca di usare una Patata Velenosa su un'entità vivente, l'effetto Luminescenza verrà applicato.
+Now when any player tries to use a Poisonous Potato on a living entity, the glowing effect will be applied to it.
 
-<VideoPlayer src="/assets/develop/networking/use-poisonous-potato.webm">Effetto Luminescenza applicato quando una Patata Velenosa viene usata su un'entità vivente</VideoPlayer>
+<VideoPlayer src="/assets/develop/networking/use-poisonous-potato.webm">Glowing effect is applied when a Poisonous Potato is used on a living entity</VideoPlayer>

@@ -1,8 +1,10 @@
 ---
 title: Instalowanie oprogramowania Java na Windows
-description: Przewodnik krok po kroku o tym, jak zainstalować oprogramowanie Java na Windows.
+description: A step-by-step guide on how to install Java on Windows.
 authors:
   - IMB11
+  - skycatminepokie
+next: false
 ---
 
 Ten przewodnik pokaże ci, jak zainstalować Javę 21 na systemie Windows.
@@ -13,7 +15,7 @@ Launcher Minecrafta zawiera własną instalację Javy, więc ta sekcja jest isto
 
 Aby sprawdzić, czy masz już zainstalowaną Javę, musisz najpierw otworzyć wiersz poleceń.
 
-Możesz to zrobić poprzez wciśnięcie klawiszy <kbd>Win</kbd>+<kbd>R</kbd> i wpisanie `cmd.exe` w wyświetlonym oknie.
+You can do this by pressing <kbd>Windows</kbd>+<kbd>R</kbd> and typing `cmd.exe` into the box that appears.
 
 ![Okno dialogowe Uruchamiania w systemie Windows z wpisanym tekstem "cmd.exe" w pasku uruchamiania](/assets/players/installing-java/windows-run-dialog.png)
 
@@ -23,39 +25,51 @@ Jeśli polecenie zostanie wykonane pomyślnie, to zobaczysz coś takiego. Jeśli
 
 ![Wiersz poleceń z wpisanym poleceniem "java -version"](/assets/players/installing-java/windows-java-version.png)
 
-:::warning
-Aby używać Minecrafta w wersji 1.21, musisz mieć zainstalowaną co najmniej Javę 21. Jeśli to polecenie wyświetla wersję mniejszą niż 21, wymagane będzie zaktualizowanie istniejącej instalacji Javy.
+::: warning
+
+To use Minecraft 1.21.11, you'll need at least Java 21 installed.
+
+If this command displays any version lower than 21, you'll need to update your existing Java installation; keep reading this page.
+
 :::
 
-## 2. Pobierz instalator Javy 21 {#2-download-the-java-installer}
+## 2. Download the Java 21 Installer {#2-download-the-java-installer}
 
-Do zainstalowania Javy 21 wymagane jest pobranie instalatora ze strony Adoptium.
+To install Java 21, you'll need to download the installer from [Adoptium](https://adoptium.net/temurin/releases?version=21&os=windows&arch=any&mode=filter).
 
-Pobierz wersję `Windows Installer (.msi)`:
+You'll want to download the `Windows Installer (.msi)` version:
 
-![Strona pobierania Adoptium z wyróżnioną wersją Windows Installer (.msi)](/assets/players/installing-java/windows-download-java.png)
+![Adoptium download page with Windows Installer (.msi) highlighted](/assets/players/installing-java/windows-download-java.png)
 
-Jeśli masz 32-bitowy system operacyjny wybierz `x86`, natomiast jeśli masz 64-bitowy system wybierz `x64`.
+You should choose `x86` if you have a 32-bit operating system, or `x64` if you have a 64-bit operating system.
 
-Większość nowoczesnych komputerów posiada 64-bitowy system operacyjny. Jeśli nie masz pewności, spróbuj pobrać wersję 64-bitową.
+The majority of modern computers will have a 64-bit operating system. If you are unsure, try using the 64-bit download.
 
-## 3. Uruchom instalator! {#3-run-the-installer}
+## 3. Run the Installer! {#3-run-the-installer}
 
-Aby zainstalować Javę 21, postępuj zgodnie z instrukcjami w instalatorze. Gdy dotrzesz do tej strony, ustaw następujące funkcje na "Cała funkcja zostanie zainstalowana na lokalnym dysku twardym":
+Follow the steps in the installer to install Java 21. When you reach this page, you should set the following features to "Entire feature will be installed on local hard drive":
 
-- `Set JAVA_HOME environment variable` - zostanie to dodane do PATH.
+- `Set JAVA_HOME environment variable` - This will be added to your PATH.
 - `JavaSoft (Oracle) registry keys`
 
-![Instalator Javy 21 wyróżnionymi polami "Set JAVA\\_HOME variable" i "JavaSoft (Oracle) registry keys"](/assets/players/installing-java/windows-wizard-screenshot.png)
+![Java 21 installer with "Set JAVA_HOME variable" and "JavaSoft (Oracle) registry keys" highlighted](/assets/players/installing-java/windows-wizard-screenshot.png)
 
-Po zrobieniu tego kliknij `Next` i kontynuuj instalację.
+Once you've done that, you can click `Next` and continue with the installation.
 
-## 4. Zweryfikuj czy Java 21 została zainstalowana {#4-verify-that-java-is-installed}
+::: warning
 
-Po zakończeniu instalacji możesz zweryfikować czy Java 21 została zainstalowana, ponownie otwierając wiersz poleceń i wpisując `java -version`.
+Windows won't always tell other programs that Java is installed until you restart your computer.
 
-Jeśli polecenie zostanie uruchomione pomyślnie, to zobaczysz coś takiego, gdzie wyświetlana jest wersja Javy:
+**Make sure to restart your computer before continuing!**
+
+:::
+
+## 4. Verify That Java 21 Is Installed {#4-verify-that-java-is-installed}
+
+Once the installation is complete, you can verify that Java 21 is installed by opening the command prompt again and typing `java -version`.
+
+If the command runs successfully, you will see something like shown before, where the Java version is displayed:
 
 ![Wiersz poleceń z wpisanym poleceniem "java -version"](/assets/players/installing-java/windows-java-version.png)
 
-Jeśli napotkasz jakiś problem, śmiało możesz poprosić o pomoc na [Discordzie Fabric](https://discord.gg/v6v4pMv) na kanale `#player-support`.
+If you encounter any issues, feel free to ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.

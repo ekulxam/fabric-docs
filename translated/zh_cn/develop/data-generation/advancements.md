@@ -2,6 +2,7 @@
 title: 进度生成
 description: 使用 Datagen 设置进度生成的指南。
 authors:
+  - CelDaemon
   - MattiDragon
   - skycatminepokie
   - Spinoscythe
@@ -10,146 +11,158 @@ authors-nogithub:
   - mcrafterzz
 ---
 
-:::info 前提
-首先，请确保你已完成 [Datagen 设置](./setup) 。
+<!---->
+
+:::info PREREQUISITES
+
+Make sure you've completed the [datagen setup](./setup) process first.
+
 :::
 
-## 设置 {#setup}
+## Setup {#setup}
 
-首先，我们需要创建 Provider。 创建一个继承 `FabricAdvancementProvider` 的类，并填入基本方法：
+First, we need to make our provider. Create a class that extends `FabricAdvancementProvider` and fill out the base methods:
 
 @[code lang=java transcludeWith=:::datagen-advancements:provider-start](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-要完成设置，请将此提供程序添加到 `onInitializeDataGenerator` 方法中的 `DataGeneratorEntrypoint`。
+To finish setup, add this provider to your `DataGeneratorEntrypoint` within the `onInitializeDataGenerator` method.
 
-@[code lang=java transclude={26-26}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code lang=java transcludeWith=:::datagen-advancements:register](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## 进度结构 {#advancement-structure}
+## Advancement Structure {#advancement-structure}
 
-一项进度是由几个不同的部分组成的。 除了称为“准则”的要求外，它可能还具有：
+An advancement is made up a few different components. Along with the requirements, called "criterion," it may have:
 
-- `AdvancementDisplay` 告诉游戏如何向玩家展示进度，
-- `AdvancementRequirements` 是一系列准则的列表，要求每个子列表中至少完成一项准则，
-- `AdvancementRewards` 是玩家完成进度后获得的奖励。
-- `CriterionMerger` 告诉进度如何处理多个准则，以及
-- 父级 `Advancement`，用于组织您在“进度”屏幕上看到的层次结构。
+- Some `DisplayInfo` that tell the game how to show the advancement to players,
+- `AdvancementRequirements`, which are lists of lists of criteria, requiring at least one criterion from each sub-list to be completed,
+- `AdvancementRewards`, which the player receives for completing the advancement.
+- A `Strategy`, which tells the advancement how to handle multiple criterion, and
+- A parent `Advancement`, which organizes the hierarchy you see on the "Advancements" screen.
 
-## 简单进度 {#simple-advancements}
+## Simple Advancements {#simple-advancements}
 
-以下是获取土块的简单进度：
+Here's a simple advancement for getting a dirt block:
 
 @[code lang=java transcludeWith=:::datagen-advancements:simple-advancement](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-:::warning
-当构建你的进度条目时，请记住函数接受 `String` 格式的进度的 `Identifier`！
+::: warning
+
+When building your advancement entries, remember that the function accepts the `Identifier` of the advancement in `String` format!
+
 :::
 
-:::details JSON 输出
+:::details JSON Output
+
 @[code lang=json](@/reference/latest/src/main/generated/data/example-mod/advancement/get_dirt.json)
+
 :::
 
-## 另一个示例 {#one-more-example}
+## One More Example {#one-more-example}
 
-为了掌握要领，我们再添加一项进度。 我们将练习添加奖励、使用多项准则以及指定父级：
+Just to get the hang of it, let's add one more advancement. We'll practice adding rewards, using multiple criterion, and assigning parents:
 
 @[code lang=java transcludeWith=:::datagen-advancements:second-advancement](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-## 自定义准则 {#custom-criteria}
+## Custom Criteria {#custom-criteria}
 
-:::warning
-虽然 datagen 可以在客户端，但是 `Criterion` 和 `Predicate` 位于主源集（双方）中，因为服务器需要触发和评估它们。
+::: warning
+
+While datagen can be on the client side, `Criterion`s and `Predicate`s are in the main source set (both sides), since the server needs to trigger and evaluate them.
+
 :::
 
-### 定义 {#definitions}
+### Definitions {#definitions}
 
-**准则**（英语：criterion/criteria）是指玩家可以做的事情（或可能发生在玩家身上的事情），这些事情可以被计入进度的达成。 游戏附带许多[准则](https://zh.minecraft.wiki/w/%E8%BF%9B%E5%BA%A6%E5%AE%9A%E4%B9%89%E6%A0%BC%E5%BC%8F#%E5%87%86%E5%88%99%E8%A7%A6%E5%8F%91%E5%99%A8)，可以在 `net.minecraft.advancement.criterion` 包中找到。 一般来说，仅当您在游戏中实现自定义机制时才需要新的准则。
+A **criterion** (plural: criteria) is something a player can do (or that can happen to a player) that may be counted towards an advancement. The game comes with many [criteria](https://minecraft.wiki/w/Advancement_definition#List_of_triggers), which can be found in the `net.minecraft.advancements.criterion` package. Generally, you'll only need a new criterion if you implement a custom mechanic into the game.
 
-**条件**是根据准则来评估的。 只有满足所有相关条件时，准则才会被计入。 条件通常用谓词来表达。
+**Conditions** are evaluated by criteria. A criterion is only counted if all the relevant conditions are met. Conditions are usually expressed with a predicate.
 
-**谓词**是一种接受值并返回 `boolean` 的东西。 例如，如果物品是钻石，则 `Predicate<Item>` 可能返回 `true`，而如果实体与村民不敌对，则 `Predicate<LivingEntity>` 可能返回 `true`。
+A **predicate** is something that takes a value and returns a `boolean`. For example, a `Predicate<Item>` might return `true` if the item is a diamond, while a `Predicate<LivingEntity>` might return `true` if the entity is not hostile to villagers.
 
-### 创建自定义准则 {#creating-custom-criteria}
+### Creating Custom Criteria {#creating-custom-criteria}
 
-首先，我们需要实现一个新的机制。 让我们告诉玩家每次破坏方块时他们使用了什么工具。
+First, we'll need a new mechanic to implement. Let's tell the player what tool they used every time they break a block.
 
 @[code lang=java transcludeWith=:::datagen-advancements:entrypoint](@/reference/latest/src/main/java/com/example/docs/advancement/ExampleModDatagenAdvancement.java)
 
-请注意，这个代码确实很烂。 `HashMap` 没有存储在任何持久位置，因此每次重新启动游戏时它都会被重置。 这只是为了展示 `Criterion`。 开始游戏并且试一下吧！
+Note that this code is really bad. The `HashMap` is not stored anywhere persistent, so it will be reset every time the game is restarted. It's just to show off `Criterion`s. Start the game and try it out!
 
-接下来，让我们创建自定义准则 `UseToolCriterion`。 它将需要自己的 `Conditions` 类来配合它，因此我们将同时创建它们：
+Next, let's create our custom criterion, `UseToolCriterion`. It's going to need its own `Conditions` class to go with it, so we'll make them both at once:
 
 @[code lang=java transcludeWith=:::datagen-advancements:criterion-base](@/reference/latest/src/main/java/com/example/docs/advancement/UseToolCriterion.java)
 
-哇，好多呀！ 让我们分解一下。
+Whew, that's a lot! Let's break it down.
 
-- `UseToolCriterion` 是一个 `AbstractCriterion`，`Conditions` 可以应用于它。
-- `Conditions` 有一个 `playerPredicate` 字段。 所有的 `Conditions` 都应有一个玩家谓词（技术上来讲是 LootContextPredicate\`）。
-- `Conditions` 也有一个 `CODEC`。 这个 `Codec` 只是其一个字段 `playerPredicate` 的 codec，带有在它们之间进行转换的额外指令（`xmap`）。
+- `UseToolCriterion` is a `SimpleCriterionTrigger`, which `Conditions` can apply to.
+- `Conditions` has a `playerPredicate` field. All `Conditions` should have a player predicate (technically a `LootContextPredicate`).
+- `Conditions` also has a `CODEC`. This `Codec` is simply the codec for its one field, `playerPredicate`, with extra instructions to convert between them (`xmap`).
 
-:::info
-要了解有关 codec 的更多信息，请参阅 [Codec](../codecs) 页面。
+::: info
+
+To learn more about codecs, see the [Codecs](../codecs) page.
+
 :::
 
-我们需要一种方法来检查条件是否满足。 我们向 `Conditions` 添加一个辅助方法：
+We're going to need a way to check if the conditions are met. Let's add a helper method to `Conditions`:
 
 @[code lang=java transcludeWith=:::datagen-advancements:conditions-test](@/reference/latest/src/main/java/com/example/docs/advancement/UseToolCriterion.java)
 
-现在我们已经有了准则及其条件，我们需要一种触发它的方式。 为 `UseToolCriterion` 添加一个触发方法：
+Now that we've got a criterion and its conditions, we need a way to trigger it. Add a trigger method to `UseToolCriterion`:
 
 @[code lang=java transcludeWith=:::datagen-advancements:criterion-trigger](@/reference/latest/src/main/java/com/example/docs/advancement/UseToolCriterion.java)
 
-快完成了！ 接下来，我们需要一个可以使用的准则实例。 我们把它放入一个名为 `ModCriteria` 的新类中。
+Almost there! Next, we need an instance of our criterion to work with. Let's put it in a new class, called `ModCriteria`.
 
 @[code lang=java transcludeWith=:::datagen-advancements:mod-criteria](@/reference/latest/src/main/java/com/example/docs/advancement/ModCriteria.java)
 
-为了确保我们的准则在正确的时间进行初始化，添加一个空白的 `init` 方法：
+To make sure that our criteria are initialized at the right time, add a blank `init` method:
 
 @[code lang=java transcludeWith=:::datagen-advancements:mod-criteria-init](@/reference/latest/src/main/java/com/example/docs/advancement/ModCriteria.java)
 
-并在你的模组初始化程序中调用它：
+And call it in your mod initializer:
 
 @[code lang=java transcludeWith=:::datagen-advancements:call-init](@/reference/latest/src/main/java/com/example/docs/advancement/ExampleModDatagenAdvancement.java)
 
-最后，我们需要触发我们的准则。 将其添加到我们在主模组类中向玩家发送消息的地方。
+Finally, we need to trigger our criteria. Add this to where we sent a message to the player in the main mod class.
 
 @[code lang=java transcludeWith=:::datagen-advancements:trigger-criterion](@/reference/latest/src/main/java/com/example/docs/advancement/ExampleModDatagenAdvancement.java)
 
-你的崭新准则现已可供使用！ 我们将其添加到我们的提供程序中：
+Your shiny new criterion is now ready to use! Let's add it to our provider:
 
 @[code lang=java transcludeWith=:::datagen-advancements:custom-criteria-advancement](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-再次运行 datagen 任务，您就可以获得新的进度了！
+Run the datagen task again, and you've got your new advancement to play with!
 
-## 带参数的条件 {#conditions-with-parameters}
+## Conditions with Parameters {#conditions-with-parameters}
 
-这一切都很好，但是如果我们只想在做了 5 次之后才授予进度该怎么办呢？ 那为什么不再来一个 10 次的呢？ 为此，我们需要为条件提供一个参数。 您可以继续使用 `UseToolCriterion`，也可以遵循新的 `ParameterizedUseToolCriterion`。 实际上，您应该只拥有一个参数化版本，但在本教程中我们将保留这两个版本。
+This is all well and good, but what if we want to only grant an advancement once we've done something 5 times? And why not another one at 10 times? For this, we need to give our condition a parameter. You can stay with `UseToolCriterion`, or you can follow along with a new `ParameterizedUseToolCriterion`. In practice, you should only have the parameterized one, but we'll keep both for this tutorial.
 
-让我们自下而上地开展工作。 我们需要检查要求是否满足，因此让我们编辑 `Conditions#requirementsMet` 方法：
+Let's work bottom-up. We'll need to check if the requirements are met, so let's edit our `Conditions#requirementsMet` method:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-requirements-met](@/reference/latest/src/main/java/com/example/docs/advancement/ParameterizedUseToolCriterion.java)
 
-`requiredTimes` 不存在，因此将其作为 `Conditions` 的一个参数：
+`requiredTimes` doesn't exist, so make it a parameter of `Conditions`:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-parameter](@/reference/latest/src/main/java/com/example/docs/advancement/ParameterizedUseToolCriterion.java)
 
-现在我们的 codec 在报错。 让我们为新的变更编写一个新的 codec：
+Now our codec is erroring. Let's write a new codec for the new changes:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-codec](@/reference/latest/src/main/java/com/example/docs/advancement/ParameterizedUseToolCriterion.java)
 
-接下来，我们需要修复我们的 `trigger` 方法：
+Moving on, we now need to fix our `trigger` method:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-trigger](@/reference/latest/src/main/java/com/example/docs/advancement/ParameterizedUseToolCriterion.java)
 
-如果你制定了新准则，我们需要将其添加到 `ModCriteria`
+If you've made a new criterion, we need to add it to `ModCriteria`
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-mod-criteria](@/reference/latest/src/main/java/com/example/docs/advancement/ModCriteria.java)
 
-然后在主类中调用它，就在原来的位置：
+And call it in our main class, right where the old one is:
 
 @[code lang=java transcludeWith=:::datagen-advancements:trigger-new-criterion](@/reference/latest/src/main/java/com/example/docs/advancement/ExampleModDatagenAdvancement.java)
 
-将进度添加到您的提供程序：
+Add the advancement to your provider:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-custom-criteria-advancement](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-再次运行 datagen，就搞定了！
+Run datagen again, and you're finally done!

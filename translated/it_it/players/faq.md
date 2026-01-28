@@ -1,6 +1,6 @@
 ---
-title: Domande Frequenti per Giocatori (FAQ)
-description: Domande frequenti riguardanti Fabric per giocatori e admin di server.
+title: Domande Frequenti (FAQ)
+description: Domande riguardanti Fabric, chieste frequentemente da giocatori e da amministratori di server.
 ---
 
 Ci sono molte domande che vengono poste di frequente, quindi ne abbiamo compilato una lista qui.
@@ -11,15 +11,17 @@ Ufficialmente, Fabric supporta tutte le versioni di Minecraft a partire da snaps
 
 ## Dove Posso Scaricare le Mod Fabric Pubblicate? {#where-can-i-download-published-fabric-mods}
 
-:::info
-Dovresti sempre controllare che le mod provengano da una fonte affidabile. Dai un occhiata alla guida [Trovare Mod Affidabili](./finding-mods) per più informazioni.
+::: info
+
+You should always check if mods are from a trustworthy source. Check out the [Finding Trustworthy Mods](./finding-mods) guide for more information.
+
 :::
 
-La maggior parte degli autori pubblica le loro mod su [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) e CurseForge, anche se altri potrebbero aver deciso di caricarle sui loro siti personali o su altre piattaforme come le repository di GitHub.
+The majority of authors publish their mods to [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) and [CurseForge](https://www.curseforge.com/minecraft/search?class=mc-mods&gameVersionTypeId=4), however some may choose to upload them on their personal websites, or on other platforms, such as a GitHub repository.
 
-## Dove Posso Trovare Modpack Fabric Prefabbricati? {#where-can-i-find-pre-made-fabric-modpacks}
+## Where Can I Find Pre-Made Fabric Modpacks? {#where-can-i-find-pre-made-fabric-modpacks}
 
-Puoi trovare modpack Fabric prefabbricati su varie piattaforme, come:
+You can find pre-made Fabric modpacks on a variety of platforms, such as:
 
 - [Modrinth](https://modrinth.com/modpacks?g=categories:%27fabric%27)
 - [CurseForge](https://www.curseforge.com/minecraft/search?class=modpacks&gameVersionTypeId=4)

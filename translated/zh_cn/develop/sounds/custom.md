@@ -37,11 +37,11 @@ authors:
 
 ## 注册自定义声音{#registering-the-custom-sound}
 
-要将自定义声音添加到模组，在你的[模组的初始化器](./getting-started/project-structure#entrypoints)中注册 SoundEvent。
+要将自定义声音添加到模组，在你的[模组的初始化器](../getting-started/project-structure#entrypoints)中注册 SoundEvent。
 
 ```java
-Registry.register(Registries.SOUND_EVENT, Identifier.of(MOD_ID, "metal_whistle"),
-        SoundEvent.of(Identifier.of(MOD_ID, "metal_whistle")));
+Registry.register(BuiltInRegistries.SOUND_EVENT, Identifier.fromNamespaceAndPath(MOD_ID, "metal_whistle"),
+        SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(MOD_ID, "metal_whistle")));
 ```
 
 ## 整理整理{#cleaning-up-the-mess}
@@ -58,4 +58,4 @@ Registry.register(Registries.SOUND_EVENT, Identifier.of(MOD_ID, "metal_whistle")
 
 ## 使用自定义的 SoundEvent{#using-the-custom-soundevent}
 
-使用辅助类去访问自定义的 SoundEvent。 查看[播放声音事件（SoundEvent）](./using-sounds)页面，了解如何播放声音。
+使用辅助类去访问自定义的 SoundEvent。 查看[播放声音](./using-sounds)页面，了解如何播放声音。

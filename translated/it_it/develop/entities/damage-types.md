@@ -13,7 +13,7 @@ I tipi di danno definiscono tipi di danno che le entità possono subire. A parti
 
 Creiamo un tipo di danno personalizzato chiamato _Tater_. Inizieremo creando un file JSON per il tuo danno personalizzato. Il file sarà posizionato nella cartella `data` della tua mod, in una sottocartella chiamata `damage_type`.
 
-```:no-line-numbers
+```text:no-line-numbers
 resources/data/example-mod/damage_type/tater.json
 ```
 
@@ -31,9 +31,10 @@ Affidati alla [Minecraft Wiki](https://minecraft.wiki/w/Damage_type#JSON_format)
 
 ### Accedere ai Tipi di Danno Tramite Codice {#accessing-damage-types-through-code}
 
-Quando abbiamo bisogno di accedere al nostro tipo di danno personalizzato tramite codice, useremo la sua `RegistryKey` per costruire un'istanza di `DamageSource`.
+When we need to access our custom damage type through code, we will use it's `ResourceKey` to build an instance
+of `DamageSource`.
 
-La `RegistryKey` può essere ottenuta nel modo seguente:
+The `ResourceKey` can be obtained as follows:
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/damage/ExampleModDamageTypes.java)
 
@@ -41,7 +42,7 @@ La `RegistryKey` può essere ottenuta nel modo seguente:
 
 Per mostrare l'uso dei tipi di danno personalizzati, useremo un blocco personalizzato chiamato _Blocco di Tater_. Facciamo in modo che quando un'entità calpesta un _Blocco di Tater_, esso causa danno _Tater_.
 
-Puoi fare override di `onSteppedOn` per infliggere questo danno.
+You can override `stepOn` to inflict this damage.
 
 Cominciamo creando una `DamageSource` del nostro tipo di danno personalizzato.
 
@@ -63,9 +64,7 @@ Puoi definire un messaggio di morte per il tipo di danno nel formato `death.atta
 
 ```json
 {
-  // ...
-  "death.attack.tater": "%1$s died from Tater damage!",
-  // ...
+  "death.attack.tater": "%1$s died from Tater damage!"
 }
 ```
 
@@ -89,7 +88,7 @@ Aggiungiamo il nostro tipo di danno Tater al tag `bypasses_armor` dei tipi di da
 
 Per aggiungere il nostro tipo di danno a uno di questi tag, creeremo un file JSON nel namespace `minecraft`.
 
-```:no-line-numbers
+```text:no-line-numbers
 data/minecraft/tags/damage_type/bypasses_armor.json
 ```
 

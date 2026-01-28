@@ -2,9 +2,11 @@
 title: Fabric ドキュメント
 description: マインクラフトの前提Mod Fabricの公式ドキュメント
 layout: home
+
 hero:
   name: Fabric ドキュメント
-  tagline: マインクラフトの前提Mod Fabricの公式ドキュメント
+  tagline: The official curated documentation for Fabric,<br />a modding toolchain for Minecraft.
+
 features:
   - title: プレイヤーガイド
     icon: 📚

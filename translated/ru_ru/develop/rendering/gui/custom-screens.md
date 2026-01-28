@@ -5,58 +5,62 @@ authors:
   - IMB11
 ---
 
-:::info
-Эта страница относится к обычным экранам, а не к управляемым — эти экраны открываются игроком на клиенте, а не те, которыми управляет сервер.
+<!---->
+
+::: info
+
+This page refers to normal screens, not handled ones - these screens are the ones that are opened by the player on the client, not the ones that are handled by the server.
+
 :::
 
-Экраны по сути представляют собой графические интерфейсы, с которыми взаимодействует игрок, например, титульный экран, экран паузы и т. д.
+Screens are essentially the GUIs that the player interacts with, such as the title screen, pause screen etc.
 
-Вы можете создавать собственные экраны для отображения пользовательского контента, пользовательского меню настроек и многого другого.
+You can create your own screens to display custom content, a custom settings menu, or more.
 
-## Создание экрана {#creating-a-screen}
+## Creating a Screen {#creating-a-screen}
 
-Чтобы создать экран, вам необходимо расширить класс `Screen` и переопределить метод `init` (при желании вы также можете переопределить метод `render`), но обязательно вызовите его super метод, иначе он не отобразит фон, виджеты и т. д.
+To create a screen, you need to extend the `Screen` class and override the `init` method - you may optionally override the `render` method as well - but make sure to call it's super method or it wont render the background, widgets etc.
 
-Вам следует принять к сведению, что:
+You should take note that:
 
-- Виджеты не создаются в конструкторе, поскольку на тот момент экран еще не инициализирован, а некоторые переменные, такие как `width` и `height`, еще недоступны или неточны.
-- Метод `init` вызывается при инициализации экрана, и это лучшее место для создания виджетов.
-  - Виджеты добавляются с помощью метода `addDrawableChild`, который принимает любой отрисовываемый виджет.
-- Метод `render` вызывается в каждом кадре — из этого метода можно получить доступ к контексту отрисовки и положению мыши.
+- Widgets are not being created in the constructor because the screen is not yet initialized at that point - and certain variables, such as `width` and `height`, are not yet available or not yet accurate.
+- The `init` method is called when the screen is being initialized, and it is the best place to create widgets.
+  - You add widgets using the `addRenderableWidget` method, which accepts any drawable widget.
+- The `render` method is called every frame - you can access the draw context, and the mouse position from this method.
 
-В качестве примера мы можем создать простой экран с кнопкой и меткой над ней.
+As an example, we can create a simple screen that has a button and a label above it.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
-![Пользовательский экран 1](/assets/develop/rendering/gui/custom-1-example.png)
+![Custom Screen 1](/assets/develop/rendering/gui/custom-1-example.png)
 
-## Открытие экрана {#opening-the-screen}
+## Opening the Screen {#opening-the-screen}
 
-Вы можете открыть экран с помощью метода `setScreen` `MinecraftClient` — это можно сделать из многих мест, например, с помощью привязки клавиш, команды или обработчика пакетов клиента.
+You can open the screen using the `Minecraft`'s `setScreen` method - you can do this from many places, such as a key binding, a command, or a client packet handler.
 
 ```java
-MinecraftClient.getInstance().setScreen(
-  new CustomScreen(Text.empty())
+Minecraft.getInstance().setScreen(
+  new CustomScreen(Component.empty())
 );
 ```
 
-## Закрытие экрана {#closing-the-screen}
+## Closing the Screen {#closing-the-screen}
 
-Если вы хотите закрыть экран, просто установите экран в значение `null`:
+If you want to close the screen, simply set the screen to `null`:
 
 ```java
-MinecraftClient.getInstance().setScreen(null);
+Minecraft.getInstance().setScreen(null);
 ```
 
-Если вы хотите проявить изюминку и вернуться к предыдущему экрану, вы можете передать текущий экран в конструктор `CustomScreen` и сохранить его в поле, а затем использовать его для возврата к предыдущему экрану при вызове метода `close`.
+If you want to be fancy, and return to the previous screen, you can pass the current screen into the `CustomScreen` constructor and store it in a field, then use it to return to the previous screen when the `close` method is called.
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
-Теперь при открытии пользовательского экрана вы можете передать текущий экран в качестве второго аргумента — тогда при вызове `CustomScreen#close` произойдет возврат к предыдущему экрану.
+Now, when opening the custom screen, you can pass the current screen as the second argument - so when you call `CustomScreen#close` - it will return to the previous screen.
 
 ```java
-Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-MinecraftClient.getInstance().setScreen(
-  new CustomScreen(Text.empty(), currentScreen)
+Screen currentScreen = Minecraft.getInstance().currentScreen;
+Minecraft.getInstance().setScreen(
+  new CustomScreen(Component.empty(), currentScreen)
 );
 ```

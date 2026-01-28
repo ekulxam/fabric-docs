@@ -9,7 +9,7 @@ authors:
 
 ## 1. 使用众所周知的可信来源{#trustworthy-source}
 
-大部分作者都将他们的模组发布在 [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) 和 CurseForge 上。
+大部分作者都将他们的模组发布在 [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) 和 [CurseForge](https://www.curseforge.com/minecraft/search?class=mc-mods&gameVersionTypeId=4) 上。
 
 这些网站会检查模组是否为他们所说的，以及是否包含恶意代码。 你还可以向那些网站举报恶意模组，他们会较快地行动。
 
@@ -17,16 +17,18 @@ authors:
 
 如果要从并非已知可信的来源下载模组，应该先向他人询问，看看他们是否曾从你下载的地方下载过该模组，以及他们是否遇到过任何问题。
 
-如遇问题，欢迎在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#player-support` 频道提问。
+If in doubt, you are welcome to ask in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.
 
 ## 3. 避免常见的恶意网站！ {#avoid-malware} {#avoid-malware}
 
-:::info
-恶意软件网站并非人人都能辨别。 如果不确定，应征求他人的意见，或避免使用该网站，只依靠值得信赖的来源，例如 Modrinth 和 CurseForge。
+::: info
+
+Malware sites may not be obvious to everyone. If you are unsure, you should ask for opinions from others or avoid the site altogether and rely only on trusted sources, such as Modrinth and CurseForge.
+
 :::
 
-有很多网站声称它们收录 Minecraft 模组，但实际上只是恶意软件分发网站。 你应该尽量避免使用此类网站。
+There are a lot of websites that claim to have mods for Minecraft, but are actually just malware sites. You should avoid these sites at all costs.
 
-你可以使用 [Windows Defender](https://www.microsoft.com/en-us/windows/comprehensive-security) 或 [VirusTotal](https://www.virustotal.com/) 等杀毒软件或网站来检查下载的模组。 但是，不要完全依赖这些方法，因为有时可能不正确。
+You can use antivirus software and websites like [Windows Defender](https://www.microsoft.com/en-us/windows/comprehensive-security) or [VirusTotal](https://www.virustotal.com/) to check the downloaded mods. However, do not rely entirely on those methods, because they can be sometimes incorrect.
 
-最后，如遇问题，欢迎在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#player-support` 频道提问。
+Again, if in doubt, you are welcome to ask for opinions in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.

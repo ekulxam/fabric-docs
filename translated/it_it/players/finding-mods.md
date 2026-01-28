@@ -9,7 +9,7 @@ Anzitutto, la fiducia è soggettiva, e dovresti sempre affidarti al tuo giudizio
 
 ## 1. Usa una Fonte Nota per Essere Affidabile {#trustworthy-source}
 
-La maggior parte degli autori pubblica le loro mod su [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) e CurseForge.
+La maggior parte degli autori pubblica le loro mod su [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) e [CurseForge](https://www.curseforge.com/minecraft/search?class=mc-mods&gameVersionTypeId=4).
 
 Questi siti controllano che le mod siano quello che dicono di essere, e che non contengano codice maligno. Puoi anche segnalare mod sospette su quei siti, ed essi agiranno in modo relativamente veloce.
 
@@ -17,16 +17,18 @@ Questi siti controllano che le mod siano quello che dicono di essere, e che non 
 
 Se stai scaricando una mod da una fonte che non è nota per essere affidabile, dovresti controllare con gli altri per vedere se loro l'hanno scaricata prima dalla posizione da cui la stai scaricando tu, e se hanno avuto problemi con essa.
 
-Se hai dubbi, sentiti libero di chiedere nel [Discord di Fabric](https://discord.gg/v6v4pMv) nel canale `#player-support`.
+If in doubt, you are welcome to ask in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.
 
 ## 3. Evita Siti Comuni Maligni! {#avoid-malware}
 
-:::info
-I siti maligni potrebbero non essere ovvi per tutti. Se non sei sicuro, dovresti chiedere l'opinione di altri o evitare il sito completamente e affidarti solo a fonti fidate, come Modrinth e CurseForge.
+::: info
+
+Malware sites may not be obvious to everyone. If you are unsure, you should ask for opinions from others or avoid the site altogether and rely only on trusted sources, such as Modrinth and CurseForge.
+
 :::
 
-Ci sono tanti siti che dicono di avere mod per Minecraft, ma che sono in realtà solo siti maligni. Dovresti evitare questi siti a tutti i costi.
+There are a lot of websites that claim to have mods for Minecraft, but are actually just malware sites. You should avoid these sites at all costs.
 
-Puoi usare software antivirus e siti come [Windows Defender](https://www.microsoft.com/it-it/windows/comprehensive-security) o [VirusTotal](https://www.virustotal.com/) per controllare le mod scaricate. Tuttavia, non affidarti completamente su quei metodi, perché a volte potrebbero essere errati.
+You can use antivirus software and websites like [Windows Defender](https://www.microsoft.com/en-us/windows/comprehensive-security) or [VirusTotal](https://www.virustotal.com/) to check the downloaded mods. However, do not rely entirely on those methods, because they can be sometimes incorrect.
 
-Ancora, se hai dubbi, sentiti libero di chiedere l'opinione di altri nel [Discord di Fabric](https://discord.gg/v6v4pMv) nel canale `#player-support`.
+Again, if in doubt, you are welcome to ask for opinions in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.

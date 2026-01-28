@@ -27,21 +27,21 @@ Inoltre tieni a mente che un file audio può aumentare drasticamente le dimensio
 
 ## Caricare il File Audio {#loading-the-audio-file}
 
-Aggiungi un nuovo percorso `resources/assets/example-mod/sounds` per i suoni della tua mod, e trasferisci qui il file audio esportato `metal_whistle.ogg`.
+Add the new `resources/assets/example-mod/sounds` directory for the sounds in your mod, and put the exported audio file `metal_whistle.ogg` in there.
 
-Se non esiste ancora, crea il file `resources/assets/example-mod/sounds.json` e aggiungici i tuoi suoni.
+Continue with creating the `resources/assets/example-mod/sounds.json` file if it doesn't exist yet and add your sound to the sound entries.
 
 @[code lang=json](@/reference/latest/src/main/resources/assets/example-mod/sounds.json)
 
-La voce subtitle fornisce un contesto più approfondito per il giocatore. Il nome del sottotitolo è usato nei file di lingua nel percorso `resources/assets/example-mod/lang` e verrà visualizzato se l'impostazione dei sottotitoli nel gioco è attiva e se questo suono personalizzato viene riprodotto.
+La voce subtitle fornisce un contesto più approfondito per il giocatore. The subtitle name is used in the language files in the `resources/assets/example-mod/lang` directory and will be displayed if the in-game subtitle setting is turned on and this custom sound is being played.
 
 ## Registrare il Suono Personalizzato {#registering-the-custom-sound}
 
-Per aggiungere il suono personalizzato alla mod, registra un SoundEvent nell'[initializer della tua mod](./getting-started/project-structure#entrypoints).
+To add the custom sound to the mod, register a SoundEvent in your [mod's initializer](../getting-started/project-structure#entrypoints).
 
 ```java
-Registry.register(Registries.SOUND_EVENT, Identifier.of(MOD_ID, "metal_whistle"),
-        SoundEvent.of(Identifier.of(MOD_ID, "metal_whistle")));
+Registry.register(BuiltInRegistries.SOUND_EVENT, Identifier.fromNamespaceAndPath(MOD_ID, "metal_whistle"),
+        SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(MOD_ID, "metal_whistle")));
 ```
 
 ## Ripulire il Disordine {#cleaning-up-the-mess}
@@ -58,4 +58,4 @@ Facendo così, basta che l'initializer della tua mod implementi una riga sola pe
 
 ## Usare il SoundEvent Personalizzato {#using-the-custom-soundevent}
 
-Usa la classe ausiliaria per accedere al SoundEvent personalizzato. Consulta la pagina [Riprodurre Suoni](./using-sounds) per imparare come riprodurre i suoni.
+Usa la classe ausiliaria per accedere al SoundEvent personalizzato. Check out the [Playing Sounds](./using-sounds) page to learn how to play sounds.

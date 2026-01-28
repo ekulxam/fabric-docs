@@ -5,50 +5,65 @@ description: Học cách tạo ra câu lệnh với tham số phức tạp.
 
 Hầu hết các câu lệnh đều có tham số. Nhiều khi tham số đó không bắt buộc, bạn không cần phải đưa vào câu lệnh nhưng nó vẫn chạy. Một node có thể có nhiều loại tham số, nhưng bạn nên tránh xảy ra trường hợp kiểu dữ liệu của tham số không rõ.
 
-@[code lang=java highlight={3} transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+@[code lang=java highlight={3} transcludeWith=:::command_with_arg](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
-Trong trường hợp này, sau `/argtater`, bạn cần đưa ra một số nguyên làm tham số. Chẳng hạn, khi bạn chạy `/argtater 3`, bạn sẽ nhận được thông báo `Called /argtater with value = 3`. Khị bạn nhập `/argtater` mà không đưa ra tham số, câu lệnh trên sẽ không chạy được.
+@[code lang=java transcludeWith=:::execute_command_with_arg](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
-Chúng ta có thể thêm vào đối số không bắt buộc thứ hai:
+In this case, after the command text `/command_with_arg`, you should type an integer. For example, if you
+run `/command_with_arg 3`, you will get the feedback message:
 
-@[code lang=java highlight={3,13} transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+> Called /command_with_arg with value = 3
+
+@[code lang=java highlight={3,13} transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/command/FabricDocsReferenceCommands.java)
+
+@[code lang=java highlight={3,13} transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/command/FabricDocsReferenceCommands.java)
+
+@[code lang=java highlight={3,5} transcludeWith=:::command_with_two_args](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+
+@[code lang=java transcludeWith=:::execute_command_with_two_args](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
 Giờ đây, bạn có thể nhập một hoặc hai số nguyên làm tham số. Nếu bạn đưa vào một số nguyên, bạn sẽ nhận được thông báo với một giá trị. Nếu là hai số nguyên, thông báo sẽ đưa ra hai giá trị.
 
 Có thể bạn thấy việc viết hai quy trình xử lý dữ liệu giống nhau là không cần thiết. Ta có thể tạo một method sử dụng trong cả hai tham số.
 
-@[code lang=java highlight={3,5,6,7} transcludeWith=:::6](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+@[code lang=java highlight={4,6} transcludeWith=:::command_with_common_exec](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
-## Kiểu Tham Số Tùy Chỉnh
+@[code lang=java transcludeWith=:::execute_common](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+
+## Custom Argument Types {#custom-argument-types}
 
 Nếu bạn không tìm thấy kiểu tham số bạn cần trong vanilla, bạn có thể tự tạo kiểu của riêng mình. Bạn cần tạo một class mà kế thừa interface `ArgumentType<T>`, với `T` là kiểu tham số.
 
-Bạn cần phải thêm method `parse` để xử lý tham số từ kiểu xâu ký tự sang kiểu tham số mà bạn cần.
+Giả sử bạn cần một kiểu tham số cho ra `BlockPos` khi người dùng nhập: `{x, y, z}`
 
 Giả sử bạn cần một kiểu tham số cho ra `BlockPos` khi người dùng nhập: `{x, y, z}`
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/command/BlockPosArgumentType.java)
 
-### Đăng Ký Kiểu Tham Số Tùy Chỉnh
+### Registering Custom Argument Types {#registering-custom-argument-types}
 
-:::warning
-Câu lệnh của bạn sẽ không hoạt động nếu bạn không đăng ký kiểu tham số tùy chỉnh trên cả máy chủ lẫn máy khách!
+::: warning
+
+You need to register the custom argument type on both the server and the client or else the command will not work!
+
 :::
 
-Bạn có thể đăng ký kiểu tham số tùy chỉnh trong khi mod của bạn đang khởi động trong method `onInitialize`, sử dụng class `ArgumentTypeRegistry`:
+You can register your custom argument type in the `onInitialize` method of your [mod's initializer](../getting-started/project-structure#entrypoints) using the `ArgumentTypeRegistry` class:
 
-@[code lang=java transcludeWith=:::11](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+@[code lang=java transcludeWith=:::register_custom_arg](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
-### Sử Dụng Kiểu Tham Số Tùy Chỉnh
+### Using Custom Argument Types {#using-custom-argument-types}
 
-Bạn có thể sử dụng kiểu tham số tùy chỉnh trong một câu lệnh bằng cách đưa một instance của nó vào method `.argument` khi đang xây dựng một câu lệnh.
+We can use our custom argument type in a command - by passing an instance of it into the `.argument` method on the command builder.
 
-@[code lang=java transcludeWith=:::10 highlight={3}](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+@[code lang=java highlight={3} transcludeWith=:::custom_arg_command](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
-Thử chạy câu lệnh xem kiểu tham số của chúng ta có hoạt động không:
+@[code lang=java highlight={2} transcludeWith=:::execute_custom_arg_command](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
-![Tham số không hợp lệ](/assets/develop/commands/custom-arguments_fail.png)
+Running the command, we can test whether or not the argument type works:
 
-![Tham số hợp lệ](/assets/develop/commands/custom-arguments_valid.png)
+![Invalid argument](/assets/develop/commands/custom-arguments_fail.png)
 
-![Kết quả câu lệnh](/assets/develop/commands/custom-arguments_result.png)
+![Valid argument](/assets/develop/commands/custom-arguments_valid.png)
+
+![Command result](/assets/develop/commands/custom-arguments_result.png)

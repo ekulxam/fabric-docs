@@ -3,6 +3,8 @@ title: 在 Windows 上安装 Java
 description: 在 Windows 上安装 Java 的逐步指南。
 authors:
   - IMB11
+  - skycatminepokie
+next: false
 ---
 
 这个指南将会指引您在 Windows 上安装 Java 21。
@@ -13,7 +15,7 @@ Minecraft 启动器附带了自己的 Java 安装，因此这部分只在你想�
 
 要检查 Java 是否已安装，你首先必须打开命令提示符。
 
-你可以通过按下 <kbd>Win</kbd> + <kbd>R</kbd> 并在出现的对话框中输入 `cmd.exe` 来实现它。
+You can do this by pressing <kbd>Windows</kbd>+<kbd>R</kbd> and typing `cmd.exe` into the box that appears.
 
 ![Windows运行对话框中的「cmd.exe」](/assets/players/installing-java/windows-run-dialog.png)
 
@@ -23,39 +25,51 @@ Minecraft 启动器附带了自己的 Java 安装，因此这部分只在你想�
 
 ![命令提示符中输入了「java -version」](/assets/players/installing-java/windows-java-version.png)
 
-:::warning
-要使用 Minecraft 1.21，你需要安装至少 Java 21。 如果运行该命令后显示 Java 版本低于 21，你需要更新设备上现有 Java。
+::: warning
+
+To use Minecraft 1.21.11, you'll need at least Java 21 installed.
+
+If this command displays any version lower than 21, you'll need to update your existing Java installation; keep reading this page.
+
 :::
 
-## 2. 下载 Java 21 安装程序{#2-download-the-java-installer}
+## 2. Download the Java 21 Installer {#2-download-the-java-installer}
 
-要安装 Java 21，你需要从 Adoptium 下载安装程序。
+To install Java 21, you'll need to download the installer from [Adoptium](https://adoptium.net/temurin/releases?version=21&os=windows&arch=any&mode=filter).
 
-你需要下载 `Windows Installer (.msi)` 版本：
+You'll want to download the `Windows Installer (.msi)` version:
 
-![Adoptium 下载页面，使用了 Windows 安装程序 (.msi)](/assets/players/installing-java/windows-download-java.png)
+![Adoptium download page with Windows Installer (.msi) highlighted](/assets/players/installing-java/windows-download-java.png)
 
-如果你有 32 位操作系统，应该选择 `x86`；如果你有 64 位操作系统，则应该选择 `x64`。
+You should choose `x86` if you have a 32-bit operating system, or `x64` if you have a 64-bit operating system.
 
-现代大多数电脑都运行 64 位操作系统。 如果你不确定，请尝试使用 64 位的下载。
+The majority of modern computers will have a 64-bit operating system. If you are unsure, try using the 64-bit download.
 
-## 3. 运行安装程序！ 运行安装程序！ {#3-run-the-installer}
+## 3. Run the Installer! {#3-run-the-installer}
 
-按照安装程序的步骤安装 Java 21。 当你到达这个页面时，你应该将以下功能设置为「整个功能将安装在本机硬盘上」：
+Follow the steps in the installer to install Java 21. When you reach this page, you should set the following features to "Entire feature will be installed on local hard drive":
 
-- `Set JAVA_HOME environment variable` - 这将加入到你的PATH中。
+- `Set JAVA_HOME environment variable` - This will be added to your PATH.
 - `JavaSoft (Oracle) registry keys`
 
-![Java 21 安装程序，具有「Set JAVA_HOME variable」和「JavaSoft (Oracle) registry keys」](/assets/players/installing-java/windows-wizard-screenshot.png)
+![Java 21 installer with "Set JAVA_HOME variable" and "JavaSoft (Oracle) registry keys" highlighted](/assets/players/installing-java/windows-wizard-screenshot.png)
 
-完成后，你可以按 `下一步` 继续安装。
+Once you've done that, you can click `Next` and continue with the installation.
 
-## 4. 验证是否已安装 Java 21{#4-verify-that-java-is-installed}
+::: warning
 
-安装完成后，您可以打开命令提示符并输入 `java -version` 来验证 Java 21 是否已安装。
+Windows won't always tell other programs that Java is installed until you restart your computer.
 
-如果命令成功执行，你可以看到类似前文所示的内容，Java 版本被显示出来：
+**Make sure to restart your computer before continuing!**
+
+:::
+
+## 4. Verify That Java 21 Is Installed {#4-verify-that-java-is-installed}
+
+Once the installation is complete, you can verify that Java 21 is installed by opening the command prompt again and typing `java -version`.
+
+If the command runs successfully, you will see something like shown before, where the Java version is displayed:
 
 ![命令提示符中输入了「java -version」](/assets/players/installing-java/windows-java-version.png)
 
-如果遇到任何问题，你可以在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#player-support` 频道中寻求帮助。
+If you encounter any issues, feel free to ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.

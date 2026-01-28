@@ -1,6 +1,6 @@
 ---
 title: 安裝模組
-description: Fabric 模組安裝的逐步指南
+description: A step-by-step guide on how to install mods for Fabric.
 authors:
   - IMB11
 ---
@@ -11,55 +11,57 @@ authors:
 
 ## 1. 下載模組 {#1-download-the-mod}
 
-:::warning
-你應該只從你信任的來源下載模組。 如需更多關於尋找模組的資訊，請參閱[尋找模組](./finding-mods)指南。 如需更多關於尋找模組的資訊，請參閱[尋找模組](./finding-mods)指南。
+::: warning
+
+You should only download mods from sources you trust. For more information on finding mods, see the [Finding Trustworthy Mods](./finding-mods) guide.
+
 :::
 
-大部分的模組都需要 Fabric API，它可以從 [Modrinth](https://modrinth.com/mod/fabric-api) 或 [CurseForge](https://curseforge.com/minecraft/mc-mods/fabric-api)下載。
+The majority of mods require Fabric API as well, which can be downloaded from [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://curseforge.com/minecraft/mc-mods/fabric-api).
 
-下載模組時，請確保：
+When downloading mods, ensure that:
 
-- 它們能在你想玩的 Minecraft 版本上執行。 例如，一個在 1.20 上執行的模組可能無法在 1.20.2 上執行。 例如，一個在 1.20 上執行的模組可能無法在 1.20.2 上執行。 例如，一個在 1.20 上執行的模組可能無法在 1.20.2 上執行。
-- 它是為 Fabric 製作，而不是其他模組載入器。
-- 此外，它們適用於正確的 Minecraft 版本（Java 版）。
+- They work on the version of Minecraft you want to play on. A mod that worked on version 1.21.8 for instance, might not work anymore on 1.21.11.
+- They are for Fabric and not another mod loader.
+- Furthermore, they are for the correct edition of Minecraft (Java Edition).
 
-## 2. 將模組移動到 `mods` 資料夾 {#2-move-the-mod-to-the-mods-folder}
+## 2. Move the Mod to the `mods` Folder {#2-move-the-mod-to-the-mods-folder}
 
-各個作業系統中，模組資料夾的位置如下所示：
+The mods folder can be found in the following locations for each operating system.
 
-您可以將這些路徑貼上到檔案總管的路徑列中，以便快速導航到該資料夾。
+You can usually paste these paths into the address bar of your file explorer to quickly navigate to the folder.
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft\mods
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft/mods
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft/mods
 ```
 
 :::
 
-找到 `mods` 資料夾後，您可以將模組 `.jar` 檔案移動到其中。
+Once you've found the `mods` folder, you can move the mod `.jar` files into it.
 
-![mods 資料夾中已安裝的模組](/assets/players/installing-mods.png)
+![Installed mods in the mods folder](/assets/players/installing-mods.png)
 
-## 3. 你完成了！ {#3-you-re-done}
+## 3. You're Done! {#3-you-re-done}
 
-![已選擇 Fabric 設定檔的 Minecraft 啟動器](/assets/players/installing-fabric/launcher-screen.png)
+Once you've moved the mods into the `mods` folder, you can open the Minecraft Launcher and select the Fabric profile from the dropdown in the bottom-left corner and press play!
 
-將模組移動到 `mods` 資料夾後，您可以開啟 Minecraft 啟動器，並從左下方的下拉式選單中選擇 Fabric 設定檔，然後按下開始遊戲！
+![Minecraft Launcher with Fabric profile selected](/assets/players/installing-fabric/launcher-screen.png)
 
-## 疑難排解 {#troubleshooting}
+## Troubleshooting {#troubleshooting}
 
-如果你在依照本指南操作時遇到任何問題，你可以在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#player-support` 頻道中尋求幫助。
+If you encounter any issues whilst following this guide, you can ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.
 
-您也可以嘗試透過閱讀疑難排解頁面自行解決問題：
+You can also attempt to troubleshoot the issue yourself by reading the troubleshooting pages:
 
-- [崩潰報告](./troubleshooting/crash-reports)
-- [上傳記錄檔](./troubleshooting/uploading-logs)
+- [Crash Reports](./troubleshooting/crash-reports)
+- [Uploading Logs](./troubleshooting/uploading-logs)

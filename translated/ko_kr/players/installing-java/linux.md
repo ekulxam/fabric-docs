@@ -1,11 +1,14 @@
 ---
 title: Linux에 Java 설치하기
-description: Linux에 Java를 설치하는 방법에 대한 단계별 가이드입니다.
+description: A step-by-step guide on how to install Java on Linux.
 authors:
   - IMB11
+next: false
 ---
 
 이 가이드는 Linux에 Java 21을 설치하는 과정을 안내해 줄 것입니다.
+
+The Minecraft Launcher comes with its own Java installation, so this section is only relevant if you want to use the Fabric `.jar` based installer, or if you want to use the Minecraft Server `.jar`.
 
 ## 1. 이미 Java가 설치되었는지 확인하기 {#1-check-if-java-is-already-installed}
 
@@ -13,33 +16,39 @@ authors:
 
 !["java -version"이 입력된 터미널](/assets/players/installing-java/linux-java-version.png)
 
-:::warning
-Minecraft: Java Edition 1.21을 플레이 하려면, 적어도 Java 21 이상의 Java가 설치되어야 합니다. 만약 이 명령어가 Java 21보다 낮은 버전을 표시한다면, 기존의 Java 설치를 업데이트해야 합니다.
+::: warning
+
+To use Minecraft 1.21.11, you'll need at least Java 21 installed.
+
+If this command displays any version lower than 21, you'll need to update your existing Java installation; keep reading this page.
+
 :::
 
-## 2. Java 21 다운로드하고 설치하기 {#2-downloading-and-installing-java}
+## 2. Downloading and Installing Java 21 {#2-downloading-and-installing-java}
 
-대부분의 Linux 배포판에서 사용 가능한 OpenJDK 21을 사용하는 것을 권장합니다.
+We recommend using OpenJDK 21, which is available for most Linux distributions.
 
 ### Arch Linux {#arch-linux}
 
-:::info
-Arch Linux에 Java를 설치하는 방법에 대한 자세한 내용은 [Arch Linux 위키](https://wiki.archlinux.org/title/Java)를 참조하세요.
+::: info
+
+For more information on installing Java on Arch Linux, see the [Arch Linux Wiki](https://wiki.archlinux.org/title/Java).
+
 :::
 
-다음 명령어를 사용하여 공식 패키지 저장소에서 최신 JRE를 설치할 수 있습니다:
+You can install the latest JRE from the official repositories:
 
 ```sh
 sudo pacman -S jre-openjdk
 ```
 
-그래픽 UI 없이 서버를 실행하려면, 헤드리스(headless) 버전을 설치할 수도 있습니다:
+If you're running a server without the need for a graphical UI, you can install the headless version instead:
 
 ```sh
 sudo pacman -S jre-openjdk-headless
 ```
 
-모드를 개발하고자 한다면, JRE 대신 JDK를 설치해야 합니다:
+If you plan to develop mods, you'll need the JDK instead:
 
 ```sh
 sudo pacman -S jdk-openjdk
@@ -47,7 +56,7 @@ sudo pacman -S jdk-openjdk
 
 ### Debian/Ubuntu {#debian-ubuntu}
 
-아래의 `apt` 명령어를 사용하여 Java 21을 설치할 수 있습니다:
+You can install Java 21 using `apt` with the following commands:
 
 ```sh
 sudo apt update
@@ -56,34 +65,34 @@ sudo apt install openjdk-21-jdk
 
 ### Fedora {#fedora}
 
-아래의 `dnf` 명령어를 사용하여 Java 21을 설치할 수 있습니다:
+You can install Java 21 using `dnf` with the following commands:
 
 ```sh
 sudo dnf install java-21-openjdk
 ```
 
-그래픽 UI가 필요하지 않다면, 대신 헤드리스(headless) 버전을 설치할 수도 있습니다:
+If you don't need a graphical UI, you can install the headless version instead:
 
 ```sh
 sudo dnf install java-21-openjdk-headless
 ```
 
-모드를 개발하고자 한다면, JRE 대신 JDK를 설치해야 합니다:
+If you plan to develop mods, you'll need the JDK instead:
 
 ```sh
 sudo dnf install java-21-openjdk-devel
 ```
 
-### 기타 Linux 배포판 {#other-linux-distributions}
+### Other Linux Distributions {#other-linux-distributions}
 
-문서에 없는 배포판을 사용하고 있다면, [Adoptium](https://adoptium.net/temurin/)에서 최신 JRE를 다운로드할 수 있습니다.
+If your distribution isn't listed above, you can download the latest JRE from [Adoptium](https://adoptium.net/temurin/)
 
-모드를 개발하고자 한다면 배포판의 다른 가이드를 참고해야 합니다.
+You should refer to an alternative guide for your distribution if you plan to develop mods.
 
-## 3. Java 21이 올바르게 설치되었는지 확인하기 {#3-verify-that-java-is-installed}
+## 3. Verify That Java 21 Is Installed {#3-verify-that-java-is-installed}
 
-설치 과정을 완료했다면, 터미널을 열고 `java -version`을 입력하여 Java 21이 올바르게 설치되었는지 확인할 수 있습니다.
+Once the installation is complete, you can verify that Java 21 is installed by opening a terminal and typing `java -version`.
 
-명령어가 성공적으로 실행되었다면, 아래와 같이 Java 버전이 표시된 것을 확인할 수 있을 것입니다:
+If the command runs successfully, you will see something like shown before, where the Java version is displayed:
 
 !["java -version"이 입력된 터미널](/assets/players/installing-java/linux-java-version.png)

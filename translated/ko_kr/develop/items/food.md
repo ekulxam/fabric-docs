@@ -15,25 +15,25 @@ authors:
 
 ## 음식 요소 추가하기 {#adding-the-food-component}
 
-아이템에 음식 요소를 추가하려면, `Item.Settings` 인스턴스에 다음과 같이 전달할 수 있습니다:
+To add a food component to an item, we can pass it to the `Item.Properties` instance:
 
 ```java
-new Item.Settings().food(new FoodComponent.Builder().build())
+new Item.Properties().food(new FoodProperties.Builder().build())
 ```
 
-지금으로썬, 이렇게 하면 아이템을 그저 섭취할 수만 있게 합니다.
+지금으로선 단지 아이템을 먹는 기능 그 이상 이하도 존재하지 않습니다.
 
-`FoodComponent.Builder` 클래스에는 음식이 섭취되었을 때 발생하는 일을 조정할 수 있게 해주는 여러 메소드가 있습니다.
+The `FoodProperties.Builder` class has some methods that allow you to modify what happens when a player eats your item:
 
 | 메소드                  | 설명                                        |
 | -------------------- | ----------------------------------------- |
 | `nutrition`          | 아이템이 채울 배고픔의 양을 설정합니다.    |
 | `saturationModifier` | 아이템이 채울 포만감의 양을 설정합니다.    |
-| `alwaysEdible`       | 배고픔의 상관없이 항상 먹을 수 있게 합니다. |
+| `alwaysEdible`       | 배고픔에 상관없이 항상 먹을 수 있게 합니다. |
 
-원하는 대로 빌더를 수정했으면, `build()` 메소드를 호출하며 `FoodComponent`를 생성할 수 있습니다.
+When you've modified the builder to your liking, you can call the `build()` method to get the `FoodProperties`.
 
-플레이어가 아이템을 섭취했을 때 물약 효과가 부여되도록 만들고 싶다면, `FoodComponent` 클래스와 함께 다음과 같이 `ConsumableComponent`도 사용해야 합니다:
+If you want to add status effects to the player when they eat your food, you will need to add a `Consumable` component alongside the `FoodProperties` component as seen in the following example:
 
 @[code transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
@@ -43,7 +43,7 @@ new Item.Settings().food(new FoodComponent.Builder().build())
 
 이렇게 하면 아이템에 다음과 같은 효과가 적용됩니다:
 
-- 배고픔의 양에 상관없이 항상 먹을 수 있습니다.
+- 배고픔에 상관없이 항상 먹을 수 있습니다.
 - 항상 먹을 때마다 독 II를 6초 부여합니다.
 
 <VideoPlayer src="/assets/develop/items/food_0.webm">독사과를 섭취하는 모습</VideoPlayer>

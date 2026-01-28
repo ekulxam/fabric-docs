@@ -11,11 +11,11 @@ Minecraft имеет большой выбор звуков которые вы 
 
 Обязательно вызовите метод `playSound()` на логической стороне сервера когда воспроизводятся звуки!
 
-Например, методы `useOnEntity()` и `useOnBlock()` для собственного интерактивного предмета используются для воспроизведения "поставлен медный блок" и звук мародёра.
+In this example, the `interactLivingEntity()` and `useOn()` methods for a custom interactive item are used to play a "placing copper block" and a pillager sound.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/custom/CustomSoundItem.java)
 
-Метод`playSound()` используется вместе с объектом `LivingEntity`. Необходимо указать только SoundEvent, громкость и высоту тона. Вы также можете использовать метод `playSound()` из экземпляра мира, чтобы получить более высокий уровень контроля.
+Метод`playSound()` используется вместе с объектом `LivingEntity`. Необходимо указать только SoundEvent, громкость и высоту тона. You can also use the `playSound()` method from the level instance to have a higher level of control.
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/custom/CustomSoundItem.java)
 

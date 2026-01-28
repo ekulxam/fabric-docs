@@ -7,7 +7,7 @@ authors:
 
 Apabila menyelesaikan masalah, anda selalunya perlu menyediakan log untuk membantu mengenal pasti punca isu tersebut.
 
-## Mengapa saya perlu memuat naik log?
+## Why Should I Upload Logs? {#why-should-i-upload-logs}
 
 Memuat naik log membolehkan orang lain membantu anda dalam menyelesaikan masalah anda dengan lebih cepat daripada hanya menampal log ke dalam ruang perbualan atau siaran forum. Ia juga membolehkan anda berkongsi log anda dengan orang lain tanpa perlu menyalin dan menampalnya.
 
@@ -23,19 +23,19 @@ Untuk mendapatkan maklumat lanjut tentang laporan ranap permainan, lihat [Lapora
 
 Panduan ini merangkumi Pelancar Minecraft rasmi (biasanya dirujuk sebagai "pelancar vanila") - untuk pelancar pihak ketiga, anda harus merujuk dokumentasi mereka.
 
-Log-log terletak di dalam folder `log` dalam direktori permainan, direktori permainan boleh didapati di lokasi berikut bergantung pada sistem pengoperasian anda:
+Panduan ini merangkumi Pelancar Minecraft rasmi (biasanya dirujuk sebagai "pelancar vanila") - untuk pelancar pihak ketiga, anda harus merujuk dokumentasi mereka.
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft
 ```
 

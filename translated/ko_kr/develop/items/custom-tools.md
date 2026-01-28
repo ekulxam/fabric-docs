@@ -24,6 +24,10 @@ authors:
 | `enchantmentValue`        | 이 `ToolMaterial`로 만들어진 도구의 "마법 부여성"을 설정합니다.                                                  |
 | `repairItems`             | 이 태그에 포함된 아이템은 모루에서 `ToolMaterial`로 만들어진 도구를 수리할 때 사용할 수 있습니다.                               |
 
+For this example, we will use the same repair item we will be using for armor. We define the tag reference as follows:
+
+@[code transcludeWith=:::repair_tag](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
+
 숫자가 입력되는 매개 변수의 균형 잡힌 값을 결정하기 어렵다면, `ToolMaterial.STONE`이나 `ToolMaterial.DIAMOND`와 같이 기본 도구 재료를 참조하는 것도 좋습니다.
 
 ## 도구 아이템 만들기 {#creating-tool-items}
@@ -34,7 +38,7 @@ authors:
 
 두 실수 값 (`1f, 1f`) 은 각각 도구의 공격 피해와 공격 속도를 의미합니다.
 
-크리에이티브 보관함에서 아이템을 찾고 싶다면 아이템 그룹에 추가해야 한다는 사실을 잊지 마세요!
+Remember to add them to a creative tab if you want to access them from the creative inventory!
 
 @[code transcludeWith=:::8](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 

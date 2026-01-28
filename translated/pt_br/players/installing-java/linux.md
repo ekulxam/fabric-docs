@@ -1,11 +1,14 @@
 ---
 title: Instalando Java no Linux
-description: Um guia passo a passo de como instalar Java no Linux.
+description: A step-by-step guide on how to install Java on Linux.
 authors:
   - IMB11
+next: false
 ---
 
 Este guia o orientará na instalação do Java 17 no Linux.
+
+The Minecraft Launcher comes with its own Java installation, so this section is only relevant if you want to use the Fabric `.jar` based installer, or if you want to use the Minecraft Server `.jar`.
 
 ## 1. Verificar Se o Java Já Está Instalado
 
@@ -13,77 +16,83 @@ Abra um terminal, digite `java -version`, e pressione <kbd>Enter</kbd>.
 
 ![Terminal com "java -version" digitado](/assets/players/installing-java/linux-java-version.png)
 
-:::warning
-Para usar a maioria das versões modernas do Minecraft, você precisará ter pelo menos o Java 17 instalado. Se este comando exibir uma versão inferior a 17, será necessário atualizar sua instalação do Java atual.
+::: warning
+
+To use Minecraft 1.21.11, you'll need at least Java 21 installed.
+
+If this command displays any version lower than 21, you'll need to update your existing Java installation; keep reading this page.
+
 :::
 
-## 2. Baixando e instalando Java 17
+## 2. Downloading and Installing Java 21 {#2-downloading-and-installing-java}
 
-Recomendamos usar o OpenJDK 17, que está disponível para a maioria das distribuições Linux.
+We recommend using OpenJDK 21, which is available for most Linux distributions.
 
-### Arch Linux
+### Arch Linux {#arch-linux}
 
-:::info
-Para mais informações na instalação do Java no Arch Linux, veja a [Wiki do Arch Linux](https://wiki.archlinux.org/title/Java_\\(Portugu%C3%AAs\\)).
+::: info
+
+For more information on installing Java on Arch Linux, see the [Arch Linux Wiki](https://wiki.archlinux.org/title/Java).
+
 :::
 
-Você pode instalar a JRE mais recente através de repositórios oficiais:
+You can install the latest JRE from the official repositories:
 
 ```sh
 sudo pacman -S jre-openjdk
 ```
 
-Se estiver rodando um servidor sem a necessidade de uma interface gráfica, você pode instalar a versão headless:
+If you're running a server without the need for a graphical UI, you can install the headless version instead:
 
 ```sh
 sudo pacman -S jre-openjdk-headless
 ```
 
-Se você planeja desenvolver mods, precisará do JDK:
+If you plan to develop mods, you'll need the JDK instead:
 
 ```sh
 sudo pacman -S jdk-openjdk
 ```
 
-### Debian/Ubuntu
+### Debian/Ubuntu {#debian-ubuntu}
 
-Você pode instalar o Java 17 usando `apt` com os seguintes comandos:
+You can install Java 21 using `apt` with the following commands:
 
 ```sh
 sudo apt update
-sudo apt install openjdk-17-jdk
+sudo apt install openjdk-21-jdk
 ```
 
-### Fedora
+### Fedora {#fedora}
 
-Você pode instalar o Java 17 usando `dnf` com os seguintes comandos:
+You can install Java 21 using `dnf` with the following commands:
 
 ```sh
-sudo dnf install java-17-openjdk
+sudo dnf install java-21-openjdk
 ```
 
-Se você não precisa de uma interface gráfica, você pode instalar a versão headless:
+If you don't need a graphical UI, you can install the headless version instead:
 
 ```sh
-sudo dnf install java-17-openjdk-headless
+sudo dnf install java-21-openjdk-headless
 ```
 
-Se você planeja desenvolver mods, precisará do JDK:
+If you plan to develop mods, you'll need the JDK instead:
 
 ```sh
-sudo dnf install java-17-openjdk-devel
+sudo dnf install java-21-openjdk-devel
 ```
 
-### Outras distribuições Linux
+### Other Linux Distributions {#other-linux-distributions}
 
-Se sua distribuição não foi listada acima, você pode baixar a JRE mais recente pelo [Adoptium](https://adoptium.net/temurin/)
+If your distribution isn't listed above, you can download the latest JRE from [Adoptium](https://adoptium.net/temurin/)
 
-Você deve consultar um guia próprio de sua distribuição se planeja desenvolver mods.
+You should refer to an alternative guide for your distribution if you plan to develop mods.
 
-## 3. Verificar se o Java 17 está instalado
+## 3. Verify That Java 21 Is Installed {#3-verify-that-java-is-installed}
 
-Assim que a instalação terminar, você pode verificar se o Java 17 está instalado abrindo o terminal novamente e digitando `java -version`.
+Once the installation is complete, you can verify that Java 21 is installed by opening a terminal and typing `java -version`.
 
-Se o comando for executado com êxito, você verá algo como mostrado anteriormente onde a versão do Java é exibida:
+If the command runs successfully, you will see something like shown before, where the Java version is displayed:
 
 ![Terminal com "java -version" digitado](/assets/players/installing-java/linux-java-version.png)

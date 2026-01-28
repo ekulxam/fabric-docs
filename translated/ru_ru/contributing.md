@@ -17,18 +17,20 @@ description: Руководство по внесению вклада в док
 
 Если вы хотите перевести документацию на свой язык, вы можете сделать это на [странице Fabric на Crowdin](https://crowdin.com/project/fabricmc).
 
-<!-- markdownlint-disable-next-line titlecase-rule -->
+<!-- markdownlint-disable titlecase-rule -->
 
 ## <Badge type="tip">new-content</Badge> Внесение контента {#contributing-content}
 
-Основной способ внести вклад в документацию Fabric — это внесение контента.
+<!-- markdownlint-enable titlecase-rule -->
+
+Content contributions are the main way to contribute to the Fabric Documentation.
 
 Все материалы, добавляемые в контент, проходят следующие этапы, каждому из которых соответствует метка:
 
-1. <Badge type="tip">локально</Badge> Подготовьте свои изменения и отправьте PR
-2. <Badge type="tip">stage:expansion</Badge>: Руководство по расширению при необходимости
-3. <Badge type="tip">этап:проверка</Badge>: проверка содержимого
-4. <Badge type="tip">stage:cleanup</Badge>: Грамматика, Линтер...
+1. <Badge type="tip">locally</Badge>: Подготовьте изменения и отправьте pull request
+2. <Badge type="tip">stage:expansion</Badge>: Рекомендации по расширению, если необходимо
+3. <Badge type="tip">stage:verification</Badge>: Проверка содержимого
+4. <Badge type="tip">stage:cleanup</Badge>: Грамматика, Линтинг...
 5. <Badge type="tip">stage:ready</Badge>: Готово к релизу!
 
 Всё содержимое должно соответствовать нашим [рекомендациям по стилю](#style-guidelines).
@@ -40,9 +42,9 @@ description: Руководство по внесению вклада в док
 1. [Создайте форк репозитория на GitHub](https://github.com/FabricMC/fabric-docs/fork)
 2. Создайте новую ветку в вашем форке
 3. Сделайте свои изменения в этой ветке
-4. Откройте запрос на изменение в оригинальном репозитории (Pull Request)
+4. Откройте запрос на изменение в оригинальном репозитории
 
-Вы можете прочитать больше о потоке GitHub [здесь](https://docs.github.com/ru/get-started/using-github/github-flow).
+Вы можете прочитать больше о [потоке GitHub](https://docs.github.com/en/get-started/using-github/github-flow).
 
 Вы можете внести изменения из веб-интерфейса на GitHub, или разработать и предварительно просмотреть веб-сайт локально.
 
@@ -79,7 +81,7 @@ npm run dev
 
 #### Создание веб-сайта {#building-the-website}
 
-Это преобразует все файлы Markdown в статические HTML-файлы и разместит их в папке `.vitepress/dist`:
+Это скомпилирует все файлы с Markdown в статические HTML-файлы и поместит их в `.vitepress/dist`:
 
 ```sh
 npm run build
@@ -105,9 +107,9 @@ git push
 
 Затем, зайдите по ссылке в выводе команды `git push`, чтобы открыть PR.
 
-### 2. <Badge type="tip">stage:expansion</Badge> Руководство по расширению, если необходимо {#2-guidance-for-expansion-if-needed}
+### 2. <Badge type="tip">stage:expansion</Badge> Рекомендации по расширению, если необходимо {#2-guidance-for-expansion-if-needed}
 
-Если команда по документированию считает, что вы могли бы расширить свой запрос, один из членов команды добавит метку <Badge type="tip">stage:expansion</Badge> к вашему запросу на извлечение вместе с комментарием, объясняющим, что, по их мнению, вы могли бы расширить. Если вы согласны с этим предложением, вы можете дополнить свой реквест.
+Если команда по документированию считает, что вы могли бы расширить свой запрос, один из членов команды добавит метку <Badge type="tip">stage:expansion</Badge> к вашему запросу с комментарием, объясняющим, что, по их мнению, вы могли бы расширить. Если вы согласны с этим предложением, вы можете дополнить свой реквест.
 
 Если вы не хотите дополнять свой реквест, но будете рады, что кто-то другой дополнит его позже, лучше всего создать пост [на странице проблем](https://github.com/FabricMC/fabric-docs/issues) и объяснить, что, по вашему мнению, можно было бы дополнить. Затем группа по документированию добавит метку <Badge type="tip">требуется помощь</Badge> к вашему PR.
 
@@ -121,7 +123,7 @@ git push
 - Весь ли контент актуален?
 - Охватывает ли контент все случаи, например, различные операционные системы?
 
-### 4. <Badge type="tip">этап:очистка</Badge> Очистка {#4-cleanup}
+### 4. <Badge type="tip">stage:cleanup</Badge>: Очистка {#4-cleanup}
 
 На этом этапе происходит следующее:
 
@@ -130,25 +132,27 @@ git push
 - Форматирование всего кода Java с использованием [Checkstyle](https://checkstyle.sourceforge.io/)
 - Другие различные исправления и улучшения
 
-## <Badge type="tip">framework</Badge> Вносящий вклад в фреймворк {#contributing-framework}
+## <Badge type="tip">framework</Badge> Contributing Framework {#contributing-framework}
 
 Фреймворк относится к внутренней структуре веб-сайта. Любые запросы, которые изменяют фреймворк веб-сайта, будут помечены меткой <Badge type="tip">framework</Badge>.
 
 К вашему сведению, вы должны делать pull requests, касающиеся фреймворка, только после консультации с командой документации на [Discord-сервере Fabric](https://discord.gg/v6v4pMv) или через issue.
 
-:::info
+::: info
+
 Изменение файлов боковой панели и конфигурации панели навигации не считается pull request, касающимся фреймворка.
+
 :::
 
 ## Стандарты оформления {#style-guidelines}
 
-Если вы насчёт чего-то не уверены, можете задать свой вопрос в [Discord-сервере Fabric](https://discord.gg/v6v4pMv) или через GitHub Discussions.
+Если вы насчёт чего-то не уверены, можете задать свой вопрос в [Fabric Discord](https://discord.fabricmc.net/) или через GitHub Discussions.
 
-### Корректура (проверка грамматики и т. д.)
+### Write the Original in American English {#write-the-original-in-american-english}
 
 Вся оригинальная документация написана на английском языке в соответствии с американскими правилами грамматики.
 
-### Добавляем данные в начало файла {#add-data-to-the-frontmatter}
+### Add Data to the Frontmatter {#add-data-to-the-frontmatter}
 
 Все страницы должны иметь заголовок и описание.
 
@@ -163,21 +167,21 @@ authors:
 ---
 ```
 
-### Добавьте "Якорь" к заголовкам {#add-anchors-to-headings}
+### Add Anchors to Headings {#add-anchors-to-headings}
 
-Каждый заголовок должен иметь якорь, который используется для создания ссылки на этот заголовок:
+Each heading must have an anchor, which is used to link to that heading:
 
 ```md
 ## This Is a Heading {#this-is-a-heading}
 ```
 
-Якорь должен использовать строчные буквы, цифры и дефисы.
+The anchor must use lowercase characters, numbers and dashes.
 
-### Разместите код внутри `/reference` мода {#place-code-within-the-reference-mod}
+### Place Code Within the Example Mod {#place-code-within-the-example-mod}
 
-Если вы создаёте или изменяете страницы, содержащие код, разместите этот код в каком-нибудь месте мода с примерами (он находится в папке `/reference` репозитория). Фрагмент кода будет выглядеть следующим образом:
+If you create or modify pages containing code, place the code in an appropriate location within the example mod (located in the `/reference` folder of the repository). Then, use the [code snippet feature offered by VitePress](https://vitepress.dev/guide/markdown#import-code-snippets) to embed the code.
 
-Это выведет все линии с 15 по 21 из файла `ExampleMod.java` из мода с примерами:
+For example, to highlight lines 15-21 of the `ExampleMod.java` file from the mod:
 
 ::: code-group
 
@@ -189,9 +193,9 @@ authors:
 
 :::
 
-Затем используйте [функцию вставки кода от VitePress](https://vitepress.dev/guide/markdown#import-code-snippets), чтобы встроить код, или, если вам требуется более широкий контроль, вы можете использовать функцию [transclude из `markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
+If you need a greater span of control, you can use the [transclude feature from `markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
 
-Например, это встроит секции файла выше, которые помечены тегом `#entrypoint`:
+For example, this will embed the sections of the file above that are marked with the `#entrypoint` tag:
 
 ::: code-group
 
@@ -203,29 +207,29 @@ authors:
 
 :::
 
-### Создавайте боковую панель для каждого нового раздела {#create-a-sidebar-for-each-new-section}
+### Create a Sidebar for Each New Section {#create-a-sidebar-for-each-new-section}
 
-Если вы создаете новую категорию, вам следует создать новую боковую панель в папке `.vitepress/sidebars` и добавить её в файл `config.mts`.
+If you're creating a new section, you should create a new sidebar in the `.vitepress/sidebars` folder and add it to the `i18n.mts` file.
 
-Если вам нужна помощь с этим, спросите [в дискорде Fabric](https://discord.gg/v6v4pMv) в канале `#docs`.
+If you need assistance with this, please ask in the [Fabric Discord](https://discord.fabricmc.net/)'s `#docs` channel.
 
-### ⚠️ **Ссылки на другие страницы должны быть относительными.** ⚠️
+### Add New Pages to the Relevant Sidebars {#add-new-pages-to-the-relevant-sidebars}
 
-При создании новой страницы вы должны добавить ее на соответствующую боковую панель в папке `.vitepress/sidebars`.
+When creating a new page, you should add it to the relevant sidebar in the `.vitepress/sidebars` folder.
 
-Опять же, если вам нужна помощь, спросите в дискорде Fabric в канале `#docs`.
+Again, if you need assistance, ask in the Fabric Discord in the `#docs` channel.
 
-### Используйте `/assets` для хранения медиаконтента {#place-media-in-assets}
+### Place Media in `/assets` {#place-media-in-assets}
 
-Любые изображения должны находиться в соответствующем месте в папке `/assets`.
+Any images should be placed in a suitable place in the `/public/assets` folder.
 
-### Используйте относительные ссылки! ⚠️ **Если ты ссылаешься на другие страницы, используй относительные ссылки.** ⚠️ {#use-relative-links}
+### Use Relative Links! {#use-relative-links}
 
-Это требуется для правильной работы системы с разными версиями, которая заранее обрабатывает ссылки для добавления версии. Если вы используете обычные ссылки, номер версии не будет добавлен к ссылке.
+This is because of the versioning system in place, which will process the links to add the version beforehand. If you use absolute links, the version number will not be added to the link.
 
-Вы также не должны добавлять расширение файла к ссылке.
+You must also not add the file extension to the link either.
 
-Например, для страницы в папке `/players`, ссылка на страницу `installing-fabric` по пути `/players/installing-fabric.md`, вы должны сделать следующее:
+For example, to link to the page found in `/players/index.md` from the page `/develop/index.md`, you would have to do the following:
 
 ::: code-group
 
@@ -245,3 +249,5 @@ This relative link has the file extension.
 ```
 
 :::
+
+<!---->

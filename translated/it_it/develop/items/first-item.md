@@ -14,71 +14,75 @@ Se non ne sei al corrente, tutto in Minecraft è memorizzato in registry, e gli 
 
 ## Preparare la Tua Classe dei Oggetti {#preparing-your-items-class}
 
-Per semplificare la registrazione degli oggetti, puoi creare un metodo che accetta una stringa come identificatore, delle impostazioni dell'oggetto e una fabbrica per creare l'istanza `Item`.
+To simplify the registering of items, you can create a method that accepts a string identifier, some item properties and a factory to create the `Item` instance.
 
-Questo metodo creerà un oggetto con l'identificatore fornito e lo registrano nella registry degli oggetti del gioco.
+Questo metodo creerà un oggetto con l'identificatore fornito e lo registrerà con il registro degli oggetti del gioco.
 
-Puoi mettere questo metodo in una classe chiamata `ModItems` (o qualsiasi altro nome).
+Puoi mettere questo metodo in una classe chiamata `Moditems` (o qualunque nome in cui tu voglia nominare la classe).
 
 Anche Mojang fa lo stesso per i suoi oggetti! Prendi ispirazione dalla classe `Items`.
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Nota l'utilizzo di un'interfaccia [`Function`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html) per la fabbrica, il che ci permetterà successivamente di specificare come vogliamo creare il nostro oggetto date le impostazioni tramite `Item::new`.
+Notice how we're using a `GenericItem`, which allows us to use the same method `register` for registering any type of item that extends `Item`. We're also using a [`Function`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html) interface for the factory, which allows us to specify how we want our item to be created given the item properties.
 
 ## Registrare un Oggetto {#registering-an-item}
 
-Puoi ora registrare un oggetto con il metodo.
+Ora puoi registrare un oggetto con il metodo.
 
-Il metodo di registrazione accetta come parametro un'istanza della classe `Item.Settings`. Questa classe ti permette di configurare le proprietà dell'oggetto con vari metodi costruttori.
+The register method takes in an instance of the `Item.Properties` class as a parameter. Questa classe ti permette di configurare le proprietà dell'oggetto con vari metodi di costruttore.
 
 ::: tip
-If you want to change your item's stack size, you can use the `maxCount` method in the `Item.Settings` class.
+
+If you want to change your item's stack size, you can use the `stacksTo` method in the `Item.Properties` class.
 
 Questo non funzionerà se hai segnato un oggetto come danneggiabile, poiché la dimensione di uno stack è sempre 1 per oggetti danneggiabili per evitare duplicazioni.
+
 :::
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-`Item::new` dice alla funzione di registrazione di creare un'istanza `Item` con `Item.Settings` chiamando il costruttore `Item` (`new Item(...)`), che accetta `Item.Settings` come parametro.
+`Item::new` tells the register function to create an `Item` instance from an `Item.Properties` by calling the `Item` constructor (`new Item(...)`), which takes an `Item.Properties` as a parameter.
 
-Tuttavia, provando ora ad eseguire il client modificato, noterai che il nostro oggetto non esiste ancora nel gioco! Questo perché non hai inizializzato la classe staticamente.
+However, if you now try to run the modified client, you can see that our item doesn't exist in-game yet! This is because you didn't statically initialize the class.
 
-Per fare questo puoi aggiungere un metodo `initialize` pubblico e statico alla tua classe e richiamarlo dall'[initializer della tua mod](../getting-started/project-structure#entrypoints). Per ora il metodo non deve contenere nulla.
+To do this, you can add a public static initialize method to your class and call it from your [mod's initializer](../getting-started/project-structure#entrypoints) class. Currently, this method doesn't need anything inside it.
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ExampleModItems.java)
 
-Chiamare un metodo su una classe la inizializza staticamente se non è mai stata caricata prima - questo significa che tutti gli attributi `static` vengono calcolati. Questo è il motivo di questo metodo `initialize` fasullo.
+Calling a method on a class statically initializes it if it hasn't been previously loaded - this means that all `static` fields are evaluated. This is what this dummy `initialize` method is for.
 
-## Aggiungere l'Oggetto ad un Gruppo di Oggetti {#adding-the-item-to-an-item-group}
+## Adding the Item to a Creative Tab {#adding-the-item-to-a-creative-tab}
 
-:::info
-Se volessi aggiungere l'oggetto a un `ItemGroup` personalizzato, consulta la pagina [Gruppi di Oggetti Personalizzati](./custom-item-groups) per maggiori informazioni.
+::: info
+
+If you want to add the item to a custom `CreativeModeTab`, check out the [Custom Creative Tabs](./custom-item-groups) page for more information.
+
 :::
 
-Per questo esempio, aggiungeremo questo oggetto all'`ItemGroup` ingredienti, dovrai usare gli eventi dei gruppi di oggetti dell'API di Fabric - in particolare `ItemGroupEvents.modifyEntriesEvent`
+For example purposes, we will add this item to the ingredients `CreativeModeTab`, you will need to use Fabric API's creative tab events - specifically `ItemGroupEvents.modifyEntriesEvent`
 
-Questo si può fare nel metodo `initialize` della tua classe degli oggetti.
+This can be done in the `initialize` method of your items class.
 
 @[code transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Appena caricato il gioco, vedrai che il nostro oggetto è stato registrato, ed è nel gruppo di oggetti Ingredienti:
+Loading into the game, you can see that our item has been registered, and is in the Ingredients creative tab:
 
-![Oggetto nel gruppo ingredienti](/assets/develop/items/first_item_0.png)
+![Item in the ingredients group](/assets/develop/items/first_item_0.png)
 
-Tuttavia, gli manca il seguente:
+However, it's missing the following:
 
-- Modello dell'Oggetto
+- Item Model
 - Texture
-- Traduzione (nome)
+- Translation (name)
 
-## Dare un Nome all'Oggetto {#naming-the-item}
+## Naming The Item {#naming-the-item}
 
-L'oggetto per ora non ha una traduzione, per cui dovrai aggiungerne una. La chiave di traduzione è già stata fornita da Minecraft: `item.example-mod.suspicious_substance`.
+The item currently doesn't have a translation, so you will need to add one. The translation key has already been provided by Minecraft: `item.example-mod.suspicious_substance`.
 
-Crea un nuovo file JSON presso: `src/main/resources/assets/example-mod/lang/en_us.json` e mettici la chiave di traduzione, e il suo valore:
+Create a new JSON file at: `src/main/resources/assets/example-mod/lang/en_us.json` and put in the translation key, and its value:
 
 ```json
 {
@@ -86,84 +90,102 @@ Crea un nuovo file JSON presso: `src/main/resources/assets/example-mod/lang/en_u
 }
 ```
 
-Puoi riavviare il gioco, o ricostruire la tua mod e premere <kbd>F3</kbd>+<kbd>T</kbd> per applicare le modifiche.
+You can either restart the game or build your mod and press <kbd>F3</kbd>+<kbd>T</kbd> to apply changes.
 
-## Aggiungere Texture e Modello {#adding-a-texture-and-model}
+## Adding a Client Item, Texture and Model {#adding-a-client-item-texture-and-model}
 
-Per dare al tuo oggetto una texture e un modello, ti basta creare un'immagine 16x16 come texture per il tuo oggetto e salvarla nella cartella `assets/example-mod/textures/item`. Il nome del file è l'identificatore dell'oggetto, con estensione `.png`.
+For your item to have a proper appearance, it requires:
 
-Per questo esempio, puoi usare questa texture di esempio per `suspicious_substance.png`
+- [An item texture](https://minecraft.wiki/w/Textures#Items)
+- [An item model](https://minecraft.wiki/w/Model#Item_models)
+- [A client item](https://minecraft.wiki/w/Items_model_definition)
+
+### Adding a Texture {#adding-a-texture}
+
+::: info
+
+For more information on this topic, see the [Item Models](./item-models) page.
+
+:::
+
+To give your item a texture and model, simply create a 16x16 texture image for your item and save it in the `assets/example-mod/textures/item` folder. Name the texture file the same as the item's identifier, but with a `.png` extension.
+
+For example purposes, you can use this example texture for `suspicious_substance.png`
 
 <DownloadEntry visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png">Texture</DownloadEntry>
 
-Appena riavviato/ricaricato il gioco - dovresti vedere che l'oggetto ancora non ha texture, questo perché devi aggiungere un modello che usi questa texture.
+### Adding a Model {#adding-a-model}
 
-Creeremo un semplice modello `item/generated`, che accetti come input solo una texture.
+When restarting/reloading the game - you should see that the item still has no texture, that's because you will need to add a model that uses this texture.
 
-Crea il modello JSON nella cartella `assets/example-mod/models/item`, con lo stesso nome dell'oggetto; `suspicious_substance.json`
+You're going to create a simple `item/generated` model, which takes in an input texture and nothing else.
+
+Create the model JSON in the `assets/example-mod/models/item` folder, with the same name as the item; `suspicious_substance.json`
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/item/suspicious_substance.json)
 
-### Comprendere il Modello in JSON {#breaking-down-the-model-json}
+#### Breaking Down the Model JSON {#breaking-down-the-model-json}
 
-- `parent`: Questo è il modello genitore da cui questo modello erediterà. In questo caso è il modello `item/generated`.
-- `textures`: Qui è dove definisci le texture per il modello. La chiave `layer0` è la texture che il modello userà.
+- `parent`: This is the parent model that this model will inherit from. In this case, it's the `item/generated` model.
+- `textures`: This is where you define the textures for the model. The `layer0` key is the texture that the model will use.
 
-La maggior parte degli oggetti usa il modello `item/generated` come genitore, perché è un modello semplice che mostra semplicemente la texture.
+Most items will use the `item/generated` model as their parent, as it's a simple model that just displays the texture.
 
-Ci sono alternative, tra cui `item/handheld` che si usa per oggetti che il giocatore "tiene in mano", come gli utensili.
+There are alternatives, such as `item/handheld` which is used for items that are "held" in the player's hand, such as tools.
 
-## Creare la Descrizione del Modello d'Oggetto {#creating-the-item-model-description}
+### Creating the Client Item {#creating-the-client-item}
 
-Minecraft non sa in automatico dove i file dei modelli dei tuoi oggetti si trovino, dobbiamo fornire una descrizione del modello dell'oggetto.
+Minecraft doesn't automatically know where your items' model files can be found, we need to provide a client item.
 
-Crea la descrizione JSON dell'oggetto in `assets/example-mod/items`, e come nome del file l'identifier dell'oggetto: `suspicious_substance.json`.
+Create the client item JSON in the `assets/example-mod/items`, with the same file name as the identifier of the item: `suspicious_substance.json`.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/items/suspicious_substance.json)
 
-### Comprendere il JSON della Descrizione del Modello d'Oggetto {#breaking-down-the-item-model-description-json}
+#### Breaking Down the Client Item JSON {#breaking-down-the-client-item-json}
 
-- `model`: Questa è la proprietà che contiene il riferimento al nostro modello.
-  - `type`: Questo è il tipo del nostro modello. Per la maggior parte degli oggetti dovrebbe essere `minecraft:model`
-  - `model`: Questo è l'identifier del modello. Dovrebbe seguire questo formato: `example-mod:item/item_name`
+- `model`: This is the property that contains the reference to our model.
+  - `type`: This is the type of our model. For most items, this should be `minecraft:model`
+  - `model`: This is the model's identifier. It should have this form: `example-mod:item/item_name`
 
-Il tuo oggetto dovrebbe ora avere questo aspetto nel gioco:
+Your item should now look like this in-game:
 
-![Oggetto con il modello corretto](/assets/develop/items/first_item_2.png)
+![Item with correct model](/assets/develop/items/first_item_2.png)
 
-## Rendere l'Oggetto Compostabile o Combustibile {#making-the-item-compostable-or-a-fuel}
+## Making the Item Compostable or a Fuel {#making-the-item-compostable-or-a-fuel}
 
-L'API di Fabric fornisce varie registry che si possono usare per aggiungere altre proprietà al tuo oggetto.
+Fabric API provides various registries that can be used to add additional properties to your item.
 
-Per esempio, per rendere il tuo oggetto compostabile, puoi usare la `CompostableItemRegistry`:
+For example, if you want to make your item compostable, you can use the `CompostingChanceRegistry`:
 
-@[code transcludeWith=:::_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-In alternativa, se vuoi rendere il tuo oggetto combustibile, puoi usare l'evento `FuelRegistryEvents.BUILD`:
+Alternatively, if you want to make your item a fuel, you can use the `FuelRegistryEvents.BUILD` event:
 
-@[code transcludeWith=:::_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-## Aggiungere una Ricetta Basilare {#adding-a-basic-crafting-recipe}
+## Adding a Basic Crafting Recipe {#adding-a-basic-crafting-recipe}
 
 <!-- In the future, an entire section on recipes and recipe types should be created. For now, this suffices. -->
 
-Se vuoi aggiungere una ricetta per il tuo oggetto, devi posizione un file JSON della ricetta nella cartella `data/example-mod/recipe`.
+If you want to add a crafting recipe for your item, you will need to place a recipe JSON file in the `data/example-mod/recipe` folder.
 
-Per maggiori informazioni sul formato delle ricette, consulta queste risorse:
+For more information on the recipe format, check out these resources:
 
-- [Generatore di Ricette JSON](https://crafting.thedestruc7i0n.ca/)
+- [Recipe JSON Generator](https://crafting.thedestruc7i0n.ca/)
 - [Minecraft Wiki - Recipe JSON](https://minecraft.wiki/w/Recipe#JSON_Format)
 
-## Tooltip Personalizzati {#custom-tooltips}
+## Custom Tooltips {#custom-tooltips}
 
-Se vuoi che il tuo oggetto abbia un tooltip personalizzato, dovrai creare una classe che estenda `Item` e faccia override del metodo `appendTooltip`.
+If you want your item to have a custom tooltip, you will need to create a class that extends `Item` and override the `appendHoverText` method.
 
-:::info
-Questo esempio usa la classe `LightningStick` creata nella pagina [Interazioni Personalizzate tra Oggetti](./custom-item-interactions).
+::: info
+
+This example uses the `LightningStick` class created in the [Custom Item Interactions](./custom-item-interactions) page.
+
 :::
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-Ogni chiamata di `add()` aggiungerà una linea al tooltip.
+Each call to `accept()` will add one line to the tooltip.
 
-![Anteprima del Tooltip](/assets/develop/items/first_item_3.png)
+![Tooltip Showcase](/assets/develop/items/first_item_3.png)

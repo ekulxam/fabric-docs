@@ -9,61 +9,49 @@ authors:
 
 Есть несколько ключевых классов которые вы должны понять, прежде чем будете рассматривать события с ванильными предметами.
 
-## TypedActionResult {#typedactionresult}
+## InteractionResult {#interactionresult}
 
-Для предметов более распространённым `TypedActionResult` является `ItemStacks` - этот класс говорит игре, что нужно заменять (или не заменять) после того, как событие произошло.
+An `InteractionResult` tells the game the status of the event, whether it was passed/ignored, failed or successful.
 
-Если в событие ничего не произошло, вам нужно будет использовать метод `TypedActionResult#pass(stack)`, где `stack` это текущий стек предметов.
-
-Вы можете получить текущий стек предметов, получая стек из руки игрока. Обычно события, требующие `TypedActionResult`, передают эту функцию методу события.
-
-```java
-TypedActionResult.pass(user.getStackInHand(hand))
-```
-
-Если вы передадите текущий стек, тогда ничего не изменится, независимо от того, объявите ли вы событие неудавшимся, прошедшим/проигнорируемым или успехом.
-
-Если вы хотите удалить текущий стек, вам следует передать пустой. То же самое сказать про уменьшение, вы извлекаете текущий стек и уменьшаете его на количество которое вы хотите:
+A succesful interaction can also be used to transform the stack in hand.
 
 ```java
 ItemStack heldStack = user.getStackInHand(hand);
 heldStack.decrement(1);
-TypedActionResult.success(heldStack);
+InteractionResult.SUCCESS.heldItemTransformedTo().success(heldStack);
 ```
-
-## ActionResult {#actionresult}
-
-Аналогичным образом, `ActionResult` говорит игре статус события, не смотря было ли оно пройдено/проигнорированно, неудачно или успешно.
 
 ## Переопределяемые события {#overridable-events}
 
 К счастью, класс предмета имеет множество методам, которые можно переопределить, чтобы добавить дополнительную функциональность вашим предметам.
 
-:::info
-Отличный пример использование этих событие вы можете найти на странице [Воспроизведение SoundEvents](../sounds/using-sounds), где событие `useOnBlock` воспроизводит звук когда игрок кликает правой кнопкой мыши по блоку.
+::: info
+
+A great example of these events being used can be found in the [Playing SoundEvents](../sounds/using-sounds) page, which uses the `useOn` event to play a sound when the player right clicks a block.
+
 :::
 
-| Метод           | Информация                                                                            |
-| --------------- | ------------------------------------------------------------------------------------- |
-| `postHit`       | Вызывается когда игрок, ударяет сущность.                             |
-| `postMine`      | Вызывается когда игрок, ломает блок.                                  |
-| `inventoryTick` | Вызывается каждый тик когда предмет находится в инвентаре.            |
-| `onCraft`       | Вызывается когда предмет, создаётся.                                  |
-| `useOnBlock`    | Вызывается когда игрок кликает правой кнопкой мыши предметом на блок. |
-| `use`           | Вызывается когда игрок кликает правой кнопкой мыши предметом.         |
+| Method                 | Information                                                             |
+| ---------------------- | ----------------------------------------------------------------------- |
+| `hurtEnemy`            | Ran when the player hits an entity.                     |
+| `mineBlock`            | Ran when the player mines a block.                      |
+| `inventoryTick`        | Ran every tick whilst the item is in an inventory.      |
+| `onCraftedPostProcess` | Ran when the item is crafted.                           |
+| `useOn`                | Ran when the player right clicks a block with the item. |
+| `use`                  | Ran when the player right clicks the item.              |
 
-## Событие `use()` {#use-event}
+## The `use()` Event {#use-event}
 
-Допустим, вы хотите создать предмет, который вызывает молнию перед игроком - вам нужно будет создать собственный класс.
+Let's say you want to make an item that summons a lightning bolt in front of the player - you would need to create a custom class.
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-Событие `use`, вероятно, самое полезное из всех, вы можете использовать это событие, чтобы призвать молнию, вы должны создать её перед игроками в 10 блоков от направления.
+The `use` event is probably the most useful out of them all - you can use this event to spawn our lightning bolt, you should spawn it 10 blocks in front of the players facing direction.
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-Как обычно, вам необходимо зарегистрировать свой предмет, добавьте модель и текстуру.
+As usual, you should register your item, add a model and texture.
 
-Как вы можете видеть, молния должна появиться в 10 блоках перед вами - игроком.
+As you can see, the lightning bolt should spawn 10 blocks in front of you - the player.
 
-<VideoPlayer src="/assets/develop/items/custom_items_0.webm" title="Using the Lightning Stick" />
+<VideoPlayer src="/assets/develop/items/custom_items_0.webm">Using the Lightning Stick</VideoPlayer>

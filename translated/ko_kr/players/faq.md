@@ -1,6 +1,6 @@
 ---
-title: 자주 묻는 질문
-description: Fabric 관련 서버 관리자와 플레이어가 자주 묻는 질문입니다.
+title: Frequently Asked Questions
+description: Questions about Fabric, frequently asked by players and server administrators.
 ---
 
 자주 언급되는 질문이 여럿 있으므로, 아래에 간단히 정리했습니다.
@@ -11,15 +11,17 @@ description: Fabric 관련 서버 관리자와 플레이어가 자주 묻는 질
 
 ## 어디서 Fabric 모드를 다운로드 할 수 있나요? {#where-can-i-download-published-fabric-mods}
 
-:::info
-항상 모드가 신뢰할 수 있는 서비스에서 다운로드되었는지 확인해야 합니다. [안전한 모드 찾기](./finding-mods) 에서 더 많은 정보를 확인할 수 있습니다.
+::: info
+
+You should always check if mods are from a trustworthy source. Check out the [Finding Trustworthy Mods](./finding-mods) guide for more information.
+
 :::
 
-대부분의 모드 개발자는 [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) 또는 CurseForge에 자신의 모드를 게시합니다.
+The majority of authors publish their mods to [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) and [CurseForge](https://www.curseforge.com/minecraft/search?class=mc-mods&gameVersionTypeId=4), however some may choose to upload them on their personal websites, or on other platforms, such as a GitHub repository.
 
-## 먼저 생성된 Fabric 모드팩은 어디에서 찾을 수 있나요? {#where-can-i-find-pre-made-fabric-modpacks}
+## Where Can I Find Pre-Made Fabric Modpacks? {#where-can-i-find-pre-made-fabric-modpacks}
 
-먼저 생성된 Fabric 모드팩은 다음과 같이 여러 플랫폼에서 찾을 수 있습니다:
+You can find pre-made Fabric modpacks on a variety of platforms, such as:
 
 - [Modrinth](https://modrinth.com/modpacks?g=categories:%27fabric%27)
 - [CurseForge](https://www.curseforge.com/minecraft/search?class=modpacks&gameVersionTypeId=4)

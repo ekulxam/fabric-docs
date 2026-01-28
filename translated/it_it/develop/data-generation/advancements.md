@@ -2,6 +2,7 @@
 title: Generazione di Progressi
 description: Una guida per configurare la generazione di progressi con datagen.
 authors:
+  - CelDaemon
   - MattiDragon
   - skycatminepokie
   - Spinoscythe
@@ -10,146 +11,158 @@ authors-nogithub:
   - mcrafterzz
 ---
 
-:::info PREREQUISITI
-Assicurati di aver prima completato il processo di [configurazione della datagen](./setup).
+<!---->
+
+:::info PREREQUISITES
+
+Make sure you've completed the [datagen setup](./setup) process first.
+
 :::
 
-## Configurazione {#setup}
+## Setup {#setup}
 
-Anzitutto, dobbiamo creare il nostro fornitore. Crea una classe che `extends FabricAdvancementProvider` e compilane i metodi di base:
+First, we need to make our provider. Create a class that extends `FabricAdvancementProvider` and fill out the base methods:
 
 @[code lang=java transcludeWith=:::datagen-advancements:provider-start](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-Per completare la configurazione, aggiungi questo fornitore alla tua `DataGeneratorEntrypoint` nel metodo `onInitializeDataGenerator`.
+To finish setup, add this provider to your `DataGeneratorEntrypoint` within the `onInitializeDataGenerator` method.
 
-@[code lang=java transclude={26-26}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code lang=java transcludeWith=:::datagen-advancements:register](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## Struttura dei Progressi {#advancement-structure}
+## Advancement Structure {#advancement-structure}
 
-Un progresso è composto di alcune componenti diverse. Assieme ai requisiti, detti "criterio", potrebbe avere:
+An advancement is made up a few different components. Along with the requirements, called "criterion," it may have:
 
-- Un `AdvancementDisplay` che dice al gioco come mostrare il progresso ai giocatori,
-- `AdvancementRequirements`, ovvero liste di liste di criteri, che richiedono che almeno un criterio di ogni sotto-lista sia soddisfatto,
-- `AdvancementRewards`, che il giocatore riceverà per aver completato il progresso,
-- Un `CriterionMerger`, che informa il progresso su come gestire criteri multipli, e
-- Un `Advancement` genitore, che organizza la gerarchia che vedi nella schermata "Progressi".
+- Some `DisplayInfo` that tell the game how to show the advancement to players,
+- `AdvancementRequirements`, which are lists of lists of criteria, requiring at least one criterion from each sub-list to be completed,
+- `AdvancementRewards`, which the player receives for completing the advancement.
+- A `Strategy`, which tells the advancement how to handle multiple criterion, and
+- A parent `Advancement`, which organizes the hierarchy you see on the "Advancements" screen.
 
-## Progressi Semplici {#simple-advancements}
+## Simple Advancements {#simple-advancements}
 
-Ecco un semplice progresso per aver ottenuto un blocco di terra:
+Here's a simple advancement for getting a dirt block:
 
 @[code lang=java transcludeWith=:::datagen-advancements:simple-advancement](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-:::warning
-Nel costruire le voci del tuo progresso, ricorda che la funzione accetta l'`Identifier` del progresso nel formato `String`!
+::: warning
+
+When building your advancement entries, remember that the function accepts the `Identifier` of the advancement in `String` format!
+
 :::
 
-:::details Output JSON
+:::details JSON Output
+
 @[code lang=json](@/reference/latest/src/main/generated/data/example-mod/advancement/get_dirt.json)
+
 :::
 
-## Un Altro Esempio Ancora {#one-more-example}
+## One More Example {#one-more-example}
 
-Solo per capirne il funzionamento, aggiungiamo un altro progresso. Faremo pratica con l'aggiunta di ricompense, l'uso di criterio multiplo, e l'assegnazione di genitori:
+Just to get the hang of it, let's add one more advancement. We'll practice adding rewards, using multiple criterion, and assigning parents:
 
 @[code lang=java transcludeWith=:::datagen-advancements:second-advancement](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-## Criteri Personalizzati {#custom-criteria}
+## Custom Criteria {#custom-criteria}
 
-:::warning
-Anche se la datagen può avvenire lato client, i `Criterion` e i `Predicate` sono nell'insieme di codice main (entrambi i lati), poiché il server ne ha bisogno per innescarli e valutarli.
+::: warning
+
+While datagen can be on the client side, `Criterion`s and `Predicate`s are in the main source set (both sides), since the server needs to trigger and evaluate them.
+
 :::
 
-### Definizioni {#definitions}
+### Definitions {#definitions}
 
-Un **criterio** (in inglese _criterion_, plurale _criteria_) è qualcosa che un giocatore può fare (o che succede a un giocatore) e che può essere considerata per quanto riguarda un progresso. Nel gioco ci sono già vari [criteri](https://minecraft.wiki/w/Advancement_definition#List_of_triggers), che si possono trovare nel package `net.minecraft.advancement.criterion`. In genere dovrai aggiungere un nuovo criterio solo se devi implementare una meccanica personalizzata nel gioco.
+A **criterion** (plural: criteria) is something a player can do (or that can happen to a player) that may be counted towards an advancement. The game comes with many [criteria](https://minecraft.wiki/w/Advancement_definition#List_of_triggers), which can be found in the `net.minecraft.advancements.criterion` package. Generally, you'll only need a new criterion if you implement a custom mechanic into the game.
 
-Le **condizioni** sono valutate dai criteri. Un criterio viene preso in considerazione solo se tutte le condizioni rilevanti sono soddisfatte. Le condizioni di solito si esprimono come predicati.
+**Conditions** are evaluated by criteria. A criterion is only counted if all the relevant conditions are met. Conditions are usually expressed with a predicate.
 
-Un **predicato** è qualcosa che accetta un valore e restituisce un `boolean`. Per esempio, un `Predicate<Item>` potrebbe restituire `true` se l'oggetto è un diamante, mentre un `Predicate<LivingEntity>` potrebbe restituire `true` se l'entità non è ostile ai villici.
+A **predicate** is something that takes a value and returns a `boolean`. For example, a `Predicate<Item>` might return `true` if the item is a diamond, while a `Predicate<LivingEntity>` might return `true` if the entity is not hostile to villagers.
 
-### Creare Criteri Personalizzati {#creating-custom-criteria}
+### Creating Custom Criteria {#creating-custom-criteria}
 
-Anzitutto ci serve una meccanica da implementare. Informiamo il giocatore riguardo a quale utensile ha usato ogni volta che rompe un blocco.
+First, we'll need a new mechanic to implement. Let's tell the player what tool they used every time they break a block.
 
 @[code lang=java transcludeWith=:::datagen-advancements:entrypoint](@/reference/latest/src/main/java/com/example/docs/advancement/ExampleModDatagenAdvancement.java)
 
-Nota che questo è del codice molto brutto. La `HashMap` non viene memorizzata persistentemente, quindi sarà resettata ad ogni riavvio del gioco. È solo per mostrare i `Criterion`. Avvia il gioco e provalo!
+Note that this code is really bad. The `HashMap` is not stored anywhere persistent, so it will be reset every time the game is restarted. It's just to show off `Criterion`s. Start the game and try it out!
 
-Ora, creiamo il nostro criterio personalizzato, `UseToolCriterion`. Avrà bisogno di una sua classe `Conditions`, quindi creeremo entrambe insieme:
+Next, let's create our custom criterion, `UseToolCriterion`. It's going to need its own `Conditions` class to go with it, so we'll make them both at once:
 
 @[code lang=java transcludeWith=:::datagen-advancements:criterion-base](@/reference/latest/src/main/java/com/example/docs/advancement/UseToolCriterion.java)
 
-Wow, questo è un sacco! Analizziamolo poco per volta.
+Whew, that's a lot! Let's break it down.
 
-- `UseToolCriterion` è un `AbstractCriterion`, al quale si possono applicare delle `Conditions`.
-- `Conditions` ha un attributo `playerPredicate`. Tutte le `Conditions` dovrebbero avere un predicato del giocatore (tecnicamente un `LootContextPredicate`).
-- `Conditions` ha anche un `CODEC`. Questo `Codec` è semplicemente il codec per il suo unico attributo, `playerPredicate`, con istruzioni aggiuntive per convertirlo tra di essi (`xmap`).
+- `UseToolCriterion` is a `SimpleCriterionTrigger`, which `Conditions` can apply to.
+- `Conditions` has a `playerPredicate` field. All `Conditions` should have a player predicate (technically a `LootContextPredicate`).
+- `Conditions` also has a `CODEC`. This `Codec` is simply the codec for its one field, `playerPredicate`, with extra instructions to convert between them (`xmap`).
 
-:::info
-Per saperne di più sui codec, controlla la pagina [Codec](../codecs).
+::: info
+
+To learn more about codecs, see the [Codecs](../codecs) page.
+
 :::
 
-Ci serve un modo per controllare se le condizioni sono soddisfatte. Aggiungiamo un metodo ausiliare a `Conditions`:
+We're going to need a way to check if the conditions are met. Let's add a helper method to `Conditions`:
 
 @[code lang=java transcludeWith=:::datagen-advancements:conditions-test](@/reference/latest/src/main/java/com/example/docs/advancement/UseToolCriterion.java)
 
-Ora che abbiamo un criterio e le sue condizioni, ci serve un modo per innescarlo. Aggiungi un metodo d'innesco a `UseToolCriterion`:
+Now that we've got a criterion and its conditions, we need a way to trigger it. Add a trigger method to `UseToolCriterion`:
 
 @[code lang=java transcludeWith=:::datagen-advancements:criterion-trigger](@/reference/latest/src/main/java/com/example/docs/advancement/UseToolCriterion.java)
 
-Ci siamo quasi! Ora, ci serve un'istanza del nostro criterio con cui lavorare. Mettiamola in una nuova classe, chiamata `ModCriteria`.
+Almost there! Next, we need an instance of our criterion to work with. Let's put it in a new class, called `ModCriteria`.
 
 @[code lang=java transcludeWith=:::datagen-advancements:mod-criteria](@/reference/latest/src/main/java/com/example/docs/advancement/ModCriteria.java)
 
-Per assicurarci che i nostri criteri siano inizializzati al tempo giusto, aggiungi un metodo vuoto `init`:
+To make sure that our criteria are initialized at the right time, add a blank `init` method:
 
 @[code lang=java transcludeWith=:::datagen-advancements:mod-criteria-init](@/reference/latest/src/main/java/com/example/docs/advancement/ModCriteria.java)
 
-E chiamalo nell'initializer della tua mod:
+And call it in your mod initializer:
 
 @[code lang=java transcludeWith=:::datagen-advancements:call-init](@/reference/latest/src/main/java/com/example/docs/advancement/ExampleModDatagenAdvancement.java)
 
-Infine, dobbiamo innescare i nostri criteri. Aggiungi questo a dove inviamo un messaggio al giocatore nella classe main della mod.
+Finally, we need to trigger our criteria. Add this to where we sent a message to the player in the main mod class.
 
 @[code lang=java transcludeWith=:::datagen-advancements:trigger-criterion](@/reference/latest/src/main/java/com/example/docs/advancement/ExampleModDatagenAdvancement.java)
 
-Il tuo criterio nuovo e luccicante è ora pronto per l'uso! Aggiungiamolo al nostro fornitore:
+Your shiny new criterion is now ready to use! Let's add it to our provider:
 
 @[code lang=java transcludeWith=:::datagen-advancements:custom-criteria-advancement](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-Esegui l'operazione di datagen di nuovo, e avrai con te un nuovo progresso con cui giocare!
+Run the datagen task again, and you've got your new advancement to play with!
 
-## Condizioni con Parametri {#conditions-with-parameters}
+## Conditions with Parameters {#conditions-with-parameters}
 
-Tutto questo è bello e tutto, ma, e se volessimo solo concedere il progresso dopo aver fatto qualcosa 5 volte? E perché non concederne un altro dopo 10 volte? Per questo dovremo dare alla nostra condizione un parametro. Puoi attenerti a `UseToolCriterion`, o andare avanti qui con un nuovo `ParameterizedUseToolCriterion`. Nella pratica dovresti solo avere quello parametrizzato, ma li terremo entrambi per questo tutorial.
+This is all well and good, but what if we want to only grant an advancement once we've done something 5 times? And why not another one at 10 times? For this, we need to give our condition a parameter. You can stay with `UseToolCriterion`, or you can follow along with a new `ParameterizedUseToolCriterion`. In practice, you should only have the parameterized one, but we'll keep both for this tutorial.
 
-Lavoriamo dal basso verso l'alto. Dovremo verificare se i requisiti sono soddisfatti, quindi modifichiamo il nostro metodo `Conditions#requirementsMet`:
+Let's work bottom-up. We'll need to check if the requirements are met, so let's edit our `Conditions#requirementsMet` method:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-requirements-met](@/reference/latest/src/main/java/com/example/docs/advancement/ParameterizedUseToolCriterion.java)
 
-`requiredTimes` non esiste, quindi rendilo un parametro di `Conditions`:
+`requiredTimes` doesn't exist, so make it a parameter of `Conditions`:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-parameter](@/reference/latest/src/main/java/com/example/docs/advancement/ParameterizedUseToolCriterion.java)
 
-Ora il nostro codec dà errore. Scriviamo un nuovo codec per le nuove modifiche:
+Now our codec is erroring. Let's write a new codec for the new changes:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-codec](@/reference/latest/src/main/java/com/example/docs/advancement/ParameterizedUseToolCriterion.java)
 
-Andando avanti, dobbiamo ora aggiustare il nostro metodo `trigger`:
+Moving on, we now need to fix our `trigger` method:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-trigger](@/reference/latest/src/main/java/com/example/docs/advancement/ParameterizedUseToolCriterion.java)
 
-Se hai creato un nuov criterio, dobbiamo aggiungerlo a `ModCriteria`
+If you've made a new criterion, we need to add it to `ModCriteria`
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-mod-criteria](@/reference/latest/src/main/java/com/example/docs/advancement/ModCriteria.java)
 
-E chiamarlo nella nostra classe principale, proprio dove c'è quello vecchio:
+And call it in our main class, right where the old one is:
 
 @[code lang=java transcludeWith=:::datagen-advancements:trigger-new-criterion](@/reference/latest/src/main/java/com/example/docs/advancement/ExampleModDatagenAdvancement.java)
 
-Aggiungi il progresso al tuo fornitore:
+Add the advancement to your provider:
 
 @[code lang=java transcludeWith=:::datagen-advancements:new-custom-criteria-advancement](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModAdvancementProvider.java)
 
-Esegui nuovamente la datagen, e hai finalmente finito!
+Run datagen again, and you're finally done!

@@ -15,15 +15,15 @@ authors:
 
 ## Добавляем компонент еды {#adding-the-food-component}
 
-Чтобы добавить пищевой компонент к элементу, мы можем передать его экземпляру `Item.Settings`:
+To add a food component to an item, we can pass it to the `Item.Properties` instance:
 
 ```java
-new Item.Settings().food(new FoodComponent.Builder().build())
+new Item.Properties().food(new FoodProperties.Builder().build())
 ```
 
 На данный момент это просто делает продукт съедобным и ничего более.
 
-Класс `FoodComponent.Builder` имеет несколько методов, которые позволяют вам изменить то, что происходит, когда игрок съедает ваш предмет:
+The `FoodProperties.Builder` class has some methods that allow you to modify what happens when a player eats your item:
 
 | Метод                | Описание                                                                                  |
 | -------------------- | ----------------------------------------------------------------------------------------- |
@@ -31,9 +31,9 @@ new Item.Settings().food(new FoodComponent.Builder().build())
 | `saturationModifier` | Устанавливает количество точек насыщенности, которые добавит ваш элемент. |
 | `alwaysEdible`       | Позволяет съесть ваш предмет независимо от уровня голода.                 |
 
-После того как вы изменили конструктор по своему вкусу, вы можете вызвать метод `build()`, чтобы получить `FoodComponent`.
+When you've modified the builder to your liking, you can call the `build()` method to get the `FoodProperties`.
 
-Если вы хотите добавить эффекты статуса игроку, когда он ест вашу еду, вам нужно будет использовать `ConsumableComponent` вместе с классом `FoodComponent`, как показано в следующем примере:
+If you want to add status effects to the player when they eat your food, you will need to add a `Consumable` component alongside the `FoodProperties` component as seen in the following example:
 
 @[code transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
@@ -45,5 +45,3 @@ new Item.Settings().food(new FoodComponent.Builder().build())
 
 - Всегда съедобным, может быть съеден независимо от уровня голода.
 - Всегда дающим Отравление II на 6 секунд когда съеден.
-
-<VideoPlayer src="/assets/develop/items/food_0.webm" title="Eating the Poisonous Apple" />

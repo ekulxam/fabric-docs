@@ -2,6 +2,7 @@
 title: 물약
 description: 여러 상태 효과를 부여하는 사용자 정의 물약을 만드는 방법을 알아보세요.
 authors:
+  - cassiancc
   - dicedpixels
   - Drakonkinst
   - JaaiDead
@@ -12,36 +13,39 @@ authors:
 
 ## 사용자 정의 물약 {#custom-potions}
 
-아이템과 블록들처럼, 물약도 등록이 필요합니다.
+아이템과 블록처럼, 물약도 등록이 필요합니다.
 
 ### 물약 만들기 {#creating-the-potion}
 
-`Potion` 인스턴스를 저장할 필드를 만들며 시작해 봅시다. 이를 보관하기 위해 `ModInitializer` 구현 클래스를 직접 사용하겠습니다.
+Let's start by declaring a field to hold your `Potion` instance. 이를 보관하기 위해 `ModInitializer` 구현 클래스를 직접 사용하겠습니다. Note the use of `Registry.registerForHolder`, as, like mob effects, most vanilla methods that use potions prefer them as holders.
 
 @[code lang=java transclude={18-27}](@/reference/latest/src/main/java/com/example/docs/potion/ExampleModPotions.java)
 
-`StatusEffectInstance` 인스턴스에는 세 가지 매개 변수를 입력해야 합니다.
+We pass an instance of `MobEffectInstance`, which takes 3 parameters:
 
-- `RegistryEntry<StatusEffect> type` - 효과. 여기에선 사용자 정의 효과를 사용해볼 것입니다. 대신, 바닐라의 `StatusEffects` 클래스를 통해 바닐라 효과에 접근할 수도 있습니다.
+- `Holder<MobEffect> type` - An effect, represented as a holder. 여기에선 사용자 정의 효과를 사용해볼 것입니다. Alternatively you can access vanilla effects
+  through vanilla's `MobEffects` class.
 - `int duration` - 효과의 지속 시간(틱).
 - `int amplifier` - 효과의 세기. 예를 들어, 성급함 II는 1을 세기로 가지게 됩니다.
 
-:::info
-사용자 정의 물약 효과를 만드려면, [상태 효과](../entities/effects) 가이드를 참조하세요.
+::: info
+
+To create your own potion effect, please see the [Effects](../entities/effects) guide.
+
 :::
 
-### 물약 등록하기 {#registering-the-potion}
+### Registering the Potion {#registering-the-potion}
 
-이니셜라이저에서 `BrewingRecipeRegistry.registerPotionRecipe` 메서드를 사용해 물약 효과를 등록하기 위해 `FabricBrewingRecipeRegistryBuilder.BUILD` 이벤트를 사용할 것입니다.
+In our initializer, we will use the `FabricBrewingRecipeRegistryBuilder.BUILD` event to register our potion using the `BrewingRecipeRegistry.registerPotionRecipe` method.
 
-@[code lang=java transclude={29-42}](@/reference/latest/src/main/java/com/example/docs/potion/ExampleModPotions.java)
+@[code lang=java transclude={29-40}](@/reference/latest/src/main/java/com/example/docs/potion/ExampleModPotions.java)
 
-`registerPotionRecipe`는 세 가지 매개변수를 가집니다.
+`registerPotionRecipe` takes 3 parameters:
 
-- `RegistryEntry<Potion> input` - 시작 물약의 레지스트리 항목. 일반적으로 물병 또는 어색한 물약이 사용됩니다.
-- `Item item` - 물약의 기본 재료가 될 아이템.
-- `RegistryEntry<Potion> output` - 결과 물약의 레지스트리 항목.
+- `Holder<Potion> input` - The starting potion, represented by a holder. Usually this can be a Water Bottle or an Awkward Potion.
+- `Item item` - The item which is the main ingredient of the potion.
+- `Holder<Potion> output` - The resultant potion, represented by a holder.
 
-등록을 완료했다면, 이제 감자를 통해 Tater 물약을 만들 수 있습니다.
+Once registered, you can brew a Tater potion using a potato.
 
-![플레이어 인벤토리에서 보여지는 효과](/assets/develop/tater-potion.png)
+![Effect in player inventory](/assets/develop/tater-potion.png)

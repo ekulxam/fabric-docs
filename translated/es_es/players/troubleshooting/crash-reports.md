@@ -5,98 +5,106 @@ authors:
   - IMB11
 ---
 
-:::tip
-Si estás teniendo dificultades encontrando la causa del crasheo, puedes pedir ayuda en el servidor de [Discord de Fabric](https://discord.gg/v6v4pMv), en el canal de `#player-support` o `server-admin-support`.
+<!---->
+
+::: tip
+
+If you're having any difficulty with finding the cause of the crash, you can ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` or `#server-admin-support` channel.
+
 :::
 
-Los reportes de crasheo son importantes para la solución de problemas con tu juego o servidor. Contienen mucha información sobre el crasheo, y pueden ayudarte a encontrar la causa del crasheo.
+Crash reports are a very important part of troubleshooting issues with your game or server. They contain a lot of information about the crash, and can help you find the cause of the crash.
 
-## Encontrar los Reportes de Crasheo
+## Finding Crash Reports {#finding-crash-reports}
 
-Los reportes de crasheo se encuentran en el folder de `crash-reports` en el folder de tu juego. Si estás usando un servidor, se encuentran en el folder de `crash-reports` en el folder del servidor.
+Crash reports are stored in the `crash-reports` folder in your game directory. If you are using a server, they are stored in the `crash-reports` folder in the server directory.
 
-Para launchers de terceros, puedes referirte a su documentación sobre donde encontrar los reportes de crasheo.
+For third party launchers, you should refer to their documentation on where to find crash reports.
 
-Los reportes de crasheo pueden ser encontrados en los siguientes lugares:
+Crash reports can be found in the following locations:
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft\crash-reports
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft/crash-reports
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft/crash-reports
 ```
 
 :::
 
-## Leer los Reportes de Crasheo
+## Reading Crash Reports {#reading-crash-reports}
 
-Los reportes de crasheo son muy largos, y pueden ser confusos de leer. Sin embargo, contienen mucha información sobre el crasheo, y pueden ayudarte a encontrar la causa del crasheo.
+Crash reports are very long, and can be very confusing to read. However, they contain a lot of information about the crash, and can help you find the cause of the crash.
 
-Para esta guía, estaremos utilizando el [siguiente reporte de crasheo como ejemplo](https://github.com/FabricMC/fabric-docs/blob/main/public/assets/players/crash-report-example.log).
+For this guide, we will be using [this crash report](/assets/players/crash-report-example.log).
 
-:::details Reportes de Crasheos
+:::details Show Crash Report
 
-<<< @/public/assets/players/crash-report-example.log{log}
+<<< @/public/assets/players/crash-report-example.log
 
 :::
 
-### Secciones del Reporte de Crasheo
+### Crash Report Sections {#crash-report-sections}
 
-Los reportes de crasheo consisten de varias secciones, cada una separada por un encabezado:
+Crash reports consist of several sections, each separated using a header:
 
-- `---- Minecraft Crash Report ----`, el resumen del reporte. Esta sección contiene el error principal que ocasionó el crasheo, el tiempo en el que ocurrió, y el stack trace relevante. Esta es la sección más importante del reporte de crasheo, ya que el stack trace usualmente contiene referencias al mod que casuó el crasheo.
-- `-- Last Reload --`, esta sección no es muy útil almenos que el crasheo ocurrió durante una recarga de recursos (<kbd>F3</kbd>+<kbd>T</kbd>). Esta sección contiene el tiempo en el que se hizo la última recarga de recursos, y el stack trace relevante de errores que ocurrieron durante el proceso de recarga. Estos errores usualmente son causados por paquetes de recursos, y pueden ser ignorados al menos que estén causando problemas en el juego.
-- `-- System Details --`, esta sección contiene información sobre tu sistema, como el sistema operativo, la versión de Java, y la cantidad de memoria RAM alocada para el juego. Esta sección es útil para determinar si estás usando la versión correcta de Java, y si tienes suficiente memoria alocada para el juego.
-  - En esta sección, Fabric incluye una línea personalizada que dice `Fabric Mods:`, seguida de una lista de los mods que tienes instalados. Esta sección es útil para determinar si pudo haber ocurrido algún conflicto entre los mods que tienes instalados.
+- `---- Minecraft Crash Report ----`, the summary of the report. This section will contain the main error that caused the crash, the time it occurred, and the relevant stack trace. This is the most important section of the crash report as the stack trace can usually contain references to the mod that caused the crash.
+- `-- Last Reload --`, this section isn't really useful unless the crash occurred during a resource reload (<kbd>F3</kbd>+<kbd>T</kbd>). This section will contain the time of the last reload, and the relevant stack trace of any errors that occurred during the reload process. These errors are usually caused by resource packs, and can be ignored unless they are causing issues with the game.
+- `-- System Details --`, this section contains information about your system, such as the operating system, Java version, and the amount of memory allocated to the game. This section is useful for determining if you are using the correct version of Java, and if you have allocated enough memory to the game.
+  - In this section, Fabric will have included a custom line that says `Fabric Mods:`, followed by a list of all the mods you have installed. This section is useful for determining if any conflicts could have occurred between mods.
 
-### Entendiendo el Reporte de Crasheo
+### Breaking Down the Crash Report {#breaking-down-the-crash-report}
 
-Ahora que sabemos de qué se trata cada sección del reporte de crasheo, podemos empezar a analizar y entender el reporte de crasheo y encontrar la causa del crasheo.
+Now that we know what each section of the crash report is, we can start to break down the crash report and find the cause of the crash.
 
-Usando el ejemplo enlazado arriba, podemos analizar el reporte de crasheo y encontrar la causa del crasheo, incluyendo los mods que causaron el crasheo.
+Using the example linked above, we can analyze the crash report and find the cause of the crash, including the mods that caused the crash.
 
-El stack trace en la sección de `---- Minecraft Crash Report ----` es la más importante en este caso, ya que contiene el error principal que causó el crasheo. En este caso, el error es `java.lang.NullPointerException: Cannot invoke "net.minecraft.class_2248.method_9539()" because "net.minecraft.class_2248.field_10540" is null`.
+The stack trace in the `---- Minecraft Crash Report ----` section is the most important in this case, as it contains the main error that caused the crash.
 
-Con la cantidad de mods mencionados en el stack trace, puede ser difícil encontrar el mod culpable, pero lo primero que se debe hacer es encontrar el mod que causó el crasheo.
+:::details Show Error
 
-<!-- TODO: show part of this file -->
+<<< @/public/assets/players/crash-report-example.log{7}
 
-<<< @/public/assets/players/crash-report-example.log{8-9,14-15 log}
-
-En este caso, el mod que causó el crasheo es `snownee`, ya que es el primer mod mencionado en el stack trace.
-
-Sin embargo, con la cantidad de mods mencionados, puede significar que hay problemas de compatibiildad entre los mods, y el mod que causó el crasheo puede que no sea el mod culpable. En este caso, es mejor reportar el crasheo al autor del mod, y dejar que investiguen el crasheo.
-
-## Crasheos de Mixin
-
-:::info
-Los Mixins son una manea de modificar el juego sin tener que modificar el código fuente del juego. Son usados por muchos mods, y son una herramienta muy útil para desarrolladores de mods.
 :::
 
-Cuando un mixin crashea, usualmente mencionará el mixin en el stack trace, y la clase que el mixin está modificando.
+With the amount of mods mentioned in the stack trace, it can be difficult to point fingers, but the first thing to do is to look for the mod that caused the crash.
 
-Los métodos en un mixin contendrán `mod-id$handlerName` en el stack trace, donde `mod-id` es el ID del mod, y `handlerName` es el nombre del handler en el mixin.
+In this case, the mod that caused the crash is `snownee`, as it is the first mod mentioned in the stack trace.
 
-```:no-line-numbers
+However, with the amount of mods mentioned, it could mean there are some compatibility issues between the mods, and the mod that caused the crash may not be the mod that is at fault. In this case, it is best to report the crash to the mod author, and let them investigate the crash.
+
+## Mixin Crashes {#mixin-crashes}
+
+::: info
+
+Mixins are a way for mods to modify the game without having to modify the game's source code. They are used by many mods, and are a very powerful tool for mod developers.
+
+:::
+
+When a mixin crashes, it will usually mention the mixin in the stack trace, and the class that the mixin is modifying.
+
+Method mixins will contain `mod-id$handlerName` in the stack trace, where `mod-id` is the mod's ID, and `handlerName` is the name of the mixin handler.
+
+```text:no-line-numbers
 ... net.minecraft.class_2248.method_3821$$$mod-id$handlerName() ... // [!code focus]
 ```
 
-Puedes usar esta información para encontrar el mod que ocasionó el crasheo, y reportar el crasheo al autor del mod.
+You can use this information to find the mod that caused the crash, and report the crash to the mod author.
 
-## Que hacer con los Reportes de Crasheo
+## What to Do with Crash Reports {#what-to-do-with-crash-reports}
 
-Lo mejor que puedes hacer con los reportes de crasheo es subirlos a un sitio para pegar texto, y luego compartir el link con el autor del mod, ya sea en su rastreador de problemas o mediante un canal de comunicación (Discord etc).
+The best thing to do with crash reports is to upload them to a paste site, and then share the link with the mod author, either on their issue trackers or through some form of communication (Discord etc.).
 
-Esto le permitirá al autor investigar el crasheo, potencialmente reproducir el problema, y arreglarlo.
+This will allow the mod author to investigate the crash, potentially reproduce it, and solve the problem that caused it.
 
-Algunos sitios comunes para pegar texto de reportes de crasheo son:
+Common paste sites that are used frequently for crash reports are:
 
 - [GitHub Gist](https://gist.github.com/)
 - [mclo.gs](https://mclo.gs/)

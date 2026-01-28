@@ -2,6 +2,7 @@
 title: Пользовательские эффекты чар
 description: Узнайте, как создавать эффекты чар.
 authors:
+  - CelDaemon
   - krizh-p
 ---
 
@@ -9,52 +10,54 @@ authors:
 
 Компонент эффекта содержит код, определяющий специальные эффекты чар. Minecraft поддерживает различные эффекты по умолчанию, такие как повреждение предметов, отбрасывание и опыт.
 
-:::tip
-Обязательно проверьте, удовлетворяют ли эффекты Minecraft по умолчанию вашим потребностям, посетив [страницу компонентов эффектов зачарования Minecraft Wiki](https://minecraft.wiki/w/Enchantment_definition#Effect_components). В этом руководстве предполагается, что вы понимаете, как настраивать «простые» чары, управляемые данными, и основное внимание уделяется созданию пользовательских эффектов чар, которые не поддерживаются по умолчанию.
+::: tip
+
+Be sure to check if the default Minecraft effects satisfy your needs by visiting [the Minecraft Wiki's Enchantment Effect Components page](https://minecraft.wiki/w/Enchantment_definition#Effect_components). This guide assumes you understand how to configure "simple" data-driven enchantments and focuses on creating custom enchantment effects that aren't supported by default.
+
 :::
 
-## Пользовательские эффекты чар {#custom-enchantment-effects}
+## Custom Enchantment Effects {#custom-enchantment-effects}
 
-Начните с создания папки `enchantment`, а внутри неё создайте папку `effect`. Внутри этого мы создадим запись `LightningEnchantmentEffect`.
+Start by creating an `enchantment` folder, and within it, create an `effect` folder. Within that, we'll create the `LightningEnchantmentEffect` record.
 
-Далее мы можем создать конструктор и переопределить методы интерфейса `EnchantmentEntityEffect`. Мы также создадим переменную `CODEC` для кодирования и декодирования нашего эффекта; вы можете прочитать больше о [кодеках здесь](../codecs).
+Next, we can create a constructor and override the `EnchantmentEntityEffect` interface methods. We'll also create a `CODEC` variable to encode and decode our effect; you can read more about [Codecs here](../codecs).
 
-Большая часть нашего кода будет передана в событие `apply()`, которое вызывается, когда выполняются критерии для работы вашего зачарования. Позже мы настроим этот `Эффект`, чтобы он вызывался при ударе по объекту, а сейчас давайте напишем простой код для поражения цели молнией.
+The bulk of our code will go into the `apply()` event, which is called when the criteria for your enchantment to work is met. We'll later configure this `Effect` to be called when an entity is hit, but for now, let's write simple code to strike the target with lightning.
 
 @[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/enchantment/effect/LightningEnchantmentEffect.java)
 
-Здесь переменная `amount` указывает значение, масштабированное до уровня зачарования. Мы можем использовать это, чтобы изменить эффективность зачарования в зависимости от уровня. В приведенном выше коде мы используем уровень чар, чтобы определить, сколько ударов молнии будет вызвано.
+Here, the `amount` variable indicates a value scaled to the level of the enchantment. We can use this to modify how effective the enchantment is based on level. In the code above, we are using the level of the enchantment to determine how many lightning strikes are spawned.
 
-## Регистрация эффекта зачарования {#registering-the-enchantment-effect}
+## Registering the Enchantment Effect {#registering-the-enchantment-effect}
 
-Как и любой другой компонент вашего мода, нам придется добавить этот `EnchantmentEffect` в реестр Minecraft. Для этого добавьте класс `ModEnchantmentEffects` (или назовите его как хотите) и вспомогательный метод для регистрации чар. Обязательно вызовите `registerModEnchantmentEffects()` в вашем основном классе, который содержит метод `onInitialize()`.
+Like every other component of your mod, we'll have to add this `EnchantmentEffect` to Minecraft's registry. To do so, add a class `ModEnchantmentEffects` (or whatever you want to name it) and a helper method to register the enchantment. Be sure to call the `registerModEnchantmentEffects()` in your main class, which contains the `onInitialize()` method.
 
 @[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/enchantment/ModEnchantmentEffects.java)
 
-## Создание чар {#creating-the-enchantment}
+## Creating the Enchantment {#creating-the-enchantment}
 
-Теперь у нас есть эффект зачарования! Последний шаг — создать чары, которые будут применять наш собственный эффект. Хотя это можно сделать, создав файл JSON, аналогичный файлам в пакетах данных, в этом руководстве показано, как динамически генерировать JSON с помощью инструментов генерации данных Fabric. Для начала создайте класс `EnchantmentGenerator`.
+Now we have an enchantment effect! The final step is to create an enchantment that applies our custom effect. While this can be done by creating a JSON file similar to those in datapacks, this guide will show you how to generate the JSON dynamically using Fabric's data generation tools. To begin, create an `ExampleModEnchantmentGenerator` class.
 
-В этом классе мы сначала зарегистрируем новое зачарование, а затем воспользуемся методом `configure()` для программного создания нашего JSON.
+Within this class, we'll first register a new enchantment, and then use the `configure()` method to create our JSON programmatically.
 
-@[code transcludeWith=#entrypoint](@/reference/latest/src/client/java/com/example/docs/datagen/EnchantmentGenerator.java)
+@[code transcludeWith=#entrypoint](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModEnchantmentGenerator.java)
 
-Прежде чем продолжить, вам следует убедиться, что ваш проект настроен для генерации данных; если вы не уверены, [просмотрите соответствующую страницу документации](../data-generation/setup).
+Before proceeding, you should ensure your project is configured for data generation; if you are unsure, [view the respective docs page](../data-generation/setup).
 
-Наконец, мы должны указать нашему моду добавить наш `EnchantmentGenerator` в список задач генерации данных. Для этого просто добавьте `EnchantmentGenerator` внутри метода `onInitializeDataGenerator`.
+Lastly, we must tell our mod to add our `EnchantmentGenerator` to the list of data generation tasks. To do so, simply add the `EnchantmentGenerator` to this inside of the `onInitializeDataGenerator` method.
 
-@[code transclude={24-24}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code transcludeWith=:::custom-enchantments:register-generator](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-Теперь, когда вы запускаете задачу генерации данных вашего мода, JSON-файлы чар будут генерироваться внутри папки `generated`. Пример можно увидеть ниже:
+Now, when you run your mod's data generation task, enchantment JSONs will be generated inside the `generated` folder. An example can be seen below:
 
 @[code](@/reference/latest/src/main/generated/data/example-mod/enchantment/thundering.json)
 
-Вам также следует добавить переводы в файл `en_us.json`, чтобы дать вашему зачарованию читаемое имя:
+You should also add translations to your `en_us.json` file to give your enchantment a readable name:
 
 ```json
-"enchantment.ExampleMod.thundering": "Thundering",
+"enchantment.example-mod.thundering": "Thundering",
 ```
 
-Теперь у вас должен быть рабочий эффект зачарования! Проверьте это, зачаровав оружие чарами и ударив моба. Пример приведен в следующем видео:
+You should now have a working custom enchantment effect! Test it by enchanting a weapon with the enchantment and hitting a mob. An example is given in the following video:
 
-<VideoPlayer src="/assets/develop/enchantment-effects/thunder.webm" title="Using the Thundering Enchantment" />
+<VideoPlayer src="/assets/develop/enchantment-effects/thunder.webm">Using the Thundering Enchantment</VideoPlayer>

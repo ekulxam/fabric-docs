@@ -9,18 +9,18 @@ authors:
 
 ## 新增一個畫面元件 {#creating-a-widget}
 
-創建一個新的畫面元件類別有許多方法，例如繼承 (extend) `ClickableWidget`。 這個類別提供了很多實用的功能（例如：改變長關、位置、處理事件），他包含了 `Drawable`、`Element`、和 `Selectable`介面（interface）。
+There are multiple ways to create a widget class, such as extending `AbstractWidget`. This class provides a lot of useful utilities, such as managing width, height, position, and handling events - it implements the `Renderable`, `GuiEventListener`, `NarrationSupplier`, and `NarratableEntry` interfaces:
 
-- `Drawable` （繪製）： 需要使用 `addDrawableChild` 來繪製出這個畫面元件。
-- `Element` （事件）： 如果有需要讀取玩家互動（點選、按鍵等）。
-- `Narratable` （無障礙功能）： 如果有需要使用文字朗讀和其他無障礙功能。
-- `Selectable` （選擇）： 如果想要讓畫面元件變得可以透過<kbd>Tab</kbd>選擇，這也有助於無障礙功能。
+- `Renderable` - for rendering - Required to register the widget to the screen via the `addRenderableWidget` method.
+- `GuiEventListener` - for events - Required if you want to handle events such as mouse clicks, key presses, and more.
+- `NarrationSupplier` - for accessibility - Required to make your widget accessible to screen readers and other accessibility tools.
+- `NarratableEntry` - for selection - Required if you want to make your widget selectable using the <kbd>Tab</kbd> key - this also aids in accessibility.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomWidget.java)
 
 ## 讓元件顯示在畫面上 {#adding-the-widget-to-the-screen}
 
-就像其他畫面元件一樣，你會需要用 `Screen` 類別提供ㄉ的 `addDrawableChild` 函式來將元件顯示在畫面上。 請確保這是在 `init` 函式裡執行的。 請確保這是在 `init` 函式裡執行的。 請確保這是在 `init` 函式裡執行的。
+Like all widgets, you need to add it to the screen using the `addRenderableWidget` method, which is provided by the `Screen` class. 請確保這是在 `init` 函式裡執行的。
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
@@ -28,9 +28,9 @@ authors:
 
 ## 畫面元件事件 {#widget-events}
 
-你可以透過重寫 `onMouseClicked`、`onMouseReleased`、`onKeyPressed`等函式來讀取事件。
+You can handle events such as mouse clicks, key presses, by overriding the `mouseClicked`, `afterMouseAction`, `keyPressed`, and other methods.
 
-舉例來說，你可以透過 `ClickableWidget` 類別的 `isHovered` 函式來讓元件在滑鼠停留時改變顏色。
+For example, you can make the widget change color when it's hovered over by using the `isHovered()` method provided by the `AbstractWidget` class:
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomWidget.java)
 

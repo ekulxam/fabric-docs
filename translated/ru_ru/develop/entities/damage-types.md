@@ -15,7 +15,7 @@ authors:
 будет
 помещён в директорию вашего мода: `data`, в подпапку с названием `damage_type`.
 
-```:no-line-numbers
+```text:no-line-numbers
 resources/data/example-mod/damage_type/tater.json
 ```
 
@@ -33,9 +33,10 @@ resources/data/example-mod/damage_type/tater.json
 
 ### Доступ к типам урона через код {#accessing-damage-types-through-code}
 
-Когда нам нужно получить доступ к нашему пользовательскому типу урона через код, мы будем использовать его `RegistryKey` для создания экземпляра `DamageSource`.
+When we need to access our custom damage type through code, we will use it's `ResourceKey` to build an instance
+of `DamageSource`.
 
-`RegistryKey` можно получить следующим образом:
+The `ResourceKey` can be obtained as follows:
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/damage/ExampleModDamageTypes.java)
 
@@ -43,7 +44,7 @@ resources/data/example-mod/damage_type/tater.json
 
 Чтобы продемонстрировать использование пользовательских типов урона, мы будем использовать пользовательский блок под названием _Tater Block_. Давайте сделаем так, что когда живое существо наступает на _Tater Block_, оно наносит _Tater_ урон.
 
-Вы можете переопределить `onSteppedOn`, чтобы нанести этот урон.
+You can override `stepOn` to inflict this damage.
 
 Начнем с создания `DamageSource` нашего пользовательского типа урона.
 
@@ -65,9 +66,7 @@ resources/data/example-mod/damage_type/tater.json
 
 ```json
 {
-  // ...
-  "death.attack.tater": "%1$s died from Tater damage!",
-  // ...
+  "death.attack.tater": "%1$s died from Tater damage!"
 }
 ```
 
@@ -92,7 +91,7 @@ resources/data/example-mod/damage_type/tater.json
 
 Чтобы добавить наш тип урона к одному из этих тегов, мы создаем JSON-файл в пространстве имен `minecraft`.
 
-```:no-line-numbers
+```text:no-line-numbers
 data/minecraft/tags/damage_type/bypasses_armor.json
 ```
 

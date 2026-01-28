@@ -5,100 +5,106 @@ authors:
   - IMB11
 ---
 
-:::tip
-如果你在尋找崩潰原因時遇到任何困難，你可以在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#player-support` 或 `#server-admin-support` 頻道中尋求幫助。
+<!---->
+
+::: tip
+
+If you're having any difficulty with finding the cause of the crash, you can ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` or `#server-admin-support` channel.
+
 :::
 
-崩潰報告是排解遊戲或伺服器問題的非常重要的一部分。 它們包含了關於崩潰的大量資訊，可以幫助你找到崩潰的原因。
+Crash reports are a very important part of troubleshooting issues with your game or server. They contain a lot of information about the crash, and can help you find the cause of the crash.
 
-## 尋找崩潰報告 {#finding-crash-reports}
+## Finding Crash Reports {#finding-crash-reports}
 
-崩潰報告儲存在遊戲目錄中的 crash-reports 資料夾中。 如果您正在使用伺服器，則它們儲存在伺服器目錄中的 `crash-reports` 資料夾中。
+Crash reports are stored in the `crash-reports` folder in your game directory. If you are using a server, they are stored in the `crash-reports` folder in the server directory.
 
-對於第三方啟動器，你應參考它們的文件以找到崩潰報告的位置。
+For third party launchers, you should refer to their documentation on where to find crash reports.
 
-崩潰報告可以在以下位置找到：
+Crash reports can be found in the following locations:
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft\crash-reports
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft/crash-reports
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft/crash-reports
 ```
 
 :::
 
-## 閱讀崩潰報告 {#reading-crash-reports}
+## Reading Crash Reports {#reading-crash-reports}
 
-崩潰報告非常長，且讀起來可能會很困難。 然而，它們包含了許多關於崩潰的資訊，可以幫助你找出崩潰的原因。
+Crash reports are very long, and can be very confusing to read. However, they contain a lot of information about the crash, and can help you find the cause of the crash.
 
-在本指南中，我們將使用[這個崩潰報告作為範例](/assets/players/crash-report-example.log)。
+For this guide, we will be using [this crash report](/assets/players/crash-report-example.log).
 
-:::details 崩潰報告
+:::details Show Crash Report
 
-<<< @/public/assets/players/crash-report-example.log{log}
-
-:::
-
-### 崩潰報告部分 {#crash-report-sections}
-
-崩潰報告由幾個部分組成，每個部分都使用標題分隔：
-
-- `---- Minecraft Crash Report ----`，報告的摘要。 這個部分包含導致崩潰的主要錯誤、發生時間以及相關的堆疊追蹤。 這是崩潰報告中最重要的部分，因為堆疊追蹤通常包含導致崩潰的模組的參考。
-- `-- Last Reload --`，這個部分除非崩潰發生在資源重新載入期間（<kbd>F3</kbd> <kbd>T</kbd>），否則沒有什麼用。 這個部分將包含上次重新載入的時間以及重新載入過程中發生的任何錯誤的相關堆疊追踪。 這些錯誤通常是由資源包引起的，除非它們對遊戲造成問題，否則可以忽略。
-- `-- System Details --`，這個部分包含有關你系統的資訊，例如作業系統、Java 版本和配置給遊戲的記憶體。 這個部分對於確定你是否使用正確的 Java 版本以及是否為遊戲配置足夠的記憶體很有用。
-  - 在這一部分，Fabric 會加入一個客製化的行，顯示 `Fabric Mods:`，後面會列出您已安裝的所有模組。 這個部分對於確定模組之間是否可能發生衝突很有用。
-
-### 解析崩潰報告 {#breaking-down-the-crash-report}
-
-現在我們知道崩潰報告的每個部分是什麼，我們可以開始分解崩潰報告，找出崩潰的原因。
-
-使用上面連結的範例，我們可以分析崩潰報告，找出崩潰的原因，包括導致崩潰的模組。
-
-`---- Minecraft Crash Report ----`，報告的摘要。 這個部分包含導致崩潰的主要錯誤、發生時間以及相關的堆疊追蹤。 這是崩潰報告中最重要的部分，因為堆疊追蹤通常包含導致崩潰的模組的參考。 這個部分包含導致崩潰的主要錯誤、發生時間以及相關的堆疊追蹤。 這是崩潰報告中最重要的部分，因為堆疊追蹤通常包含導致崩潰的模組的參考。 這個部分包含導致崩潰的主要錯誤、發生時間以及相關的堆疊追蹤。 這是崩潰報告中最重要的部分，因為堆疊追蹤通常包含導致崩潰的模組的參考。 這個部分包含導致崩潰的主要錯誤、發生時間以及相關的堆疊追蹤。 這是崩潰報告中最重要的部分，因為堆疊追蹤通常包含導致崩潰的模組的參考。
-
-:::details 展示錯誤詳情
-
-<<< @/public/assets/players/crash-report-example.log{7 log}
+<<< @/public/assets/players/crash-report-example.log
 
 :::
 
-由於堆疊追蹤中提到了大量的模組，要指出責任者可能有些困難，但首先要做的是尋找導致崩潰的模組。
+### Crash Report Sections {#crash-report-sections}
 
-在這種情況下，導致崩潰的模組是 `snownee`，因為它是堆疊追蹤中首先提到的模組。
+Crash reports consist of several sections, each separated using a header:
 
-不過，這裡提到了很多模組，可能代表模組之間存在兼容性的問題，導致崩潰的模組可能不是出錯的模組。 在這種情況下，最好向模組作者回報崩潰的情形，以便他們調查崩潰原因。
+- `---- Minecraft Crash Report ----`, the summary of the report. This section will contain the main error that caused the crash, the time it occurred, and the relevant stack trace. This is the most important section of the crash report as the stack trace can usually contain references to the mod that caused the crash.
+- `-- Last Reload --`, this section isn't really useful unless the crash occurred during a resource reload (<kbd>F3</kbd>+<kbd>T</kbd>). This section will contain the time of the last reload, and the relevant stack trace of any errors that occurred during the reload process. These errors are usually caused by resource packs, and can be ignored unless they are causing issues with the game.
+- `-- System Details --`, this section contains information about your system, such as the operating system, Java version, and the amount of memory allocated to the game. This section is useful for determining if you are using the correct version of Java, and if you have allocated enough memory to the game.
+  - In this section, Fabric will have included a custom line that says `Fabric Mods:`, followed by a list of all the mods you have installed. This section is useful for determining if any conflicts could have occurred between mods.
 
-## Mixin 崩潰 {#mixin-crashes}
+### Breaking Down the Crash Report {#breaking-down-the-crash-report}
 
-:::info
-Mixin是一種無需修改遊戲原始碼即可修改遊戲的方法。 這對開發者而言是非常強大的工具，許多模組都有使用。
+Now that we know what each section of the crash report is, we can start to break down the crash report and find the cause of the crash.
+
+Using the example linked above, we can analyze the crash report and find the cause of the crash, including the mods that caused the crash.
+
+The stack trace in the `---- Minecraft Crash Report ----` section is the most important in this case, as it contains the main error that caused the crash.
+
+:::details Show Error
+
+<<< @/public/assets/players/crash-report-example.log{7}
+
 :::
 
-當 mixin 崩潰時，堆疊追蹤通常會提到 mixin 和被修改的類。
+With the amount of mods mentioned in the stack trace, it can be difficult to point fingers, but the first thing to do is to look for the mod that caused the crash.
 
-方法 mixin 將在堆疊追蹤中包含 `mod-id$handlerName`，其中 `mod-id` 是模組的 ID，`handlerName` 是 mixin 處理程序的名稱。
+In this case, the mod that caused the crash is `snownee`, as it is the first mod mentioned in the stack trace.
 
-```:no-line-numbers
-... net.minecraft.class_2248.method_3821$$$example-mod$handlerName() ... // [!code focus]
+However, with the amount of mods mentioned, it could mean there are some compatibility issues between the mods, and the mod that caused the crash may not be the mod that is at fault. In this case, it is best to report the crash to the mod author, and let them investigate the crash.
+
+## Mixin Crashes {#mixin-crashes}
+
+::: info
+
+Mixins are a way for mods to modify the game without having to modify the game's source code. They are used by many mods, and are a very powerful tool for mod developers.
+
+:::
+
+When a mixin crashes, it will usually mention the mixin in the stack trace, and the class that the mixin is modifying.
+
+Method mixins will contain `mod-id$handlerName` in the stack trace, where `mod-id` is the mod's ID, and `handlerName` is the name of the mixin handler.
+
+```text:no-line-numbers
+... net.minecraft.class_2248.method_3821$$$mod-id$handlerName() ... // [!code focus]
 ```
 
-你可以透過這項資訊找到導致崩潰的模組，並向模組作者回報崩潰情形。
+You can use this information to find the mod that caused the crash, and report the crash to the mod author.
 
-## 如何處理崩潰報告 {#what-to-do-with-crash-reports}
+## What to Do with Crash Reports {#what-to-do-with-crash-reports}
 
-處理崩潰報告的最佳方法是將它上傳至文字分享網站，並將連結分享給模組作者、錯誤追蹤器或透過某種形式的交流（Discord 等）。
+The best thing to do with crash reports is to upload them to a paste site, and then share the link with the mod author, either on their issue trackers or through some form of communication (Discord etc.).
 
-這使模組作者可以調查崩潰、嘗試復現，並解決崩潰的原因。
+This will allow the mod author to investigate the crash, potentially reproduce it, and solve the problem that caused it.
 
-常用於張貼崩潰報告的網站有：
+Common paste sites that are used frequently for crash reports are:
 
 - [GitHub Gist](https://gist.github.com/)
 - [mclo.gs](https://mclo.gs/)

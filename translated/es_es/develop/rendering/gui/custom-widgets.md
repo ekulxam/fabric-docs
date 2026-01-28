@@ -9,18 +9,18 @@ Los widgets son esencialmente componentes renderizados que pueden ser agregados 
 
 ## Crear un Widget
 
-Hay varias maneras de crear una clase widget, como extender `ClickableWidget` (Widget Clickeable). Esta clase provee varias utilidades, como por ejemplo para manejar el ancho, la altura, la posición, y para manejar eventos - implementa las interfaces `Drawable` (Dibujable), `Element` (Elemento), `Narratable` (Narrable), y `Selectable` (Seleccionable):
+There are multiple ways to create a widget class, such as extending `AbstractWidget`. This class provides a lot of useful utilities, such as managing width, height, position, and handling events - it implements the `Renderable`, `GuiEventListener`, `NarrationSupplier`, and `NarratableEntry` interfaces:
 
-- `Drawable` - para renderizar - Requerido para registrar el widget a la pantalla mediante el método `addDrawableChild`.
-- `Element` - para eventos - Requerido para manejar eventos como clicks del mouse, cuando se presiona una tecla, y más.
-- `Narratable` - para accesibilidad - Requerido para que tu widget sea accesible a lectores de pantalla y otras herramientas de accesibilidad.
-- `Seleccionable` - para selecciones - Requerido si quieres que tu widget sea seleccionable usando la tecla <kbd>Tab</kbd> - esto también ayuda en accesibilidad.
+- `Renderable` - for rendering - Required to register the widget to the screen via the `addRenderableWidget` method.
+- `GuiEventListener` - for events - Required if you want to handle events such as mouse clicks, key presses, and more.
+- `NarrationSupplier` - for accessibility - Required to make your widget accessible to screen readers and other accessibility tools.
+- `NarratableEntry` - for selection - Required if you want to make your widget selectable using the <kbd>Tab</kbd> key - this also aids in accessibility.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomWidget.java)
 
 ## Agregar el Widget a La Pantalla
 
-Como todos los widgets, necesitarás agregarlo a la pantalla mediante el método `addDrawableChild`, el cual es proveído por la clase `Screen`. Asegúrate de hacerlo en el método `init`.
+Like all widgets, you need to add it to the screen using the `addRenderableWidget` method, which is provided by the `Screen` class. Asegúrate de hacerlo en el método `init`.
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
@@ -28,9 +28,9 @@ Como todos los widgets, necesitarás agregarlo a la pantalla mediante el método
 
 ## Eventos de Widget
 
-Puedes manejar eventos como clicks del mouse, cuando se presiona una tecla, anulando el método `onMouseClicked` (duranteMouseClickeado), `onMouseReleased` (duranteMouseSoltado), `onKeyPressed` (duranteTeclaPresionada), y otros métodos.
+You can handle events such as mouse clicks, key presses, by overriding the `mouseClicked`, `afterMouseAction`, `keyPressed`, and other methods.
 
-Por ejemplo, puedes hacer que el widget cambie color cuando el mouse está flotando encima del widget usando el método `isHovering()` proveído por la clase `ClickableWidget`:
+For example, you can make the widget change color when it's hovered over by using the `isHovered()` method provided by the `AbstractWidget` class:
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomWidget.java)
 

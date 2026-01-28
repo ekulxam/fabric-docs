@@ -26,45 +26,51 @@ authors:
 В этом примере мы регистрируем нашу частицу на стороне клиента. Затем мы придаем частице некоторое движение, используя фабрику частиц конечного стержня. Это означает, что наша частица будет двигаться точно так же, как частица конечного стержня.
 
 ::: tip
+
 You can see all the particle factories by looking at all the implementations of the `ParticleFactory` interface. This is helpful if you want to use another particle's behaviour for your own particle.
 
-- Горячая клавиша IntelliJ: Ctrl+Alt+B
-- Горячая клавиша Visual Studio Code: Ctrl+F12
-  :::
+- IntelliJ's hotkey: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>B</kbd>
+- Visual Studio Code's hotkey: <kbd>Ctrl</kbd>+<kbd>F12</kbd>
 
-## Создание JSON-файла и добавление текстур {#creating-a-json-file-and-adding-textures}
+:::
 
-Вам нужно будет создать 2 папки в папке `resources/assets/example-mod/`.
+## Creating a JSON File and Adding Textures {#creating-a-json-file-and-adding-textures}
 
-| Путь к папке         | Обьяснение                                                                              |
-| -------------------- | --------------------------------------------------------------------------------------- |
-| `/textures/particle` | Папка `particle` будет содержать все текстуры для всех ваших частиц.    |
-| `/particles`         | Папка `particles` будет содержать все json-файлы для всех ваших частиц. |
+You will need to create 2 folders in your `resources/assets/example-mod/` folder.
 
-В этом примере у нас будет только одна текстура в `textures/particle` с названием "sparkle_particle_texture.png".
+| Folder Path          | Explanation                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| `/textures/particle` | The `particle` folder will contain all the textures for all of your particles.       |
+| `/particles`         | The `particles` folder will contain all of the json files for all of your particles. |
 
-Затем создайте новый JSON-файл в `particles` с тем же именем, что и путь JSON, который вы использовали при регистрации ParticleType. Для этого примера нам потребуется создать `sparkle_particle.json`. Этот файл важен, поскольку он сообщает Minecraft, какие текстуры должна использовать наша частица.
+For this example, we will have only one texture in `textures/particle` called "sparkle_particle_texture.png".
+
+Next, create a new JSON file in `particles` with the same name as the JSON path that you used when registering your ParticleType. For this example, we will need to create `sparkle_particle.json`. This file is important because it lets Minecraft know which textures our particle should use.
 
 @[code lang=json](@/reference/latest/src/main/resources/assets/example-mod/particles/sparkle_particle.json)
 
-:::tip
-Вы можете добавить больше текстур в массив `textures`, чтобы создать анимацию частиц. Частица будет циклически проходить по текстурам в массиве, начиная с первой текстуры.
+::: tip
+
+You can add more textures to the `textures` array to create a particle animation. The particle will cycle through the textures in the array, starting with the first texture.
+
 :::
 
-## Тестирование новой частицы {#testing-the-new-particle}
+## Testing the New Particle {#testing-the-new-particle}
 
-После того как вы завершите работу над файлом JSON и сохраните ее, вы можете загрузить Minecraft и все протестировать!
+Once you have completed the JSON file and saved your work, you are good to load up Minecraft and test everything out!
 
-Проверить, все ли работает, можно, введя следующую команду:
+You can see if everything has worked by typing the following command:
 
 ```mcfunction
 /particle example-mod:sparkle_particle ~ ~1 ~
 ```
 
-![Демонстрация частицы](/assets/develop/rendering/particles/sparkle-particle-showcase.png)
+![Showcase of the particle](/assets/develop/rendering/particles/sparkle-particle-showcase.png)
 
-:::info
-При выполнении этой команды частица появится внутри игрока. Чтобы увидеть его, вам, скорее всего, придется идти задом наперед.
+::: info
+
+The particle will spawn inside the player with this command. You will likely need to walk backwards to actually see it.
+
 :::
 
-В качестве альтернативы вы также можете использовать командный блок, чтобы вызвать частицу с помощью той же команды.
+Alternatively, you can also use a command block to summon the particle with the exact same command.

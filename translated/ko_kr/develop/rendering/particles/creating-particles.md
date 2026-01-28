@@ -26,45 +26,51 @@ authors:
 위 예시는 입자를 클라이언트측에 등록하는 방법입니다. 이제 엔드 막대기 입자 팩토리를 통해 입자에 움직임을 줘보겠습니다. 이렇게 하면 입자가 엔드 막대기 입자와 똑같이 움직이게 됩니다.
 
 ::: tip
+
 You can see all the particle factories by looking at all the implementations of the `ParticleFactory` interface. This is helpful if you want to use another particle's behaviour for your own particle.
 
-- IntelliJ 단축 키: Ctrl+Alt+B
-- VSCode 단축 키: Ctrl+F12
-  :::
+- IntelliJ's hotkey: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>B</kbd>
+- Visual Studio Code's hotkey: <kbd>Ctrl</kbd>+<kbd>F12</kbd>
 
-## JSON 파일을 만들고 텍스쳐 추가하기
+:::
 
-먼저, 모드 소스의 `resources/assets/<mod id here>/` 폴더에 두 가지 새로운 폴더를 생성해야 합니다.
+## Creating a JSON File and Adding Textures {#creating-a-json-file-and-adding-textures}
 
-| 폴더 경로                | 설명                                                              |
-| -------------------- | --------------------------------------------------------------- |
-| `/textures/particle` | `/textures/particle` 폴더는 입자의 모든 텍스쳐를 담습니다.      |
-| `/particles`         | `particles` 폴더는 입자의 정보에 대한 모든 JSON 파일을 담고 있습니다. |
+You will need to create 2 folders in your `resources/assets/example-mod/` folder.
 
-예를 들어, `textures/particle` 폴더에는 "sparkle_particle_texture.png" 라는 이름의 텍스쳐 이미지를 넣겠습니다.
+| Folder Path          | Explanation                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| `/textures/particle` | The `particle` folder will contain all the textures for all of your particles.       |
+| `/particles`         | The `particles` folder will contain all of the json files for all of your particles. |
 
-그리고, `particles` 폴더에는 ParticleType에 등록한 것과 같은 이름의 소문자를 이름으로 가지는 JSON 파일을 생성합니다. 이 예제에서는, `sparkle_particle.json` 으로 생성하겠습니다. 이 파일은 Minecraft가 입자에 어떠한 텍스쳐를 사용해야 하는지 정의하기 때문에 매우 중요합니다.
+For this example, we will have only one texture in `textures/particle` called "sparkle_particle_texture.png".
+
+Next, create a new JSON file in `particles` with the same name as the JSON path that you used when registering your ParticleType. For this example, we will need to create `sparkle_particle.json`. This file is important because it lets Minecraft know which textures our particle should use.
 
 @[code lang=json](@/reference/latest/src/main/resources/assets/example-mod/particles/sparkle_particle.json)
 
-:::tip
-입자에 애니메이션을 적용하고 싶다면 `textures` 배열 노드에 더 많은 텍스쳐를 추가하면 됩니다. 입자는 배열의 순서대로 반복될 것입니다.
+::: tip
+
+You can add more textures to the `textures` array to create a particle animation. The particle will cycle through the textures in the array, starting with the first texture.
+
 :::
 
-## 새 입자 테스트하기
+## Testing the New Particle {#testing-the-new-particle}
 
-위의 모든 작업을 완료했다면, 이제 Minecraft에서 입자를 테스트해볼 차례입니다.
+Once you have completed the JSON file and saved your work, you are good to load up Minecraft and test everything out!
 
-다음의 명령어를 입력하여 입자가 정상적으로 작동하는지 확인할 수 있습니다.
+You can see if everything has worked by typing the following command:
 
 ```mcfunction
-/particle <mod id here>:sparkle_particle ~ ~1 ~
+/particle example-mod:sparkle_particle ~ ~1 ~
 ```
 
-![입자 쇼케이스](/assets/develop/rendering/particles/sparkle-particle-showcase.png)
+![Showcase of the particle](/assets/develop/rendering/particles/sparkle-particle-showcase.png)
 
-:::info
-이 명령어를 사용하면 입자가 플레이어 안에 생성될 것입니다. 입자를 보려면 뒤로 몇 걸음 걸어야할 수도 있습니다.
+::: info
+
+The particle will spawn inside the player with this command. You will likely need to walk backwards to actually see it.
+
 :::
 
-대신, 같은 명령어로 명령 블록을 통해 입자를 생성할 수도 있습니다.
+Alternatively, you can also use a command block to summon the particle with the exact same command.

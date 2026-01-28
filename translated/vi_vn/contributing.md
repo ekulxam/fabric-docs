@@ -1,176 +1,253 @@
-# Tài Liệu Hướng Dẫn Cách Đóng Góp Fabric
+---
+title: Contribution Guidelines
+description: Guidelines for contributions to the Fabric Documentation.
+---
 
-Trang này sử dụng [VitePress](https://vitepress.dev/) để tạo văn bản HTML tĩnh từ nhiều tệp markdown khác nhau. Bạn nên làm quen với những tiện ích markdown mà VitePress hỗ trợ tại [đây](https://vitepress.dev/guide/markdown#features).
+This website uses [VitePress](https://vitepress.dev/) to generate static HTML from various Markdown files. You should familiarize yourself with the [Markdown extensions that VitePress supports](https://vitepress.dev/guide/markdown#features).
 
-## Mục Lục
+There are three ways you can contribute to this website:
 
 - [Tài Liệu Hướng Dẫn Cách Đóng Góp Fabric](#tài-liệu-hướng-dẫn-cách-đóng-góp-fabric)
-  - [Cách Đóng Góp](#cách-đóng-góp)
-  - [Đóng Góp Framework](#đóng-góp-framework)
-  - [Đóng Góp Nội Dung](#đóng-góp-nội-dung)
-    - [Phong Cách Ghi Tài Liệu](#phong-cách-ghi-tài-liệu)
-    - [Hướng Dẫn Mở Rộng](#hướng-dẫn-mở-rộng)
-    - [Xác Minh Nội Dung](#xác-minh-nội-dung)
-    - [Làm Gọn](#làm-gọn)
+- [Contributing Content](#contributing-content)
+- [Contributing Framework](#contributing-framework)
 
-## Cách Đóng Góp
+All contributions must follow our [style guidelines](#style-guidelines).
 
-Chúng tôi khuyên bạn nên tạo một nhánh mới trên bản fork của kho lưu trữ cho mỗi lần tạo pull request. Điều này sẽ giúp bạn dễ quản lý khi thực hiện nhiều pull request cùng một lúc.
+## Translating Documentation {#translating-documentation}
 
 **Nếu bạn muốn xem trước những thay đổi bạn tạo trên máy nội bộ của bạn, bạn cần phải cài đặt [Node.js 18+](https://nodejs.org/en/)**
 
-Trước khi chạy bất kì lệnh nào, hãy đảm bảo chạy lệnh `npm install` để cài đầy đủ các gói hỗ trợ.
+<!-- markdownlint-disable titlecase-rule -->
 
-**Chạy máy chủ phát triển nội bộ:**
+## <Badge type="tip">new-content</Badge> Contributing Content {#contributing-content}
 
-Điều này sẽ cho phép bạn xem trước các thay đổi bạn đã làm trên thiết bị của bạn tại địa chỉ `localhost:3000` và sẽ tự động tải lại trang khi bạn thực hiện các thay đổi.
+<!-- markdownlint-enable titlecase-rule -->
+
+Content contributions are the main way to contribute to the Fabric Documentation.
+
+All content contributions go through the following stages, each of which is associated with a label:
+
+1. <Badge type="tip">locally</Badge> Prepare your changes and push a PR
+2. <Badge type="tip">stage:expansion</Badge>: Guidance for Expansion if needed
+3. <Badge type="tip">stage:verification</Badge>: Content verification
+4. <Badge type="tip">stage:cleanup</Badge>: Grammar, Linting...
+5. <Badge type="tip">stage:ready</Badge>: Ready to be merged!
+
+All content must follow our [style guidelines](#style-guidelines).
+
+### 1. Prepare Your Changes {#1-prepare-your-changes}
+
+This website is open-source, and it is developed in a GitHub repository, which means that we rely on the GitHub flow:
+
+1. [Fork the GitHub repository](https://github.com/FabricMC/fabric-docs/fork)
+2. Create a new branch on your fork
+3. Make your changes on that branch
+4. Open a Pull Request to the original repository
+
+You can read more about the [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow).
+
+You can either make changes from the web UI on GitHub, or you can develop and preview the website locally.
+
+#### Cloning Your Fork {#clone-your-fork}
+
+If you want to develop locally, you will need to install [Git](https://git-scm.com/).
+
+After that, clone your fork of the repository with:
+
+```sh
+# make sure to replace "your-username" with your actual username
+git clone https://github.com/your-username/fabric-docs.git
+```
+
+#### Installing Dependencies {#install-dependencies}
+
+If you want to preview your changes locally, you will need to install [Node.js 18+](https://nodejs.org/en/).
+
+After that, make sure to install all dependencies with:
+
+```sh
+npm install
+```
+
+#### Running the Development Server {#run-the-development-server}
+
+This will allow you to preview your changes locally at `localhost:5173` and will automatically reload the page when you make changes.
 
 ```sh
 npm run dev
 ```
 
-**Xây dựng trang web:**
+Now you can open and browse the website from the browser by visiting `http://localhost:5173`.
 
-Lệnh dưới đây sẽ biên dịch toàn bộ tập tin markdown thành những tệp HTML tĩnh và đặt chúng trong `.vitepress/dist`
+#### Building the Website {#building-the-website}
+
+This will compile all Markdown files into static HTML files and place them in `.vitepress/dist`:
 
 ```sh
 npm run build
 ```
 
-**Xem trước trang web đã tạo:**
+#### Previewing the Built Website {#previewing-the-built-website}
 
-Lệnh dưới sẽ khởi động một máy chủ nội bộ trên cổng 3000 để hiển thị nội dụng được tìm thấy ở `.vitepress/dist`
+This will start a local server on port `4173` serving the content found in `.vitepress/dist`:
 
 ```sh
 npm run preview
 ```
 
-## Đóng Góp Framework
+#### Opening a Pull Request {#opening-a-pull-request}
 
-Framework ám chỉ cấu trúc bên trong của một trang web, bất kì pull request nào chỉnh sử framework của trang web nên được đánh dấu với nhãn `framework`.
+Once you're happy with your changes, you may `push` your changes:
 
-Bạn thật sự chỉ nên tạo các pull request về framework sau khi tham khảo ý kiến của đội ngũ biên soạn tài liệu trong [Discord Fabric](https://discord.gg/v6v4pMv) hoặc thông qua trang issue.
+```sh
+git add .
+git commit -m "Description of your changes"
+git push
+```
 
-**Chú ý: Việc chỉnh sửa các tập tin thanh bên và thanh định hướng không được tính là một pull request của framework.**
+Then, follow the link in the output of `git push` to open a PR.
 
-## Đóng Góp Nội Dung
+### 2. <Badge type="tip">stage:expansion</Badge> Guidance for Expansion if Needed {#2-guidance-for-expansion-if-needed}
 
-Đóng góp nội dung là cách chính để đóng góp vào Tài liệu Fabric.
+If the documentation team thinks that you could expand upon your pull request, a member of the team will add the <Badge type="tip">stage:expansion</Badge> label to your pull request alongside a comment explaining what they think you could expand upon. If you agree with the suggestion, you can expand upon your pull request.
 
-Tất cả các nội dung nên theo phong cách ghi tài liệu của chúng tôi.
+If you do not want to expand upon your pull request, but you are happy for someone else to expand upon it at a later date, you should create an issue on the [Issues page](https://github.com/FabricMC/fabric-docs/issues) and explain what you think could be expanded upon. The documentation team will then add the <Badge type="tip">help-wanted</Badge> label to your PR.
 
-### Phong Cách Ghi Tài Liệu
+### 3. <Badge type="tip">stage:verification</Badge> Content Verification {#3-content-verification}
 
-Tất cả các trang trên trang web bộ tài liệu Fabric nên thống nhất về một phong cách ghi. Nếu bạn không chắc điều gì, bạn có thể hỏi tại [Discord Fabric](https://discord.gg/v6v4pMv) hoặc thông qua mục Discussions của Github.
+This is the most important stage as it ensures that the content is accurate and follows the Fabric Documentation style guide.
 
-Quy định về phong cách như sau:
+In this stage, the following questions should be answered:
 
-1. Tất cả trang phải có tiêu đề và dòng mô tả theo định dạng frontmatter.
+- Is all of the content correct?
+- Is all of the content up-to-date?
+- Does the content cover all cases, such as different operating systems?
 
-   ```md
-   ---
-   title: Đây là tiêu đề của trang
-   description: Đây là dòng mô tả của trang
-   authors:
-     - TênNgườiDùngGithub
-   ---
+### 4. <Badge type="tip">stage:cleanup</Badge> Cleanup {#4-cleanup}
 
-   # ...
-   ```
+In this stage, the following happens:
 
-2. Nếu bạn muốn tạo hoặc chỉnh sửa đoạn mã của trang, hãy đặt đoạn mã ở một vị trí thích hợp ở trong bản mod có liên quan (được đặt ở thư mục `/reference` của kho lưu trữ). Sau đó, sử dụng [tính năng tạo định nghĩa cho mã được cung cấp bởi VitePress](https://vitepress.dev/guide/markdown#import-code-snippets) để nhúng mã, hoặc nếu bạn cần nhiều sự kiểm soát hơn, bạn có thể sử dụng tính năng transclude từ [`markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
+- Fixing of any grammar issues using [LanguageTool](https://languagetool.org/)
+- Linting of all Markdown files using [`markdownlint`](https://github.com/DavidAnson/markdownlint)
+- Formatting of all Java code using [Checkstyle](https://checkstyle.sourceforge.io/)
+- Other miscellaneous fixes or improvements
 
-   **Ví dụ:**
+## <Badge type="tip">framework</Badge> Contributing Framework {#contributing-framework}
 
-   ```md
-   <<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21 java}
-   ```
+Framework refers to the internal structure of the website, any pull requests that modify the framework of the website will be labeled with the <Badge type="tip">framework</Badge> label.
 
-   Điều này sẽ nhúng mã từ dòng 15 đến 21 của tệp `ExampleMod.java` trong tập tin mod có liên quan.
+You should really only make framework pull requests after consulting with the documentation team on the [Fabric Discord](https://discord.fabricmc.net/) or via an issue.
 
-   Kết quả sau khi tạo định nghĩa cho mã sẽ như này:
+::: info
 
-   ```java
-     @Override
-     public void onInitialize() {
-       // This code runs as soon as Minecraft is in a mod-load-ready state.
-       // However, some things (like resources) may still be uninitialized.
-       // Proceed with mild caution.
+Modifying sidebar files and the navigation bar configuration does not count as a framework pull request.
 
-       LOGGER.info("Hello Fabric world!");
-     }
-   ```
+:::
 
-   **Ví Dụ Về Transclude:**
+## Style Guidelines {#style-guidelines}
 
-   ```md
-   @[code transcludeWith=#test_transclude](@/reference/.../blah.java)
-   ```
+If you are unsure about anything, you can ask in the [Fabric Discord](https://discord.fabricmc.net/) or via GitHub Discussions.
 
-   Mã trên sẽ nhúng phần được chọn của `blah.java` mà đã được đánh dấu với nhãn `#test_transclude`.
+### Write the Original in American English {#write-the-original-in-american-english}
 
-   Ví dụ:
+All original documentation is written in English, following the American rules of grammar.
 
-   ```java
-   public final String test = "Bye World!"
+### Add Data to the Frontmatter {#add-data-to-the-frontmatter}
 
-   // #test_transclude
-   public void test() {
-     System.out.println("Hello World!");
-   }
-   // #test_transclude
-   ```
+Each page must have a `title` and a `description` in the frontmatter.
 
-   Chỉ có phần mã ở giữa nhãn `#test_transclude` mới được nhúng.
+Remember to also add your GitHub username to `authors` in the frontmatter of the Markdown file! This way we can give you proper credit.
 
-   ```java
-   public void test() {
-     System.out.println("Hello World!");
-   }
-   ```
+```yaml
+---
+title: Title of the Page
+description: This is the description of the page.
+authors:
+  - your-username
+---
+```
 
-3. Chúng tôi tuân theo ngữ pháp tiếng Anh. Mặc dù bạn cũng có thể sử dụng công cụ [LanguageTool](https://languagetool.org/) để kiểm tra ngữ pháp khi viết, nhưng đừng quá căng thẳng về điều đó. Đội ngũ biên soạn của chúng tôi sẽ luôn xem xét và sửa lại chúng trong bước làm gọn. Tuy vậy, bạn nên dành gia một chút thời gian kiểm tra từ đầu và điều đó giúp chúng tôi tiết kiệm thêm thời gian.
+### Add Anchors to Headings {#add-anchors-to-headings}
 
-4. Nếu bạn đang tạo một mục mới, bạn nên tạo thêm một thanh bên mới trong thư mục `.vitepress/sidebars` và thêm nó trong tệp `config.mts`. Nếu bạn cần sự hỗ trợ để làm điều này, vui lòng hỏi trong kênh `#wiki` ở [Discord Fabric](https://discord.gg/v6v4pMv).
+Each heading must have an anchor, which is used to link to that heading:
 
-5. Khi tạo một trang mới, bạn nên thêm nó vào thanh bên nằm ở thư mục `.vitepress/sidebars`. Một lần nữa, nếu bạn cần sự trợ giúp, hãy hỏi ở kênh `#wiki` trong Discord Fabric.
+```md
+## This Is a Heading {#this-is-a-heading}
+```
 
-6. Tât cả hình ảnh nên được đặt ở thư mục `/assets` phù hợp.
+The anchor must use lowercase characters, numbers and dashes.
 
-7. ⚠️ **Khi liên kết các trang khác, hãy sử dụng liên kết tương đối.** ⚠️
+### Place Code Within the Example Mod {#place-code-within-the-example-mod}
 
-   Điều này là do hệ thống lập phiên bản tại chỗ, sẽ xử lý các liên kết để thêm phiên bản trước. Nếu bạn sử dụng liên kết tuyệt đối, số phiên bản sẽ không được thêm vào liên kết.
+If you create or modify pages containing code, place the code in an appropriate location within the example mod (located in the `/reference` folder of the repository). Then, use the [code snippet feature offered by VitePress](https://vitepress.dev/guide/markdown#import-code-snippets) to embed the code.
 
-   Ví dụ, đối với trang ở thư mục `/players`, để liên kết trang `installing-fabric` được tạo ở `/players/installing-fabric.md`, bạn sẽ phải làm như sau:
+For example, to highlight lines 15-21 of the `ExampleMod.java` file from the mod:
 
-   ```md
-   [Đây là liên kết dẫn đến trang khác](./installing-fabric)
-   ```
+::: code-group
 
-   Bạn **KHÔNG ĐƯỢC** làm như sau:
+```md
+<<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21}
+```
 
-   ```md
-   [Đây là liên kết dẫn đến trang khác](/players/installing-fabric)
-   ```
+<<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21}[java]
 
-Tất cả sự đóng góp nội dung sẽ lần lượt đi qua ba bước:
+:::
 
-1. Hướng dẫn mở rộng (nếu có thể)
-2. Xác Minh Nội Dung
-3. Làm gọn (ngữ pháp, ...)
+If you need a greater span of control, you can use the [transclude feature from `markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
 
-### Hướng Dẫn Mở Rộng
+For example, this will embed the sections of the file above that are marked with the `#entrypoint` tag:
 
-Nếu đội ngũ biên soạn nghĩ rằng bạn có thể mở rộng thêm trong pull request của bạn, một thành viên của đội ngũ sẽ thêm nhãn `expansion` cho pull request của bạn cùng với một bình luận giải thích những thứ mà bạn có thể mở rộng thêm nữa. Nếu bạn đồng ý sự đề xuất này, bạn có thể mở rộng thêm pull request của bạn.
+::: code-group
 
-**Cũng đừng cảm thấy quá áp lực khi mở rộng thêm pull request của bạn.** Nếu bạn không muốn mở rộng thêm, bạn có thể yêu cầu xoá nhãn `expansion`.
+```md
+@[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
+```
 
-Nếu bạn không muốn mở rộng thêm pull request của bạn, nhưng bạn sẵn sàng cho người khác làm điều đó vào lúc sau, điều tốt nhất là hãy tạo một issue trong [trang Issues](https://github.com/FabricMC/fabric-docs/issues) và giải thích những gì mà bạn nghĩ có thể mở rộng thêm.
+@[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
 
-### Xác Minh Nội Dung
+:::
 
-Tất cả pull requests mà thêm nội dung đều sẽ trải qua bước xác minh nội dung, đây là bước quan trọng nhất vì nó đảm bảo tất cả nội dung phải chính xác và tuân theo quy định về phong cách ghi Tài liệu Fabric.
+### Create a Sidebar for Each New Section {#create-a-sidebar-for-each-new-section}
 
-### Làm Gọn
+If you're creating a new section, you should create a new sidebar in the `.vitepress/sidebars` folder and add it to the `i18n.mts` file.
 
-Đây là giai đoạn mà đội ngũ biên soạn sẽ sửa chữa bất kỳ lỗi ngữ pháp nào được tìm thấy và thực hiện bất kỳ thay đổi nào khác mà họ cho là cần thiết trước khi hợp nhất pull request!
+If you need assistance with this, please ask in the [Fabric Discord](https://discord.fabricmc.net/)'s `#docs` channel.
+
+### Add New Pages to the Relevant Sidebars {#add-new-pages-to-the-relevant-sidebars}
+
+When creating a new page, you should add it to the relevant sidebar in the `.vitepress/sidebars` folder.
+
+Again, if you need assistance, ask in the Fabric Discord in the `#docs` channel.
+
+### Place Media in `/assets` {#place-media-in-assets}
+
+Any images should be placed in a suitable place in the `/public/assets` folder.
+
+### Use Relative Links! {#use-relative-links}
+
+This is because of the versioning system in place, which will process the links to add the version beforehand. If you use absolute links, the version number will not be added to the link.
+
+You must also not add the file extension to the link either.
+
+For example, to link to the page found in `/players/index.md` from the page `/develop/index.md`, you would have to do the following:
+
+::: code-group
+
+```md:no-line-numbers [✅ Correct]
+This is a relative link!
+[Page](../players/index)
+```
+
+```md:no-line-numbers [❌ Wrong]
+This is an absolute link.
+[Page](/players/index)
+```
+
+```md:no-line-numbers [❌ Wrong]
+This relative link has the file extension.
+[Page](../players/index.md)
+```
+
+:::
+
+<!---->

@@ -2,6 +2,7 @@
 title: 翻译生成
 description: 使用 Datagen 设置翻译生成的指南。
 authors:
+  - CelDaemon
   - IMB11
   - MattiDragon
   - skycatminepokie
@@ -12,36 +13,42 @@ authors-nogithub:
   - sjk1949
 ---
 
-:::info 前提
-首先，请确保你已完成 [Datagen 设置](./setup) 。
+<!---->
+
+:::info PREREQUISITES
+
+Make sure you've completed the [datagen setup](./setup) process first.
+
 :::
 
-## 设置 {#setup}
+## Setup {#setup}
 
-首先，我们要创建**提供程序**。 请记住，提供程序才是为我们生成数据的。 创建一个 `extends FabricLanguageProvider` 的类，填入基本方法：
+First, we'll make our **provider**. Remember, providers are what actually generate data for us. Create a class that extends `FabricLanguageProvider` and fill out the base methods:
 
 @[code lang=java transcludeWith=:::datagen-translations:provider](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModEnglishLangProvider.java)
 
-:::tip
-对于想要生成的每种语言，需要不同的提供程序（例如一个 `ExampleEnglishLangProvider` 还有一个 `ExamplePirateLangProvider`）。
+::: tip
+
+You will need a different provider for each language you want to generate (eg. one `ExampleEnglishLangProvider` and one `ExamplePirateLangProvider`).
+
 :::
 
-要完成设置，将此提供程序添加到 `onInitializeDataGenerator` 方法中的 `DataGeneratorEntrypoint`。
+To finish setup, add this provider to your `DataGeneratorEntrypoint` within the `onInitializeDataGenerator` method.
 
-@[code lang=java transclude={28-28}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code lang=java transcludeWith=:::datagen-translations:register](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## 创建翻译 {#creating-translations}
+## Creating Translations {#creating-translations}
 
-除了创建原始翻译、来自 `Identifier` 的翻译以及从现有的文件复制（通过传递 `Path`）之外，还有用于翻译物品、方块、标签、统计数据、实体、状态效果、物品组、实体属性和魔咒的辅助方法。 只需在 `translationBuilder` 上调用 `add`，添加你想要翻译的内容以及应该翻译成的内容：
+Along with creating raw translations, translations from `Identifier`s, and copying them from an already existing file (by passing a `Path`), there are helper methods for translating items, blocks, tags, stats, entities, status effects, creative tabs, entity attributes, and enchantments. Simply call `add` on the `translationBuilder` with what you want to translate and what it should translate to:
 
 @[code lang=java transcludeWith=:::datagen-translations:build](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModEnglishLangProvider.java)
 
-## 使用翻译 {#using-translations}
+## Using Translations {#using-translations}
 
-生成的翻译取代了其他教程中添加的许多翻译，但你也可以在任何使用 `Text` 对象的地方使用。 在我们的示例中，如果我们想允许资源包翻译我们的问候语，我们使用 `Text.translatable` 而不是 `Text.of`：
+Generated translations take the place of a lot of translations added in other tutorials, but you can also use them anywhere you use a `Component` object. In our example, if we wanted to allow resource packs to translate our greeting, we use `Component.translatable` instead of `Component.literal`:
 
 ```java
-ChatHud chatHud = MinecraftClient.getInstance().inGameHud.getChatHud();
-chatHud.addMessage(Text.literal("Hello there!")); // [!code --]
-chatHud.addMessage(Text.translatable("text.example-mod.greeting")); // [!code ++]
+ChatComponent chatHud = Minecraft.getInstance().gui.getChat();
+chatHud.addMessage(Component.literal("Hello there!")); // [!code --]
+chatHud.addMessage(Component.translatable("text.example-mod.greeting")); // [!code ++]
 ```

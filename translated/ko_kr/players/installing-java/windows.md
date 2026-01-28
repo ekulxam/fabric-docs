@@ -1,8 +1,10 @@
 ---
 title: Windows에 Java 설치하기
-description: Windows에 Java를 설치하는 방법에 대한 단계별 가이드입니다.
+description: A step-by-step guide on how to install Java on Windows.
 authors:
   - IMB11
+  - skycatminepokie
+next: false
 ---
 
 이 가이드는 Windows에 Java 21을 설치하는 과정을 안내해 줄 것입니다.
@@ -13,7 +15,7 @@ Minecraft 런처에서 자체적인 Java 설치를 제공하기 때문에, 이 �
 
 Java가 설치되어 있는지 확인하려면, 먼저 명령 프롬프트를 시작해야 합니다.
 
-<kbd>Win 로고 키</kbd>와 <kbd>R 키</kbd>를 동시에 누른 다음, 왼쪽 아래에 표시된 실행 창에 `cmd`를 입력하여 명령 프롬프트를 시작할 수 있습니다.
+You can do this by pressing <kbd>Windows</kbd>+<kbd>R</kbd> and typing `cmd.exe` into the box that appears.
 
 ![입력란에 "cmd.exe"가 입력된 Windows 실행 다이얼로그](/assets/players/installing-java/windows-run-dialog.png)
 
@@ -23,39 +25,51 @@ Java가 설치되어 있는지 확인하려면, 먼저 명령 프롬프트를 �
 
 !["java -version"이 입력된 명령 프롬프트](/assets/players/installing-java/windows-java-version.png)
 
-:::warning
-Minecraft: Java Edition 1.21을 플레이 하려면, 적어도 Java 21 이상의 Java가 설치되어야 합니다. 만약 이 명령어가 Java 21보다 낮은 버전을 표시한다면, 기존의 Java 설치를 업데이트해야 합니다.
+::: warning
+
+To use Minecraft 1.21.11, you'll need at least Java 21 installed.
+
+If this command displays any version lower than 21, you'll need to update your existing Java installation; keep reading this page.
+
 :::
 
-## 2. Java 21 설치기 다운로드 {#2-download-the-java-installer}
+## 2. Download the Java 21 Installer {#2-download-the-java-installer}
 
-Java 21을 설치하려면, 먼저 Adoptium에서 설치기를 다운로드해야 합니다.
+To install Java 21, you'll need to download the installer from [Adoptium](https://adoptium.net/temurin/releases?version=21&os=windows&arch=any&mode=filter).
 
-아래와 같이 `Windows Installer (.msi)`를 선택하여 주세요:
+You'll want to download the `Windows Installer (.msi)` version:
 
-!["Windows Installer (.msi)" 선택이 강조된 Adoptium 다운로드 페이지](/assets/players/installing-java/windows-download-java.png)
+![Adoptium download page with Windows Installer (.msi) highlighted](/assets/players/installing-java/windows-download-java.png)
 
-32비트 Windows를 사용하고 계시다면 `x86`에서 선택하고, 64비트 Windows를 사용하고 계시다면 `x64`에서 선택하여 주세요.
+You should choose `x86` if you have a 32-bit operating system, or `x64` if you have a 64-bit operating system.
 
-대부분의 최신 PC(Windows 10/11)는 64비트 운영 체제를 사용합니다. 잘 모르겠다면, 64비트를 다운로드해 보세요.
+The majority of modern computers will have a 64-bit operating system. If you are unsure, try using the 64-bit download.
 
-## 3. 설치기 실행하기 설치기 실행하기 {#3-run-the-installer}
+## 3. Run the Installer! {#3-run-the-installer}
 
-Java 21을 설치하려면 다음 단계를 수행하세요. 설치기에서 아래와 같은 단계에 도달했다면, 아래 기능을 "Entire feature will be installed on local hard drive"로 설정해야 합니다:
+Follow the steps in the installer to install Java 21. When you reach this page, you should set the following features to "Entire feature will be installed on local hard drive":
 
-- `Set JAVA_HOME environment variable` - 선택하면 Java 실행 파일이 PATH에 추가됩니다.
-- `JavaSoft (Oracle) registry keys` - 선택하면 지금 설치되는 Java를 기본 실행으로 설정합니다.
+- `Set JAVA_HOME environment variable` - This will be added to your PATH.
+- `JavaSoft (Oracle) registry keys`
 
-!["Set JAVA\_HOME variable" 기능이 강조 표시된 Java 21 설치기](/assets/players/installing-java/windows-wizard-screenshot.png)
+![Java 21 installer with "Set JAVA_HOME variable" and "JavaSoft (Oracle) registry keys" highlighted](/assets/players/installing-java/windows-wizard-screenshot.png)
 
-기능을 모두 선택했다면, `Next`를 클릭하여 설치를 재개할 수 있습니다.
+Once you've done that, you can click `Next` and continue with the installation.
 
-## 4. Java 21이 올바르게 설치되었는지 확인하기 {#4-verify-that-java-is-installed}
+::: warning
 
-설치를 완료했다면, "다시" 명령 프롬프트를 열고 `java -version`을 입력하여 Java 21이 올바르게 설치되었는지 확인할 수 있습니다.
+Windows won't always tell other programs that Java is installed until you restart your computer.
 
-명령어가 성공적으로 실행되었다면, 아래와 같이 Java 버전이 표시된 것을 확인할 수 있을 것입니다:
+**Make sure to restart your computer before continuing!**
+
+:::
+
+## 4. Verify That Java 21 Is Installed {#4-verify-that-java-is-installed}
+
+Once the installation is complete, you can verify that Java 21 is installed by opening the command prompt again and typing `java -version`.
+
+If the command runs successfully, you will see something like shown before, where the Java version is displayed:
 
 !["java -version"이 입력된 명령 프롬프트](/assets/players/installing-java/windows-java-version.png)
 
-문제가 발생했다면, 자유롭게 [Fabric Discord (영어)](https://discord.gg/v6v4pMv)의 `#player-support` 채널에서 도움을 요청할 수 있습니다.
+If you encounter any issues, feel free to ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.

@@ -20,10 +20,12 @@ authors:
 - `depends`: Mod が依存する Mod の ID のリスト。
 - `mixins`: Mod が提供する Mixin 構成ファイルのリスト。
 
-以下に `fabric.mod.json` ファイルの例を示します。これは、このドキュメント上のサンプルプロジェクトで使われる `fabric.mod.json` ファイルです。
+You can see an example `fabric.mod.json` file below - this is the `fabric.mod.json` file for the mod that powers this documentation site.
 
-:::details サンプルプロジェクト `fabric.mod.json`
+:::details `fabric.mod.json` of the Example Mod
+
 @[code lang=json](@/reference/latest/src/main/resources/fabric.mod.json)
+
 :::
 
 ## エントリポイント {#entrypoints}
@@ -47,7 +49,7 @@ authors:
 
 また、`fabric.mod.json` ファイルや Mod が使用する Mixin 構成ファイルが配置される場所でもあります。
 
-リソースは、リソースパックの構造に従って格納されます。例えば、ブロックのテクスチャは `assets/example-mod/textures/block/block.png` に格納されます。
+Assets are stored in a structure that mirrors the structure of resource packs - for example, a texture for a block would be stored in `assets/example-mod/textures/block/block.png`.
 
 ## `src/client/resources` {#src-client-resources}
 

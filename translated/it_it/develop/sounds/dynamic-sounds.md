@@ -5,240 +5,265 @@ authors:
   - JR1811
 ---
 
-:::info PREREQUISITI
-Questa pagina è basata sulle pagine [Riprodurre Suoni](../sounds/using-sounds) e [Creare Suoni Personalizzati](../sounds/custom)!
+<!---->
+
+:::info PREREQUISITES
+
+This page builds on top of the [Playing Sounds](../sounds/using-sounds) and the [Creating Custom Sounds](../sounds/custom) pages!
+
 :::
 
-## Problemi con i `SoundEvents` {#problems-with-soundevents}
+## Problems with `SoundEvents` {#problems-with-soundevents}
 
-Come abbiamo imparato nella pagina [Usare i Suoni](../sounds/using-sounds), è preferibile usare i `SoundEvent` sul lato logico server, anche se è un po' controintuitivo. Dopo tutto, è il client che deve gestire il suono, trasmesso alle tue cuffie, no?
+As we have learned in the [Using Sounds](../sounds/using-sounds) page, it is preferable to use `SoundEvent`s on a logical server side, even if it is a bit counterintuitive. After all, a client needs to handle the sound, which is transmitted to your headphones, right?
 
-Questo modo di pensare è corretto. Tecnicamente è il lato client che dovrebbe gestire l'audio. Tuttavia, per la semplice riproduzione di un `SoundEvent`, il lato server ha preparato un passo enorme che potrebbe non essere ovvio a prima vista. Quali client dovrebbero poter sentire quel suono?
+This way of thinking is correct. Technically the client side needs to handle the audio. However, for simple `SoundEvent` playing, the server side prepared a big step in between which might not be obvious at first glance. Which clients should be able to hear that sound?
 
-Usare il suono sul lato logico server risolverà il problema della trasmissione dei `SoundEvent`. Per farla semplice, a ogni client (`ClientPlayerEntity`) nel raggio tracciato viene inviato un pacchetto di rete per riprodurre un certo suono specifico. L'evento audio viene praticamente trasmesso dal lato logico server, a ogni client partecipante, senza che tu te ne debba preoccupare. Il suono è riprodotto una volta sola, con i valori di volume e tono specificati.
+Using the sound on the logical server side will solve the issue of broadcasting `SoundEvent`s. To put it simply, every client (`LocalPlayer`) in tracking range, gets sent a network packet to play this specific sound. The sound event is basically broadcasted from the logical server side, to every participating client, without you having to think about it at all. The sound is played once, with the specified volume and pitch values.
 
-Ma, e se questo non bastasse? E se il suono dovesse essere riprodotto in loop? E se dovesse cambiare il volume e il tono in maniera dinamica durante la riproduzione? Tutto questo magari in base a valori provenienti da cose come `Entities` o `BlockEntities`?
+But what if this is not enough? What if the sound needs to loop, change volume and pitch dynamically while playing and all that based on values which come from things like `Entities` or `BlockEntities`?
 
-La semplice strategia di usare i `SoundEvent` sul lato logico server non basta in questo caso.
+The simple way of using the `SoundEvent` on the logical server side is not enough for this use case.
 
-## Preparare il File Audio {#preparing-the-audio-file}
+## Preparing the Audio File {#preparing-the-audio-file}
 
-Creeremo un nuovo audio che andrà in **loop** per un altro `SoundEvent`. Se riesci a trovare un file audio che già va in loop perfettamente, ti basta seguire i passaggi da [Creare Suoni Personalizzati](../sounds/custom). Se il suono non va ancora in loop perfettamente, dobbiamo prepararlo affinché faccia ciò.
+We are going to create a new **looping** audio for another `SoundEvent`. If you can find an audio file which is looping seamlessly already, you can just follow the steps from [Creating Custom Sounds](../sounds/custom). If the sound is not looping perfectly yet, we will have to prepare it for that.
 
-Ripeto, la maggior parte delle DAW (Workstation Audio Digitali) moderne dovrebbero essere in grado di fare questo, ma preferisco usare [Reaper](https://www.reaper.fm/) se la modifica dell'audio è un po' più avanzata.
+Again, most modern DAWs (Digital Audio Workstation Software) should be capable of this, but I like to use [Reaper](https://www.reaper.fm/) if the audio editing is a bit more involved.
 
-### Configurazione {#set-up}
+### Set Up {#set-up}
 
-Il [suono da cui partiamo](https://freesound.org/people/el-bee/sounds/644881/) proverrà da un motore.
+Our [starting sound](https://freesound.org/people/el-bee/sounds/644881/) will be coming from an engine.
 
 <audio controls>
     <source src="/assets/develop/sounds/dynamic-sounds/step_0.wav" type="audio/wav">
     
-    Il tuo browser non supporta l'elemento audio.
+    Your browser does not support the audio element.
 </audio>
 
-Carichiamo il file nella DAW che abbiamo scelto.
+Let's load the file into our DAW of choice.
 
-![Reaper in cui si è caricato il file audio](/assets/develop/sounds/dynamic-sounds/step_0.png)
+![Reaper loaded with the audio file](/assets/develop/sounds/dynamic-sounds/step_0.png)
 
-Possiamo sentire e notare che il motore viene avviato all'inizio e interrotto alla fine, il che non è ottimo per i suoni in loop. Tagliamo via quelle parti e regoliamo le maniglie della selezione del tempo perché corrispondano con la nuova lunghezza. Attiva anche la modalità `Toggle Repeat` così che l'audio vada in loop mentre lo regoliamo.
+We can hear and see, that the engine gets started in the beginning and stopped at the end which is not great for looping sounds. Let's cut those out and adjust the time selection handles to match the new length. Also enable the `Toggle Repeat` mode to let the audio loop, while we adjust it.
 
-![File audio tagliato](/assets/develop/sounds/dynamic-sounds/step_1.png)
+![Trimmed audio file](/assets/develop/sounds/dynamic-sounds/step_1.png)
 
-### Rimuovere Elementi Audio Dirompenti {#removing-disruptive-audio-elements}
+### Removing Disruptive Audio Elements {#removing-disruptive-audio-elements}
 
-Se ascoltiamo con attenzione, c'è un segnale acustico sullo sfondo, che potrebbe provenire dalla macchina. Penso che questo non suonerebbe bene nel gioco, per cui proviamo a toglierlo.
+If we listen closely, there is a beeping noise in the background, which could've come from the machine. I think, that this wouldn't sound great in-game, so lets try to remove it.
 
-È un suono costante, la cui frequenza rimane al di sopra della lunghezza dell'audio. Per questo un semplice filtro EQ dovrebbe essere sufficiente per filtrarlo.
+It is a constant sound which keeps its frequency over the length of the audio. So a simple EQ filter should be enough to filter it out.
 
-Reaper include già un filtro EQ chiamato "ReaEQ". Questo potrebbe essere localizzato in altri posti o avere nomi diversi in altre DAW, ma l'utilizzo dell'EQ è uno standard nella maggior parte delle DAW odierne.
+Reaper comes with an EQ filter equipped already, called "ReaEQ". This might be located somewhere else and named differently in other DAWs but using EQ is standard in most DAWs nowadays.
 
-Se sei sicuro che la tua DAW non disponga di un filtro EQ, cerca alternative VST gratuite online che tu possa installare sulla DAW di tua scelta.
+If you are sure that your DAW doesn't have an EQ filter available, check for free VST alternatives online which you may be able to install in your DAW of choice.
 
-In Reaper usa la Finestra Effetti per aggiungere l'effetto audio "ReaEQ", o altri EQ.
+In Reaper use the Effects Window to add the "ReaEQ" audio effect, or any other EQ.
 
-![Aggiungere un filtro EQ](/assets/develop/sounds/dynamic-sounds/step_2.png)
+![Adding an EQ filter](/assets/develop/sounds/dynamic-sounds/step_2.png)
 
-Riproducendo adesso l'audio, tenendo la finestra del filtro EQ aperta, il filtro EQ mostrerà l'audio in entrata sul display.
-Lì si notano tante protuberanze.
+If we play the audio now, while keeping the EQ filter window open, the EQ filter will show the incoming audio in its display.
+We can see many bumps there.
 
-![Identificazione del problema](/assets/develop/sounds/dynamic-sounds/step_3.png)
+![Identifying the problem](/assets/develop/sounds/dynamic-sounds/step_3.png)
 
-Se non sei un ingegnere audio allenato, questa parte è abbastanza sperimentazione, andando a tentativi. C'è una protuberanza piuttosto notevole tra i nodi 2 e 3. Muoviamo i nodi in modo che si abbassi la frequenza solo per quella parte.
+If you are not a trained audio engineer, this part is mostly about experimenting and "trial and error". There is a pretty harsh bump between node 2 and 3. Let's move the nodes so, that we lower the frequency only for that part.
 
-![Frequenza problematica abbassata](/assets/develop/sounds/dynamic-sounds/step_4.png)
+![Lowered the bad frequency](/assets/develop/sounds/dynamic-sounds/step_4.png)
 
-Inoltre altri effetti si possono ottenere con un semplice filtro EQ. Per esempio, tagliare le frequenze alte e/o basse può dare l'impressione di suoni trasmessi via audio.
+Also, other effects can be achieved with a simple EQ filter. For example, cutting high and/or low frequencies can give the impression of radio transmitted sounds.
 
-Puoi anche sovrapporre più file audio, cambiare il tono, aggiungere del riverbero o usare effetti di suono più elaborati come "bit-crusher". La progettazione di suoni può essere divertente, soprattutto se trovi delle belle variazioni di suono dei tuoi audio per caso. La sperimentazione è la chiave, e magari alla fine il tuo suono sarà meglio di come è cominciato.
+You can also layer more audio files, change the pitch, add some reverb or use more elaborate sound effects like "bit-crusher". Sound design can be fun, especially if you find good sounding variations of your audio by accident. Experimenting is key and maybe your sound might end up even better than before.
 
-Andremo avanti con il filtro EQ soltanto, poiché l'abbiamo usato per togliere la frequenza problematica.
+We will only continue with the EQ filter, which we used to cut out the problematic frequency.
 
-### Paragone {#comparison}
+### Comparison {#comparison}
 
-Confrontiamo il file originale con la versione ritoccata.
+Let's compare the original file with the cleaned up version.
 
-Nel suono originale puoi distinguere un segnale acustico proveniente forse da un elemento elettrico del motore.
+You can hear a distinct humming and beeping sound from maybe an electrical element of the engine, in the original sound.
 
 <audio controls>
     <source src="/assets/develop/sounds/dynamic-sounds/step_5_first.ogg" type="audio/ogg">
     
-    Il tuo browser non supporta l'elemento audio.
+    Your browser does not support the audio element.
 </audio>
 
-Con il filtro EQ siamo riusciti a toglierlo quasi del tutto. Sicuramente è più piacevole da sentire.
+With an EQ filter we were able to remove it almost completely. It is definitely more pleasant to listen to.
 
 <audio controls>
     <source src="/assets/develop/sounds/dynamic-sounds/step_5_second.ogg" type="audio/ogg">
     
-    Il tuo browser non supporta l'elemento audio.
+    Your browser does not support the audio element.
 </audio>
 
-### Fare in Modo che Vada in Loop {#making-it-loop}
+### Making It Loop {#making-it-loop}
 
-Se lasciassimo che il suono si riproduca fino alla fine e ricominci dall'inizio, possiamo chiaramente sentire quando avviene la transizione. L'obiettivo è liberarci di questo applicando una transizione fluida.
+If we let the sound play to the end and let it start from the beginning again, we can clearly hear the transition happening. The goal is to get rid of this by applying a smooth transition.
 
-Inizia tagliando via una parte dal fondo, grande quanto vuoi che sia lunga la transizione, e posizionala all'inizio di una nuova traccia audio.
-In Reaper puoi dividere l'audio semplicemente muovendo il cursore dalla posizione del taglio e premendo <kbd>S</kbd>.
+Start by cutting a piece from the end, which is as big as you want the transition to be, and place it on the beginning of a new audio track.
+In Reaper, you can split the audio by simply moving the cursor to the position of the cut and pressing <kbd>S</kbd>.
 
-![Tagliare il fondo e muoverlo ad una nuova traccia](/assets/develop/sounds/dynamic-sounds/step_6.png)
+![Cut the end and move it to a new track](/assets/develop/sounds/dynamic-sounds/step_6.png)
 
-Potresti dover copiare l'effetto audio EQ della prima traccia audio anche sulla seconda.
+You may have to copy the EQ audio effect of the first audio track over to the second one too.
 
-Ora lascia che la parte in fondo della nuova traccia si dissolva in chiusura, e che l'inizio della prima traccia audio si dissolva in apertura.
+Now let the end piece of the new track fade out and let the start of the first audio track fade in.
 
-![Loop con effetti di dissolvenza sulle tracce audio](/assets/develop/sounds/dynamic-sounds/step_7.png)
+![Looping with fading audio tracks](/assets/develop/sounds/dynamic-sounds/step_7.png)
 
-### Esportazione {#exporting}
+### Exporting {#exporting}
 
-Esporta l'audio con le due tracce, ma con un solo canale audio (Mono) e crea un nuovo `SoundEvent` per quel file `.ogg` nella tua mod.
-Se non sei certo di come farlo, controlla la pagina [Creare Suoni Personalizzati](../sounds/custom).
+Export the audio with the two audio tracks, but with only one audio channel (Mono) and create a new `SoundEvent` for that `.ogg` file in your mod.
+If you are not sure how to do that, take a look at the [Creating Custom Sounds](../sounds/custom) page.
 
-Ciò che abbiamo chiamato `ENGINE_LOOP` è il suono in loop del motore completato per il `SoundEvent`.
+This is now the finished looping engine audio for the `SoundEvent` called `ENGINE_LOOP`.
 
 <audio controls>
     <source src="/assets/develop/sounds/dynamic-sounds/step_8.ogg" type="audio/ogg">
     
-    Il tuo browser non supporta l'elemento audio.
+    Your browser does not support the audio element.
 </audio>
 
-## Usare una `SoundInstance` {#using-a-soundinstance}
+## Using a `SoundInstance` {#using-a-soundinstance}
 
-Per riprodurre suoni sul lato client, è necessaria una `SoundInstance`. Tuttavia usano comunque un `SoundEvent`.
+To play sounds on the client side, a `SoundInstance` is needed. They still make use of `SoundEvent` though.
 
-Se vuoi solo riprodurre qualcosa come un clic su un elemento dell'interfaccia grafica, esiste già la classe `PositionedSoundInstance`.
+If you only want to play something like a click on a UI element, there is already the existing `SimpleSoundInstance` class.
 
-Tieni a mente che questo sarà riprodotto solo sul client che ha eseguito questa parte del codice in particolare.
+Keep in mind that this will only be played on the specific client, which executed this part of the code.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/ExampleModDynamicSound.java)
 
-:::warning
-Si prega di notare che la classe `AbstractSoundInstance`, da cui le `SoundInstance` ereditano, ha l'annotazione `@Environment(EnvType.CLIENT)`.
+::: warning
 
-Questo significa che questa classe (e tutte le sue sottoclassi) saranno disponibili solo lato client.
+Please note that in the `AbstractSoundInstance` class, which `SoundInstance`s inherit from, has the `@Environment(EnvType.CLIENT)` annotation.
 
-Se provassi ad usarla in un contesto logico lato server, potresti non notare inizialmente il problema in singleplayer, ma un server in ambiente Multiplayer crasherà, poiché non riuscirà a trovare quella parte del codice.
+This means that this class (and all its subclasses) will only be available to the client side.
 
-Se trovi difficoltà con queste questioni, si consiglia di creare la tua mod dal [Generatore di Mod Modello online](https://fabricmc.net/develop/template/)
-attivando l'opzione `Split client and common sources`.
+If you try using that in a logical server side context, you may not notice the issue in Single player at first,
+but a server in a Multiplayer environment will crash, since it won't be able to find that part of the code at all.
+
+If you struggle with those issues, it is recommended to create your mod from the [Online template generator](https://fabricmc.net/develop/template/)
+with the `Split client and common sources` option turned on.
+
 :::
 
-Una `SoundInstance` può essere molto più potente rispetto a una semplice riproduzione di un suono una volta.
+A `SoundInstance` can be more powerful than just playing sounds once.
 
-Dai un'occhiata alla classe `AbstractSoundInstance` e a quali tipi di valori può tenere in considerazione.
-A parte le solite variabili di volume e tono, memorizza anche le coordinate XYZ, e un'opzione perché si ripeta dopo aver finito il `SoundEvent`.
+Check out the `AbstractSoundInstance` class and what kind of values it can keep track of.
+Besides the usual volume and pitch variables, it also holds XYZ coordinates and if it should repeat itself after finishing the `SoundEvent`.
 
-Poi, dando un'occhiata alla sua sottoclasse `MovingSoundInstance`, viene anche introdotta l'interfaccia `TickableSoundInstance`, che aggiunge funzionalità legate ai tick alla `SoundInstance`.
+Then taking a look at its subclass, `AbstractTickableSoundInstance` we get the `TickableSoundInstance` interface introduced too, which adds ticking functionality to the `SoundInstance`.
 
-Per cui per sfruttare queste utilità, basta creare una nuova classe per la tua `SoundInstance` personalizzata ed estendere `MovingSoundInstance`.
+So to make use of those utilities, simply create a new class for your custom `SoundInstance` and extend from `MovingSoundInstance`.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/sound/instance/CustomSoundInstance.java)
 
-Usare la tua `Entity` o il tuo `BlockEntity` personalizzati invece dell'istanza basilare `LivingEntity` può darti ancora più controllo, per esempio nel metodo `tick()` basato su metodi accessori, ma non devi per forza far riferimento ad una fonte di suono del genere. Invece di ciò puoi anche accedere alla `BlockPos` da altrove, o addirittura impostarla manualmente una volta sola nel costruttore soltanto.
+Using your custom `Entity` or `BlockEntity` instead of that basic `LivingEntity` instance can give you even more control e.g. in the `tick()` method based
+on accessor methods, but you don't necessarily need a reference to a sound source like that. Instead, you could also access a `BlockPos` from somewhere else
+or even set it by hand once in the constructor only.
 
-Tieni solo a mente che tutti gli oggetti a cui fai riferimento nella `SoundInstance` sono le versioni lato client.
-In certe circostanze specifiche, le proprietà di un'entità dal lato logico server possono differire dalla controparte lato client.
-Se noti che i tuoi valori non si allineano, assicurati che siano sincronizzati o con i `TrackedData` dell'entità, o con pacchetti S2C (da server a client) di `BlockEntity` o con pacchetti di rete S2C completamente personalizzati.
+Just keep in mind that all the referenced objects in the `SoundInstance` are the versions from the client side.
+In specific situations, a logical server side entity's properties can differ from its client side counterpart.
+If you notice that your values don't line up, make sure that your values are synchronized
+either with entity's `EntityDataAccessor`, `BlockEntity` S2C packets or complete custom S2C network packets.
 
-Dopo aver finito di creare la tua `SoundInstance` personalizzata, è tutto pronto per usarla ovunque, a condizione che venga eseguita lato client con il gestore di suoni.
-Allo stesso modo, puoi anche fermare la `SoundInstance` personalizzata manualmente, se necessario.
+After you have finished creating your custom `SoundInstance`, it's ready to be used anywhere as long as it's been executed on the client side using the sound manager.
+In the same way, you can also stop the custom `SoundInstance` manually, if necessary.
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/ExampleModDynamicSound.java)
 
-Il loop di suono sarà adesso riprodotto solo sul client che ha eseguito quella `SoundInstance`. In questo caso, il suono seguirà la `ClientPlayerEntity` stessa.
+The sound loop will be played now only for the client, which ran that SoundInstance. In this case, the sound will follow the `LocalPlayer` itself.
 
-Così abbiamo concluso la spiegazione di come creare e usare una semplice `SoundInstance` personalizzata.
+This concludes the explanation of creating and using a simple custom `SoundInstance`.
 
-## Istanze di Suoni Avanzate {#advanced-sound-instances}
+## Advanced Sound Instances {#advanced-sound-instances}
 
-:::warning
-Il contenuto seguente tratta di un argomento avanzato.
+::: warning
 
-Da questo punto in poi è necessaria una conoscenza solida di Java, programmazione a oggetti, tipi generici e sistemi di callback.
+The following content covers an advanced topic.
 
-Conoscere anche le `Entities`, i `BlockEntities` e il networking personalizzato aiuterà anche molto nella comprensione di questi casi e delle applicazioni pratiche dei suoni avanzati.
+At this point you should have a solid grasp on Java, object-oriented programming, generics and callback systems.
+
+Having knowledge on `Entities`, `BlockEntities` and custom networking will also help a lot in understanding the use case and the applications of advanced sounds.
+
 :::
 
-Per mostrare un esempio di come si possano creare sistemi di `SoundInstance` più elaborati, aggiungeremo funzionalità ulteriori, astrazioni e utilità per rendere il lavoro con suoni del genere in contesti più larghi più semplice, dinamico e flessibile.
+To show an example of how more elaborate `SoundInstance` systems can be created, we will add extra functionality, abstractions
+and utilities to make working with such sounds in a bigger scope, easier, more dynamic and flexible.
 
-### Teoria {#theory}
+### Theory {#theory}
 
-Ragioniamo un po' riguardo al nostro obiettivo con la `SoundInstance`.
+Let's think about what our goal with the `SoundInstance` is.
 
-- Il suono deve rimanere in loop fintanto che il `EngineBlockEntity` personalizzato a esso collegato è in esecuzione
-- La `SoundInstance` dovrebbe muoversi, seguendo la posizione del `EngineBlockEntity` personalizzato _(La `BlockEntity` non si muoverà, per cui questo sarebbe più utile con le `Entities`)_
-- Ci servono transizioni fluide. L'accensione e lo spegnimento non dovrebbero mai essere istantanei.
-- Cambiare il volume e il tono in base a fattori esterni (per esempio della fonte del suono)
+- The sound should loop as long as the linked custom `EngineBlockEntity` is running
+- The `SoundInstance` should move around, following its custom `EngineBlockEntity`'s position _(The `BlockEntity` won't move, so this might be more useful on `Entities`)_
+- We need smooth transitions. Turning it on or off should almost never be instant.
+- Change volume and pitch based on external factors (e.g. from the source of the sound)
 
-Insomma, dobbiamo tener traccia di un'istanza di un `BlockEntity` personalizzato, regolare i valori di volume e tono mentre la `SoundInstance` è in esecuzione in base a valori provenienti da quel `BlockEntity` personalizzato, e implementare "Stati di Transizione".
+To summarize, we need to keep track of an instance of a custom `BlockEntity`,
+adjust volume and pitch values while the `SoundInstance` is running based on values from that custom `BlockEntity` and implement "Transition States".
 
-Se hai intenzione di creare più `SoundInstance` diverse, che si comportino in maniere diverse, consiglierei di creare una nuova classe astratta `AbstractDynamicSoundInstance`, che implementi il comportamento predefinito e lasciare che le classi `SoundInstance` la estendano.
+If you plan on making several different `SoundInstances`, which behave in different ways, I would recommend creating a new abstract `AbstractDynamicSoundInstance` class,
+which implements the default behavior and let the actual custom `SoundInstance` classes extend from it.
 
-Se invece ne userai solo una, puoi saltare la creazione della superclasse astratta, e implementare invece quella funzionalità direttamente nella tua classe `SoundInstance` personalizzata.
+If you just plan on using a single one, you can skip the abstract super class, and instead implement that functionality in your custom `SoundInstance` class directly.
 
-Sarebbe anche una buona idea avere una posizione centralizzata dove le `SoundInstance` vengono tracciate, riprodotte e interrotte. In altre parole deve gestire i segnali in ingresso, come quelli provenienti da pacchetti di rete S2C personalizzati, elencare tutte le istanze in esecuzione e gestire i casi particolari, per esempio quali suoni è permesso riprodurre allo stesso tempo e quali suoni disattiverebbero potenzialmente altri suoni se attivati.
-Per fare ciò si può creare una nuova classe `DynamicSoundManager`, per interagire con questo sistema sonoro facilmente.
+In addition it will be a good idea to have a centralized place, where the `SoundInstance`'s are being tracked, played and stopped. This means that it needs to handle incoming
+signals, e.g. from custom S2C Network Packets, list all currently running instances and handle special cases, for example which sounds are allowed to play at the same time and which sounds
+could potentially disable other sounds upon activation.
+For that a new `DynamicSoundManager` class can be created, to easily interact with this sound system.
 
-Tutto sommato il nostro sistema sonoro potrebbe avere questo aspetto, una volta completato.
+Overall our sound system might look like this, when we are done.
 
-![Struttura del Sistema Sonoro Personalizzato](/assets/develop/sounds/dynamic-sounds/custom-dynamic-sound-handling.jpg)
+![Structure of the custom Sound System](/assets/develop/sounds/dynamic-sounds/custom-dynamic-sound-handling.jpg)
 
-:::info
-Tutti questi enum, interfacce e classi saranno create da zero. Adatta il sistema e le utilità alla tua situazione specifica.
-Questo è solo un esempio su come ci si può approcciare ad argomenti del genere.
+::: info
+
+All of those enums, interfaces and classes will be newly created. Adjust the system and utilities to your specific use case as you see fit.
+This is only an example of how you can approach such topics.
+
 :::
 
-### Interfaccia `DynamicSoundSource` {#dynamicsoundsource-interface}
+### `DynamicSoundSource` Interface {#dynamicsoundsource-interface}
 
-Se scegli di creare una nuova classe `AbstractDynamicSoundInstance` personalizzata e più modulare, da usare come superclasse, potresti voler fare riferimento non solo ad un tipo singolo di `Entity` ma a più tipi diversi, o anche ad un `BlockEntity`.
+If you choose to create a new, more modular, custom `AbstractDynamicSoundInstance` class as a super class,
+you may want to reference not only a single type of `Entity` but different ones, or even a `BlockEntity` too.
 
-In quel caso la chiave è sfruttare l'astrazione.
-Invece di fare riferimento, per esempio, direttamente a un `BlockEntity` personalizzato, tener solo conto di un'interfaccia che fornisce i dati risolve quel problema.
+In that case, making use of abstraction is the key.
+Instead of referencing e.g. a custom `BlockEntity` directly, only keeping track of an interface, which provides the data, solves that problem.
 
-D'ora in poi useremo un'interfaccia personalizzata chiamata `DynamicSoundSource`. È da implementare in tutte le classi che vogliono sfruttare quelle funzionalità di suoni dinamici, come il tuo `BlockEntity` personalizzato, le entità o addirittura, usando Mixin, su classi preesistenti come `ZombieEntity`. In pratica contiene solo i dati necessari della fonte di suono.
+Going forward we will make use of a custom interface called `DynamicSoundSource`. It is implemented in all classes which want to make use of that dynamic sound functionality,
+like your custom `BlockEntity`, Entities or even, using Mixins, on already existing classes, like `Zombie`. It basically represents only the necessary data of the sound source.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/sound/DynamicSoundSource.java)
 
-Dopo aver creato questa interfaccia, assicurati d'implementarla anche nelle classi ove necessario.
+After creating this interface, make sure to implement it in the necessary classes too.
 
-:::info
-Questa è un'utilità che potrebbe essere usata sia lato client sia lato logico server.
+::: info
 
-Per cui questa interfaccia dovrebbe essere memorizzata nei package comuni, non in quelli esclusivi del client, se usi l'opzione "split sources".
+This is a utility, which may be used on both the client and the logical server side.
+
+So this interface should be stored in the common packages instead of the client only packages, if you make use of the
+"split sources" option.
+
 :::
 
-### Enum `TransitionState` {#transitionstate-enum}
+### `TransitionState` Enum {#transitionstate-enum}
 
-Come detto prima, puoi interrompere la `SoundInstance` con il `SoundManager` del client, ma questo farà in modo che la `SoundInstance` si zittisca immediatamente.
-Il nostro obiettivo non è, quando si riceve un segnale di stop, di interrompere il suono ma di eseguire una fase di chiusura del suo "Stato di Transizione". Solo dopo che la fase di chiusura è stata completata, si deve interrompere la `SoundInstance` personalizzata.
+As mentioned earlier, you could stop running `SoundInstance`s with the client's `SoundManager`, but this will cause the SoundInstance to go silent instantly.
+Our goal is, when a stopping signal comes in, to not stop the sound but to execute an ending phase of its "Transition State". Only after the ending phase is finished
+the custom `SoundInstance` should be stopped.
 
-Uno `TransitionState` è un enum appena creato, che contiene tre valori. Essi verranno usati per tener traccia della fase in cui si trova il suono.
+A `TransitionState` is a newly created enum, which contains three values. They will be used to keep track on what phase the sound should be in.
 
-- Fase `STARTING`: iniziando dal silenzio, il volume del suono aumenta lentamente
-- Fase `RUNNING`: il suono viene riprodotto normalmente
-- Fase `ENDING`: iniziando dal volume originario esso diminuisce lentamente fino al silenzio
+- `STARTING` Phase: sound starts silent, but slowly increases in volume
+- `RUNNING` Phase: sound is running normally
+- `ENDING` Phase: sound starts at the original volume and slowly decreases until it is silent
 
-Tecnicamente basterebbe un semplice enum con le fasi.
+Technically a simple enum with the phases can be enough.
 
 ```java
 public enum TransitionState {
@@ -246,105 +271,118 @@ public enum TransitionState {
 }
 ```
 
-Ma quando quei valori vengono inviati tramite rete, potresti voler definire un `Identifier` per esse o anche aggiungere altri valori personalizzati.
+But when those values are sent over the network you might want to define an `Identifier` for them or even add other custom values.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/sound/TransitionState.java)
 
-:::info
-Ripeto, se stai usando le "split sources" devi ragionare su dove si posiziona questo enum.
-Tecnicamente, solo le `SoundInstance` personalizzate, che sono solo disponibili lato client, useranno quei valori dell'enum.
+::: info
 
-Ma se questo enum venisse usato altrove, per esempio in pacchetti di rete personalizzati, potresti anche dover mettere l'enum nei package comuni invece dei package esclusivi del client.
+Again, if you make use of "split sources" you need to think about where you will be using this enum.
+Technically, only the custom `SoundInstance`s which are only available on the client side, will use those enum values.
+
+But if this enum is used anywhere else, e.g. in custom network packets, you may have to put this enum also into the common packages
+instead of the client only packages.
+
 :::
 
-### Interfaccia `SoundInstanceCallback` {#soundinstancecallback-interface}
+### `SoundInstanceCallback` Interface {#soundinstancecallback-interface}
 
-Questa interfaccia viene usata come callback. Per ora ci basta un metodo `onFinished`, ma puoi anche aggiungere i tuoi metodi personalizzati se dovessi inviare anche altri segnali dall'oggetto `SoundInstance`.
+This interface is used as a callback. For now, we only need a `onFinished` method, but you can add your own methods if you need to send
+other signals from the `SoundInstance` object too.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/sound/instance/SoundInstanceCallback.java)
 
-Implementa quest'interfaccia in qualsiasi classe che deve poter gestire segnali in ingresso, per esempio la `AbstractDynamicSoundInstance` che presto creeremo, e aggiungi le funzionalità nella `SoundInstance` personalizzata stessa.
+Implement this interface on any class, which should be able to handle the incoming signals, for example the `AbstractDynamicSoundInstance`, which we will create soon
+and create the functionality in the custom `SoundInstance` itself.
 
-### Classe `AbstractDynamicSoundInstance` {#abstractdynamicsoundinstance-class}
+### `AbstractDynamicSoundInstance` Class {#abstractdynamicsoundinstance-class}
 
-Finalmente cominciamo a lavorare sul cuore del sistema di `SoundInstance` dinamiche. `AbstractDynamicSoundInstance` è la classe `abstract` che dobbiamo creare.
-Essa implementa le funzioni e utilità predefinite caratteristiche della nostra `SoundInstance` personalizzata, che da essa erediterà.
+Let's finally get started on the core of the dynamic `SoundInstance`s system. The `AbstractDynamicSoundInstance` is a newly created `abstract` class.
+It implements the default defining features and utilities of our custom `SoundInstances`, which will inherit from it.
 
-Possiamo considerare la `CustomSoundInstance` di [poco fa](#using-a-soundinstance) e migliorarla.
-Invece della `LivingEntity` faremo ora riferimento alla `DynamicSoundSource`.
-Inoltre definiremo altre proprietà.
+We can take the `CustomSoundInstance` from [earlier](#using-a-soundinstance) and improve on that.
+Instead of the `LivingEntity` we will now reference our `DynamicSoundSource`.
+In addition, we will define more properties.
 
-- `TransitionState` per tener conto della fase attuale
-- Durate in tick di quanto lunghe sono le fasi d'inizio e di fine
-- Valori minimi e massimi per volume e tono
-- Valore booleano per indicare se questa istanza è terminata e può essere ripulita
-- Gestori dei tick per tener traccia del progresso corrente del suono
-- Un callback che restituisce un segnale finale al `DynamicSoundManager` per la ripulizia, quando la `SoundInstance` è terminata
+- `TransitionState` to keep track of the current phase
+- tick durations of how long the start and the end phases should last
+- minimum and maximum values for volume and pitch
+- boolean value to notify if this instance has been finished and can get cleaned up
+- tick holders to keep track of the current sound's progress.
+- a callback which sends a signal back to the `DynamicSoundManager` for the final clean up, when the `SoundInstance` is actually finished
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/sound/AbstractDynamicSoundInstance.java)
 
-Poi configuriamo i valori iniziali predefiniti per la `SoundInstance` personalizzata nel costruttore della classe astratta.
+Then set up the default starting values for the custom `SoundInstance` in the constructor of the abstract class.
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/sound/AbstractDynamicSoundInstance.java)
 
-Dopo aver finito il costruttore, devi permettere alla `SoundInstance` di essere riprodotta.
+After the constructor is finished, you need to allow the `SoundInstance` to be able to play.
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/client/java/com/example/docs/sound/AbstractDynamicSoundInstance.java)
 
-Ecco qui la parte fondamentale di questa `SoundInstance` dinamica. In base al tick corrente dell'istanza, può applicare vari valori e comportamenti.
+Now comes the important part for this dynamic `SoundInstance`. Based on the current tick of the instance, it can apply different values and behaviors.
 
 @[code lang=java transcludeWith=:::4](@/reference/latest/src/client/java/com/example/docs/sound/AbstractDynamicSoundInstance.java)
 
-Come puoi notare, non abbiamo ancora applicato alcuna modulazione a volume e tono qui. Applichiamo solo il comportamento condiviso.
-Per cui, in questa classe `AbstractDynamicSoundInstance`, forniamo solo la struttura basilare e gli strumenti per le sottoclassi, e saranno queste a decidere il genere di modulazione che vogliono applicare.
+As you can see, we haven't applied the volume and pitch modulation here yet. We only apply the shared behavior.
+So in this `AbstractDynamicSoundInstance` class we only provide the basic structure and the tools for the
+subclasses, which can decide themselves, which kind of sound modulation they actually want to apply.
 
-Diamo un'occhiata ad alcuni esempi di strategie per quella modulazione del suono.
+So let's take a look at some examples of such sound modulation methods.
 
 @[code lang=java transcludeWith=:::5](@/reference/latest/src/client/java/com/example/docs/sound/AbstractDynamicSoundInstance.java)
 
-Come noti, valori normalizzati combinati con interpolazione lineare (lerp) permettodo di adattare i valori ai limiti sonori preferiti.
-Tieni a mente che, aggiungendo metodi multipli che modificano lo stesso valore, devi fare attenzione e regolare il modo in cui lavorano insieme tra loro.
+As you can see, normalized values in combination with linear interpolation (lerp) help out to shape the values to the preferred audio limits.
+Keep in mind that if you add multiple methods, which change the same value, you will need to observe and adjust how they work together with each other.
 
-Ora dobbiamo solo aggiungere il resto dei metodi di utilità, e abbiamo finito la classe `AbstractDynamicSoundInstance`.
+Now we just need to add the remaining utility methods, and we are done with the `AbstractDynamicSoundInstance` class.
 
 @[code lang=java transcludeWith=:::6](@/reference/latest/src/client/java/com/example/docs/sound/AbstractDynamicSoundInstance.java)
 
-### Esempio d'Implementazione di `SoundInstance` {#example-soundinstance-implementation}
+### Example `SoundInstance` Implementation {#example-soundinstance-implementation}
 
-Dando un'occhiata all'effettiva classe `SoundInstance` personalizzata, che estende l'`AbstractDynamicSoundInstance` appena creata, dobbiamo solo pensare a quali condizioni porterebbero all'interruzione del suono e a quale modulazione vogliamo applicare al suono.
+If we take a look at the actual custom `SoundInstance` class, which extends from the newly created `AbstractDynamicSoundInstance`, we only need to think about
+what conditions would bring the sound to a stop and what sound modulation we want to apply.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/sound/instance/EngineSoundInstance.java)
 
-### Classe `DynamicSoundManager` {#dynamicsoundmanager-class}
+### `DynamicSoundManager` Class {#dynamicsoundmanager-class}
 
-Abbiamo discusso [poco fa](#using-a-soundinstance) come si riproduce e interrompe una `SoundInstance`. Per ripulire, centralizzare e gestire quelle interazioni, puoi creare un tuo gestore di `SoundInstance` personalizzato basato su di esso.
+We discussed [earlier](#using-a-soundinstance) how to play and stop a `SoundInstance`. To clean up, centralize and manage those interactions, you can create your own
+`SoundInstance` handler, which builds on top of that.
 
-Questa nuova classe `DynamicSoundManager` gestirà le `SoundInstance` personalizzate, quindi anch'essa sarà solo disponibile lato client. Oltre a ciò, un client dovrebbe permettere l'esistenza solo di un'istanza di questa classe. Gestori multipli di suoni per un client solo non hanno molto senso, e complicano ulteriormente le interazioni.
-Usiamo quindi il ["Modello di Progettazione Singleton"](https://refactoring.guru/design-patterns/singleton/java/example).
+This new `DynamicSoundManager` class will manage the custom `SoundInstances` so it will also only be available to the client side. On top of that, a client should only ever allow one instance of this class to exist. Multiple sound managers for a single client wouldn't make much sense and complicate the interactions even more.
+So, let's use a ["Singleton Design Pattern"](https://refactoring.guru/design-patterns/singleton/java/example).
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/sound/DynamicSoundManager.java)
 
-Dopo aver creato la corretta struttura basilare, puoi aggiungere i metodi necessari per interagire con il sistema sonoro.
+After getting the basic structure right, you can add the methods, which are needed to interact with the sound system.
 
-- Riprodurre suoni
-- Interrompere suoni
-- Controllare se un suono è attualmente in riproduzione
+- playing sounds
+- stopping sounds
+- checking if a sound is currently playing
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/sound/DynamicSoundManager.java)
 
-Invece di avere solo una lista di tutte le `SoundInstance` attualmente in riproduzione, puoi anche tener traccia di quali fonti sonore stanno riproducendo quali suoni.
-Per esempio, un motore che riproduce due suoni di un motore allo stesso tempo non ha senso, però più motori, ciascuno dei quali riproduce i propri suoni, è un caso valido. Per semplicità abbiamo solo creato una `List<AbstractDynamicSoundInstance>`, ma spesso una `HashMap` di una `DynamicSoundSource` e una `AbstractDynamicSoundInstance` potrebbe essere una scelta migliore.
+Instead of only having a list of all currently playing `SoundInstances` you could also keep track of which sound sources are playing which sounds.
+For example, an engine having two engine sounds at the same time would make no sense, while multiple engines playing their respective engine sounds
+is a valid edge case. For the sake of simplicity we just created a `List<AbstractDynamicSoundInstance>` but in many cases a `HashMap` of `DynamicSoundSource` and a `AbstractDynamicSoundInstance` might be a better choice.
 
-### Usare il Sistema Sonoro Avanzato {#using-the-advanced-sound-system}
+### Using the Advanced Sound System {#using-the-advanced-sound-system}
 
-Per usare questo sistema sonoro, basta sfruttare i metodi di `DynamicSoundManager` o di `SoundInstance`. Usando `onStartedTrackingBy` e `onStoppedTrackingBy` delle entità, o anche solo networking S2C personalizzato, puoi ora avviare e interrompere le tue `SoundInstance` dinamiche personalizzate.
+To use this sound system, simply make use of either the `DynamicSoundManager` methods or the `SoundInstance` methods. Using `onStartedTrackingBy` and `onStoppedTrackingBy`
+from entities or just custom S2C networking, you can now start and stop your custom dynamic `SoundInstance`s.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/network/ReceiveS2C.java)
 
-Il prodotto finale può regolare il proprio volume in base alla fase di suono, per rendere fluide le transizioni, e cambiare il tono in base a un valore di stress che proviene dalla fonte sonora.
+The final product can adjust its volume based on the sound phase to smoothen out the transitions and change the pitch based on a stress value, which is
+coming from the sound source.
 
-<VideoPlayer src="/assets/develop/sounds/dynamic-sounds/engine-block-sound.webm">BlockEntity Motore con cambiamenti dinamici del suono</VideoPlayer>
+<VideoPlayer src="/assets/develop/sounds/dynamic-sounds/engine-block-sound.webm">Engine BlockEntity with dynamic sound changes</VideoPlayer>
 
-Potresti anche volendo aggiungere un altro valore alla tua fonte sonora, che tiene traccia di un valore "surriscaldamento", e fare in modo che una `SoundInstance` di un fischio/sibilo aumenti lentamente se il valore è sopra a 0; o ancora aggiungere una nuova interfaccia alla tua `SoundInstance` dinamica personalizzata, che assegni un valore di priorità ai tipi di suono, e permette di scegliere quale suono riprodurre se questi vanno in conflitto tra loro.
+You could add another value to your sound source, which keeps track of an "overheat" value and, in addition, let a hissing `SoundInstance` slowly fade in if the value is above 0
+or add a new interface to your custom dynamic `SoundInstance`s which assigns a priority value to the sound types, which helps out choosing which sound to play, if they
+collide with each other.
 
-Con il sistema corrente, puoi facilmente gestire più `SoundInstance` insieme e progettare l'audio secondo i tuoi bisogni.
+With the current system, you can easily handle multiple `SoundInstance`s at once and design the audio to your needs.

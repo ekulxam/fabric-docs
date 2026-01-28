@@ -9,7 +9,7 @@ authors:
 
 ## `fabric.mod.json` {#fabric-mod-json}
 
-`fabric.mod.json` 是向 Fabric Loader 描述你的模組的主要檔案。 這包含了模組的 ID、版本和前置等訊息。
+`fabric.mod.json` 是向 Fabric Loader 描述你的模組的主要檔案。 這包含了模組的 ID、版本和前置等訊息。 這包含了模組的 ID、版本和前置等訊息。
 
 `fabric.mod.json` 檔案中最重要的部分是:
 
@@ -20,21 +20,28 @@ authors:
 - `depends`: 你的模組所需要的前置模組。
 - `mixins`: 模組提供的 Mixin。
 
-下方是一個範例 `fabric.mod.json` 檔案 —— 這是此文檔網站的參考專案的 `fabric.mod.json` 檔案。
+You can see an example `fabric.mod.json` file below - this is the `fabric.mod.json` file for the mod that powers this documentation site.
 
-:::details 參考專案 `fabric.mod.json`
+:::details `fabric.mod.json` of the Example Mod
+
 @[code lang=json](@/reference/latest/src/main/resources/fabric.mod.json)
+
 :::
 
 ## Entrypoints {#entrypoints}
 
 如前所述，`fabric.mod.json` 檔案包含 —— 個名為 `entrypoints` 的欄位 - 這個欄位用來指定你的模組提供的進入點。
 
-模板模組生成器預設會創建一個 `main` 和一個 `client` 進入點 —— `main` 進入點用於共用的程式碼，而 `client` 進入點則用於客戶端特定的程式碼。 這些進入點會在遊戲啟動時分別被調用。
+預設情況下，模板模組生成 `main` 和 `client` 入口點：
 
-@[code lang=java transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
+- `main` 入口點用於通用程式碼，它包含在實作 `ModInitializer` 的類別中
+- `client` 入口點用於僅限於客戶端的程式碼，它包含在實作 `ClientModInitializer` 的類別中
+
+這些進入點會在遊戲啟動時分別被調用。
 
 上面是一個簡單的 `main` 進入點範例，在遊戲啟動時向控制台記錄一條訊息。
+
+@[code lang=java transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
 
 ## `src/main/resources` {#src-main-resources}
 
@@ -42,7 +49,7 @@ authors:
 
 它也是 `fabric.mod.json` 和模組使用的 Mixin 配置檔案存放的位置。
 
-資源檔案儲存在與資源包結構相似的結構中－例如，方塊的材質會存放在 `assets/example-mod/textures/block/block.png` 中。
+Assets are stored in a structure that mirrors the structure of resource packs - for example, a texture for a block would be stored in `assets/example-mod/textures/block/block.png`.
 
 ## `src/client/resources` {#src-client-resources}
 
@@ -50,7 +57,7 @@ authors:
 
 ## `src/main/java` {#src-main-java}
 
-`src/main/java` 資料夾用來存放模組的 Java 原始碼 —— 它存在於客戶端和伺服器端環境中。
+`src/client/java` 資料夾用於存放特定於客戶端的 Java 原始碼 —— 例如渲染程式碼或客戶端邏輯，如方塊顏色提供程式。
 
 ## `src/client/java` {#src-client-java}
 

@@ -20,21 +20,28 @@ Los campos más importantes en el archivo `fabric.mod.json` son:
 - `depends:` Los mods en los que tu mod depende en.
 - `mixins:` Los mixins que tu mod provee.
 
-Puedes ver un ejemplo del archivo `fabric.mod.json` abajo - este es el archivo `fabric.mod.json` del proyecto de referencia que este sitio de documentación utiliza.
+You can see an example `fabric.mod.json` file below - this is the `fabric.mod.json` file for the mod that powers this documentation site.
 
-:::details Proyecto de Referencia `fabric.mod.json`
+:::details `fabric.mod.json` of the Example Mod
+
 @[code lang=json](@/reference/latest/src/main/resources/fabric.mod.json)
+
 :::
 
 ## Puntos de Entrada
 
 Como ya fue mencionado, el archivo `fabric.mod.json` contiene un campo llamado `entrypoints` - este campo es usado para especificar los puntos de entrada que tu mod usa.
 
-El generador de plantillas de mods crea los puntos de entrada `main` y `client` por defecto - el punto de entrada de `main` es usado para código común, mientras que el punto de entrada de `client` es usado para código exclusivo o específico para el cliente. Estos puntos de entrada son llamados respectivamente cuando el juego comienza.
+The template mod generator creates both a `main` and `client` entrypoint by default:
 
-@[code lang=java transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
+- The `main` entrypoint is used for common code, and it's contained in a class which implements `ModInitializer`
+- El generador de plantillas de mods crea los puntos de entrada `main` y `client` por defecto - el punto de entrada de `main` es usado para código común, mientras que el punto de entrada de `client` es usado para código exclusivo o específico para el cliente.
+
+Estos puntos de entrada son llamados respectivamente cuando el juego comienza.
 
 Lo anterior es un ejemplo de un punto de entrada de `main` simple, el cual manda un mensaje a la consola cuando el juego empieza.
+
+@[code lang=java transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
 
 ## `src/main/resources`
 
@@ -42,16 +49,16 @@ El folder `src/main/resources` es usado para guardar los recursos que tu mod usa
 
 Aquí también se puede encontrar el archivo `fabric.mod.json` y cualquier archivo de configuración de mixin que tu mod use.
 
-Los _assets_ o recursos son guardados en una estructura que es similar a la estructura de los paquetes de recursos - por ejemplo, una textura para un bloque sería guardada en `assets/example-mod/textures/block/block.png`.
+Assets are stored in a structure that mirrors the structure of resource packs - for example, a texture for a block would be stored in `assets/example-mod/textures/block/block.png`.
 
 ## `src/client/resources`
-
-El folder de `src/client/resources` es usado para guardar recursos específicos al cliente, como las texturas, modelos, y sonidos que solo son usados en el lado del cliente.
-
-## `src/main/java`
 
 El folder de `src/main/java` es usado para guardar el código fuente de Java para tu mod - existe tanto los entornos del cliente y el servidor.
 
 ## `src/client/java`
 
 El folder de `src/client/java` es usado para guardar el código fuente de Java exclusivo del cliente, como código para renderización o lógica para el lado del cliente - como proveedores de colores de bloque.
+
+## `src/main/java`
+
+El folder de `src/client/resources` es usado para guardar recursos específicos al cliente, como las texturas, modelos, y sonidos que solo son usados en el lado del cliente.

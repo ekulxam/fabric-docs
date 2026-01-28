@@ -14,7 +14,7 @@ authors:
 
 ## 準備你的物品類別 {#preparing-your-items-class}
 
-為了簡化登錄物品的流程，你可以建立一個方法，這個方法接受ID字串、物品設定，以及建立`Item`實例的「工廠方法」。
+To simplify the registering of items, you can create a method that accepts a string identifier, some item properties and a factory to create the `Item` instance.
 
 這個方法會使用傳入的ID建立一個物品，並將其登錄到遊戲的物品登錄中。
 
@@ -24,61 +24,65 @@ Mojang對物品也是這麼做的！ 看看 `Items` 類別以了解。
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-注意這個工廠方法使用了介面 [`Function`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html)，它允許我們稍後能夠指定 `Item::new` 作為透過物品設定建立物品的方法。
+Notice how we're using a `GenericItem`, which allows us to use the same method `register` for registering any type of item that extends `Item`. We're also using a [`Function`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html) interface for the factory, which allows us to specify how we want our item to be created given the item properties.
 
 ## 登錄物品 {#registering-an-item}
 
 現在你可以用這個方法來登錄物品。
 
-物品的登錄方法接受一個 'Item.Settings\` 類別的實例作為參數。 這個類別允許你透過各式各樣的「建造方法」設定物品的屬性。
+The register method takes in an instance of the `Item.Properties` class as a parameter. 這個類別允許你透過各式各樣的「建造方法」設定物品的屬性。
 
 ::: tip
-If you want to change your item's stack size, you can use the `maxCount` method in the `Item.Settings` class.
+
+If you want to change your item's stack size, you can use the `stacksTo` method in the `Item.Properties` class.
 
 如果物品具有耐久，則這不會生效，因為對於任何具有耐久的物品，其堆疊大小永遠是1，以避免重複損壞。
+
 :::
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-`Item::new` 會告訴註冊方法，透過呼叫接收一個`Item.Settings` 作為參數的 `Item` 建構方法（`new Item(...)`），以從 `Item.Settings` 創建一個 `Item` 實例。
+`Item::new` tells the register function to create an `Item` instance from an `Item.Properties` by calling the `Item` constructor (`new Item(...)`), which takes an `Item.Properties` as a parameter.
 
-然而，若你嘗試執行修改過的用戶端，會發現我們的物品沒有被加入到遊戲中！ 這是因為你還沒有靜態初始化類別。
+However, if you now try to run the modified client, you can see that our item doesn't exist in-game yet! This is because you didn't statically initialize the class.
 
-要這麼做，你需要在類別中添加靜態的初始化方法，然後在你的[模組的初始化類別](../getting-started/project-structure#entrypoints)中呼叫。 目前，這個方法裡不需要有任何東西。
+To do this, you can add a public static initialize method to your class and call it from your [mod's initializer](../getting-started/project-structure#entrypoints) class. Currently, this method doesn't need anything inside it.
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ExampleModItems.java)
 
-呼叫一個類別裡的方法時，如果該類別尚未載入，就會進行靜態初始化——這意味著所有`static`欄位都會計算。 這就是這個虛擬 `initialize` 方法存在的目的。
+Calling a method on a class statically initializes it if it hasn't been previously loaded - this means that all `static` fields are evaluated. This is what this dummy `initialize` method is for.
 
-## 把物品添加進物品群組{#adding-the-item-to-an-item-group}
+## Adding the Item to a Creative Tab {#adding-the-item-to-a-creative-tab}
 
-:::info
-如果想要將物品添加進自訂 `ItemGroup` 中，請參閱 [自訂物品群組](./custom-item-groups)。
+::: info
+
+If you want to add the item to a custom `CreativeModeTab`, check out the [Custom Creative Tabs](./custom-item-groups) page for more information.
+
 :::
 
-舉例來說，如果我們想將這個物品加進「原材料」物品群組中，你會需要使用 Fabric API 的「物品群組事件」——即 `ItemGroupEvents.modifyEntriesEvent`。
+For example purposes, we will add this item to the ingredients `CreativeModeTab`, you will need to use Fabric API's creative tab events - specifically `ItemGroupEvents.modifyEntriesEvent`
 
-這可以在你的物品類別中的 `initialize` 方法中完成。
+This can be done in the `initialize` method of your items class.
 
 @[code transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-載入遊戲，你就會看到我們的物品已經登錄，並顯示在「原材料」物品群組中了：
+Loading into the game, you can see that our item has been registered, and is in the Ingredients creative tab:
 
-![原材料群組中的物品](/assets/develop/items/first_item_0.png)
+![Item in the ingredients group](/assets/develop/items/first_item_0.png)
 
-然而，這個物品還缺少了：
+However, it's missing the following:
 
-- 物品模型
-- 紋理
-- 翻譯（名稱）
+- Item Model
+- Texture
+- Translation (name)
 
-## 給物品命名{#naming-the-item}
+## Naming The Item {#naming-the-item}
 
-這個物品現在還沒有翻譯，所以你需要為其添加。 Minecraft本身已經提供了這個物品的翻譯鍵： `item.example-mod.suspicious_substance`。
+The item currently doesn't have a translation, so you will need to add one. The translation key has already been provided by Minecraft: `item.example-mod.suspicious_substance`.
 
-在 `src/main/resources/assets/example-mod/lang/` 中建立一個JSON檔案，名為 `zh_tw.json`（繁體中文，英文則是`en_us.json`），並輸入翻譯鍵及其值：
+Create a new JSON file at: `src/main/resources/assets/example-mod/lang/en_us.json` and put in the translation key, and its value:
 
 ```json
 {
@@ -86,84 +90,102 @@ If you want to change your item's stack size, you can use the `maxCount` method 
 }
 ```
 
-你可以選擇重啟遊戲，或者建構模组並按下<kbd>F3</kbd>+<kbd>T</kbd>，以套用變更。
+You can either restart the game or build your mod and press <kbd>F3</kbd>+<kbd>T</kbd> to apply changes.
 
-## 添加紋理與模型{#adding-a-texture-and-model}
+## Adding a Client Item, Texture and Model {#adding-a-client-item-texture-and-model}
 
-要為你的物品提供紋理與模型，只需要建立一個 16x16 的紋理圖像並儲存在 `assets/example-mod/textures/item` 資料夾中。 根據物品的ID命名紋理檔案。別忘了 `.png`副檔名。
+For your item to have a proper appearance, it requires:
 
-例如，你可以將這個範例紋理作為 `suspicious_substance.png`
+- [An item texture](https://minecraft.wiki/w/Textures#Items)
+- [An item model](https://minecraft.wiki/w/Model#Item_models)
+- [A client item](https://minecraft.wiki/w/Items_model_definition)
 
-<DownloadEntry visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png">紋理</DownloadEntry>
+### Adding a Texture {#adding-a-texture}
 
-重啟/重新載入遊戲後，你應該會發現物品還沒有紋理，因為你還需要為物品添加一個使用此紋理的模型。
+::: info
 
-你可以建立一個簡單的 `item/generated` 模型——它只接受一個紋理，僅此而已。
+For more information on this topic, see the [Item Models](./item-models) page.
 
-在 `assets/example-mod/models/item` 資料夾中，建立模型JSON，檔名與物品ID相同；`suspicious_substance.json`
+:::
+
+To give your item a texture and model, simply create a 16x16 texture image for your item and save it in the `assets/example-mod/textures/item` folder. Name the texture file the same as the item's identifier, but with a `.png` extension.
+
+For example purposes, you can use this example texture for `suspicious_substance.png`
+
+<DownloadEntry visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png">Texture</DownloadEntry>
+
+### Adding a Model {#adding-a-model}
+
+When restarting/reloading the game - you should see that the item still has no texture, that's because you will need to add a model that uses this texture.
+
+You're going to create a simple `item/generated` model, which takes in an input texture and nothing else.
+
+Create the model JSON in the `assets/example-mod/models/item` folder, with the same name as the item; `suspicious_substance.json`
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/item/suspicious_substance.json)
 
-### 解析模型JSON{#breaking-down-the-model-json}
+#### Breaking Down the Model JSON {#breaking-down-the-model-json}
 
-- `parent` 這個模型繼承的父模型。 在這個例子中，是 `item/generated` 模型。
-- `textures`：為模型定義紋理的地方。 `layer0` 鍵是模型要使用的紋理。
+- `parent`: This is the parent model that this model will inherit from. In this case, it's the `item/generated` model.
+- `textures`: This is where you define the textures for the model. The `layer0` key is the texture that the model will use.
 
-大多數物品都會繼承 `item/generated` 模型，因為它是個僅用於顯示紋理的模型。
+Most items will use the `item/generated` model as their parent, as it's a simple model that just displays the texture.
 
-除此之外，還有其他模型，例如 `item/handheld` 模型，用於表示玩家手中「持有」的物品，如工具。
+There are alternatives, such as `item/handheld` which is used for items that are "held" in the player's hand, such as tools.
 
-## 建立物品模型描述{#creating-the-item-model-description}
+### Creating the Client Item {#creating-the-client-item}
 
-Minecraft並不知道我們把模型檔案放在哪裡，因此我們需要提供物品模型描述。
+Minecraft doesn't automatically know where your items' model files can be found, we need to provide a client item.
 
-在 `assets/example-mod/items` 資料夾中建立物品模型描述JSON，檔案名稱與物品ID相同：`suspicious_substance.json`。
+Create the client item JSON in the `assets/example-mod/items`, with the same file name as the identifier of the item: `suspicious_substance.json`.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/items/suspicious_substance.json)
 
-### 解析物品模型映射JSON{#breaking-down-the-item-model-description-json}
+#### Breaking Down the Client Item JSON {#breaking-down-the-client-item-json}
 
-- `model`：包含對我們模型的引用的屬性。
-  - `type`：模型的類型。 對於大部分物品而言，它應該是 `minecraft:model`
-  - `model`：模型的ID。 它應該是這樣的形式：`example-mod:item/item_name`
+- `model`: This is the property that contains the reference to our model.
+  - `type`: This is the type of our model. For most items, this should be `minecraft:model`
+  - `model`: This is the model's identifier. It should have this form: `example-mod:item/item_name`
 
-現在你的物品在遊戲內應該是長這樣的：
+Your item should now look like this in-game:
 
-![擁有正確模型的物品](/assets/develop/items/first_item_2.png)
+![Item with correct model](/assets/develop/items/first_item_2.png)
 
-## 讓物品可拿去堆肥或當作燃料{#making-the-item-compostable-or-a-fuel}
+## Making the Item Compostable or a Fuel {#making-the-item-compostable-or-a-fuel}
 
-Fabric API 提供各式各樣的登錄，可以為你的物品添加額外屬性。
+Fabric API provides various registries that can be used to add additional properties to your item.
 
-例如，如果你想要讓你的物品可以拿去堆肥，你可以使用 `CompostableItemRegistry`：
+For example, if you want to make your item compostable, you can use the `CompostingChanceRegistry`:
 
-@[code transcludeWith=:::_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-或者，如果要讓物品可以當燃料，可以使用 `FuelRegistryEvents.BUILD`事件：
+Alternatively, if you want to make your item a fuel, you can use the `FuelRegistryEvents.BUILD` event:
 
-@[code transcludeWith=:::_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-## 添加基本的合成配方{#adding-a-basic-crafting-recipe}
+## Adding a Basic Crafting Recipe {#adding-a-basic-crafting-recipe}
 
 <!-- In the future, an entire section on recipes and recipe types should be created. For now, this suffices. -->
 
-如果要為你的物品添加合成配方，你需要將配方JSON檔案放在 `data/example-mod/recipe` 資料夾中。
+If you want to add a crafting recipe for your item, you will need to place a recipe JSON file in the `data/example-mod/recipe` folder.
 
-更多關於合成配方格式的資訊，可參閱以下資源：
+For more information on the recipe format, check out these resources:
 
-- [配方 JSON 生成器](https://crafting.thedestruc7i0n.ca/)
-- [中文 Minecraft Wiki - 配方 JSON](https://zh.minecraft.wiki/w/配方#JSON格式)
+- [Recipe JSON Generator](https://crafting.thedestruc7i0n.ca/)
+- [Minecraft Wiki - Recipe JSON](https://minecraft.wiki/w/Recipe#JSON_Format)
 
-## 自訂物品提示{#custom-tooltips}
+## Custom Tooltips {#custom-tooltips}
 
-如果你想讓你的物品擁有自訂物品提示，你會需要建立繼承了 `Item` 的類別，並覆寫 `appendTooltip`方法。
+If you want your item to have a custom tooltip, you will need to create a class that extends `Item` and override the `appendHoverText` method.
 
-:::info
-這個範例使用了 `LightningStick` 類別，其於[自訂物品交互](./custom-item-interactions)頁面中建立。
+::: info
+
+This example uses the `LightningStick` class created in the [Custom Item Interactions](./custom-item-interactions) page.
+
 :::
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-每呼叫一次 `add()` 就會增加一行提示。
+Each call to `accept()` will add one line to the tooltip.
 
-![物品提示演示](/assets/develop/items/first_item_3.png)
+![Tooltip Showcase](/assets/develop/items/first_item_3.png)

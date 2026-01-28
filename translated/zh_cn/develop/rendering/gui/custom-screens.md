@@ -5,58 +5,62 @@ authors:
   - IMB11
 ---
 
-:::info
-本文所述均指一般的、未涉及同步的界面，这类界面是由玩家独自在客户端打开的，不需要服务端的参与。
+<!---->
+
+::: info
+
+This page refers to normal screens, not handled ones - these screens are the ones that are opened by the player on the client, not the ones that are handled by the server.
+
 :::
 
-界面是指玩家可以交互的 GUI，比如标题界面、暂停界面等。
+Screens are essentially the GUIs that the player interacts with, such as the title screen, pause screen etc.
 
-您可以创建自己的界面来展示自定义内容、自定义配置目录等。
+You can create your own screens to display custom content, a custom settings menu, or more.
 
-## 创建界面{#creating-a-screen}
+## Creating a Screen {#creating-a-screen}
 
-要创建界面，您需要继承 `Screen` 类并覆写 `init` 方法。您可能还需要覆写 `render` 方法，但是请保证调用 `super.render`， 否则背景和组件都不会渲染。
+To create a screen, you need to extend the `Screen` class and override the `init` method - you may optionally override the `render` method as well - but make sure to call it's super method or it wont render the background, widgets etc.
 
-您需要注意：
+You should take note that:
 
-- 组件不应该在 `Screen` 的构造方法里创建，因为此时界面还没有初始化，并且某些变量（比如界面的宽 `width` 和高 `height`）也还没有正确地初始化。
-- 当界面正在初始化时，`init` 方法将被调用，这是创建组件对象的最佳时机。
-  - 您可以通过 `addDrawableChild` 方法来添加组件，这个方法接收任何实现了 `Drawable` 和 `Element` 接口的组件对象。
-- `render` 方法将在每一帧被调用，您可以在这个方法里获取诸多上下文，比如鼠标的位置。
+- Widgets are not being created in the constructor because the screen is not yet initialized at that point - and certain variables, such as `width` and `height`, are not yet available or not yet accurate.
+- The `init` method is called when the screen is being initialized, and it is the best place to create widgets.
+  - You add widgets using the `addRenderableWidget` method, which accepts any drawable widget.
+- The `render` method is called every frame - you can access the draw context, and the mouse position from this method.
 
-举个例子，我们可以创建一个简单的界面，这个界面有一个按钮和一个按钮的标签。
+As an example, we can create a simple screen that has a button and a label above it.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
-![自定义界面 1](/assets/develop/rendering/gui/custom-1-example.png)
+![Custom Screen 1](/assets/develop/rendering/gui/custom-1-example.png)
 
-## 打开界面{#opening-the-screen}
+## Opening the Screen {#opening-the-screen}
 
-您可以使用 `MinecraftClient` 类的 `setScreen` 方法来打开您的界面。您可以在许多地方做这件事，比如当一个按键触发时，当一条命令执行时，或者当客户端收到一个网络包时。
+You can open the screen using the `Minecraft`'s `setScreen` method - you can do this from many places, such as a key binding, a command, or a client packet handler.
 
 ```java
-MinecraftClient.getInstance().setScreen(
-  new CustomScreen(Text.empty())
+Minecraft.getInstance().setScreen(
+  new CustomScreen(Component.empty())
 );
 ```
 
-## 关闭界面{#closing-the-screen}
+## Closing the Screen {#closing-the-screen}
 
-当您想要关闭界面时，只需将界面设为 `null` 即可：
+If you want to close the screen, simply set the screen to `null`:
 
 ```java
-MinecraftClient.getInstance().setScreen(null);
+Minecraft.getInstance().setScreen(null);
 ```
 
-如果您希望在关闭界面时回退到上一个界面，您可以将当前界面对象传入自定义的 `CustomScreen` 构造方法，把它保存为字段，然后覆写 `close` 方法，将实现修改为 `this.client.setScreen(/* 您保存的上一个界面 */)` 即可。
+If you want to be fancy, and return to the previous screen, you can pass the current screen into the `CustomScreen` constructor and store it in a field, then use it to return to the previous screen when the `close` method is called.
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
-现在，当您按照上面的步骤打开界面时，您可以给构造方法的第二个参数传入当前界面对象，这样当您调用 `CustomScreen#close` 的时候，游戏就会回到上一个界面。
+Now, when opening the custom screen, you can pass the current screen as the second argument - so when you call `CustomScreen#close` - it will return to the previous screen.
 
 ```java
-Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-MinecraftClient.getInstance().setScreen(
-  new CustomScreen(Text.empty(), currentScreen)
+Screen currentScreen = Minecraft.getInstance().currentScreen;
+Minecraft.getInstance().setScreen(
+  new CustomScreen(Component.empty(), currentScreen)
 );
 ```

@@ -7,4 +7,4 @@ Bahagian Dokumentasi Fabric ini dikhususkan kepada pemain dan pentadbir pelayan 
 
 Bahagian Dokumentasi Fabric ini dikhususkan kepada pemain dan pentadbir pelayan yang ingin mengetahui cara memasang, menggunakan dan menyelesaikan masalah berkenaan Fabric.
 
-Anda harus merujuk kepada bar sisi untuk senarai semua panduan yang tersedia.
+If you encounter any issues, please report them [on GitHub](https://github.com/FabricMC/fabric-docs) or ask for help on the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` or `#server-admin-support` channels.

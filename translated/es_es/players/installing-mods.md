@@ -1,6 +1,6 @@
 ---
 title: Instalar Mods
-description: Una guía paso a paso sobre como instalar mods para Fabric.
+description: A step-by-step guide on how to install mods for Fabric.
 authors:
   - IMB11
 ---
@@ -11,55 +11,57 @@ Para launchers o lanzadores de terceros, consulta su documentación.
 
 ## 1. Descarga el Mod
 
-:::warning
-Solo deberías descargar mods desde fuentes en las que confíes. Para mayor información sobre como encontrar mods, visita la guía sobre [Encontrar Mods Confiables](./finding-mods).
+::: warning
+
+You should only download mods from sources you trust. For more information on finding mods, see the [Finding Trustworthy Mods](./finding-mods) guide.
+
 :::
 
-La mayoría de los mods requieren Fabric API, el cual puede ser descargado desde [Modrinth](https://modrinth.com/mod/fabric-api) o [CurseForge](https://curseforge.com/minecraft/mc-mods/fabric-api)
+The majority of mods require Fabric API as well, which can be downloaded from [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://curseforge.com/minecraft/mc-mods/fabric-api).
 
-Cuando descargues mods, asegúrate que:
+When downloading mods, ensure that:
 
-- Son compatibles con la versión de Minecraft en la que juegues. Por ejemplo, un mod que funcione en la versión 1.20, puede que no funcione en la versión 1.20.2.
-- Son hechos para Fabric y no otro lanzador de mods (mod loader).
-- Finalmente, que sean compatibles con la edición de Minecraft correcta (Edición de Java).
+- They work on the version of Minecraft you want to play on. A mod that worked on version 1.21.8 for instance, might not work anymore on 1.21.11.
+- They are for Fabric and not another mod loader.
+- Furthermore, they are for the correct edition of Minecraft (Java Edition).
 
-## 2. Mueve el archivo del mod al folder de `mods`
+## 2. Move the Mod to the `mods` Folder {#2-move-the-mod-to-the-mods-folder}
 
-El folder de mods puede ser encontrado en las siguientes localizaciones dependiendo de tu sistema operativo.
+The mods folder can be found in the following locations for each operating system.
 
-Usualmente puedes copiar y pegar estas direcciones de archivo en la barra de direcciones de tu explorador de archivos para encontrar el folder rápidamente.
+You can usually paste these paths into the address bar of your file explorer to quickly navigate to the folder.
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft\mods
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft/mods
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft/mods
 ```
 
 :::
 
-Una vez que hayas encontrado el folder de `mods`, puedes colocar el archivo `.jar` del mod ahí.
+Once you've found the `mods` folder, you can move the mod `.jar` files into it.
 
-![Mods instalados en el folder de mods](/assets/players/installing-mods.png)
+![Installed mods in the mods folder](/assets/players/installing-mods.png)
 
-## 3. ¡Hemos terminado!
+## 3. You're Done! {#3-you-re-done}
 
-¡Una vez que hayas movido los mods al folder de `mods`, puedes abrir el Launcher de Minecraft, seleccionar el perfil de Fabric desde el menú deslizador en la esquina inferior izquierda y presionar Jugar!
+Once you've moved the mods into the `mods` folder, you can open the Minecraft Launcher and select the Fabric profile from the dropdown in the bottom-left corner and press play!
 
-![Launcher de Minecraft con el perfil de Fabric seleccionado](/assets/players/installing-fabric/launcher-screen.png)
+![Minecraft Launcher with Fabric profile selected](/assets/players/installing-fabric/launcher-screen.png)
 
-## Solucionar Problemas
+## Troubleshooting {#troubleshooting}
 
-Si encuentras problemas tratando de seguir esta guía, puedes solicitar ayuda en el servidor de [Discord de Fabric](https://discord.gg/v6v4pMv), en el canal de `#player-support`.
+If you encounter any issues whilst following this guide, you can ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.
 
-También puedes intentar solucionar el problema tu mismo leyendo las guías sobre como solucionar problemas:
+You can also attempt to troubleshoot the issue yourself by reading the troubleshooting pages:
 
-- [Reportes de Crasheo](./troubleshooting/crash-reports)
-- [Subir Logs](./troubleshooting/uploading-logs)
+- [Crash Reports](./troubleshooting/crash-reports)
+- [Uploading Logs](./troubleshooting/uploading-logs)

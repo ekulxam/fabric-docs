@@ -1,6 +1,6 @@
 ---
 title: Cài Đặt Mod
-description: Bộ hướng dẫn từng bước để cài đặt mod cho Fabric.
+description: A step-by-step guide on how to install mods for Fabric.
 authors:
   - IMB11
 ---
@@ -9,57 +9,59 @@ Bài hướng dẫn này sẽ giúp bạn cài đặt các bản mod Fabric cho 
 
 Đối với các trình launcher bên thứ ba, bạn nên tham khảo tài liệu của họ.
 
-## 1. Tải Mod
+## 1. Download the Mod {#1-download-the-mod}
 
-:::warning
-Bạn chỉ nên tải mod từ các nguồn uy tín. Để biết thêm thông tin về cách tìm mod, hãy tham khảo tài liệu [Tìm Mod](./finding-mods).
+::: warning
+
+You should only download mods from sources you trust. For more information on finding mods, see the [Finding Trustworthy Mods](./finding-mods) guide.
+
 :::
 
-Phần lớn các bản mod đều yêu cầu Fabric API, thứ mà có thể được tải từ [Modrinth](https://modrinth.com/mod/fabric-api) hoặc [CurseForge](https://curseforge.com/minecraft/mc-mods/fabric-api)
+The majority of mods require Fabric API as well, which can be downloaded from [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://curseforge.com/minecraft/mc-mods/fabric-api).
 
-Khi chuẩn bị tải mod, cần lưu ý:
+When downloading mods, ensure that:
 
-- Chúng phải hỗ trợ phiên bản Minecraft bạn muốn chơi. Ví dụ một bản mod mà hoạt động tốt ở bản 1.20, có thể không hoạt động được ở bản 1.20.2.
-- Chúng phải dùng được cho Fabric và không phải là các trình mod khác.
-- Thêm vào đó, chúng phải đúng phiên bản Minecraft (Phiên bản Java).
+- They work on the version of Minecraft you want to play on. A mod that worked on version 1.21.8 for instance, might not work anymore on 1.21.11.
+- They are for Fabric and not another mod loader.
+- Furthermore, they are for the correct edition of Minecraft (Java Edition).
 
-## 2. Di chuyển tệp mod vào trong thư mục `mods`
+## 2. Move the Mod to the `mods` Folder {#2-move-the-mod-to-the-mods-folder}
 
-Thư mục mods có thể được tìm thấy ở các địa chỉ bên dưới ứng với mỗi hệ điều hành.
+The mods folder can be found in the following locations for each operating system.
 
-Bạn có thể dán những đường dẫn đó vào thanh địa chỉ của explorer để nhanh chóng điều hướng đến thư mục.
+You can usually paste these paths into the address bar of your file explorer to quickly navigate to the folder.
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft\mods
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft/mods
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft/mods
 ```
 
 :::
 
-Khi bạn đã tìm thấy thư mục `mods`, bạn có thể di chuyển tệp mod `.jar` vào trong đó.
+Once you've found the `mods` folder, you can move the mod `.jar` files into it.
 
-![Cài đặt mod ở thư mục mods](/assets/players/installing-mods.png)
+![Installed mods in the mods folder](/assets/players/installing-mods.png)
 
-## 3. Bạn đã hoàn tất!
+## 3. You're Done! {#3-you-re-done}
 
-Sau khi bạn đã di chuyển tệp mod vào trong thư mục `mods`, bạn có thể mở trình Launcher Minecraft và chọn hồ sơ Fabric từ danh sách thả xuống ở góc trái bên dưới và bấm nút chơi!
+Once you've moved the mods into the `mods` folder, you can open the Minecraft Launcher and select the Fabric profile from the dropdown in the bottom-left corner and press play!
 
-![Trình Launcher Minecraft với hồ sơ Fabric được chọn](/assets/players/installing-fabric/launcher-screen.png)
+![Minecraft Launcher with Fabric profile selected](/assets/players/installing-fabric/launcher-screen.png)
 
-## Khắc Phục Sự Cố
+## Troubleshooting {#troubleshooting}
 
-Nếu bạn gặp bất cứ vấn đề nào khi đang làm theo bài hướng dẫn này, bạn có thể xin sự trợ giúp từ kênh `#player-support` trong [Discord Fabric](https://discord.gg/v6v4pMv).
+If you encounter any issues whilst following this guide, you can ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.
 
-Bạn cũng có thể tự sửa chữa lỗi bằng cách tham khảo các trang khắc phục sự cố sau:
+You can also attempt to troubleshoot the issue yourself by reading the troubleshooting pages:
 
-- [Báo Cáo Dừng Đột Ngột](./troubleshooting/crash-reports)
-- [Tải Lên Tệp Log](./troubleshooting/uploading-logs)
+- [Crash Reports](./troubleshooting/crash-reports)
+- [Uploading Logs](./troubleshooting/uploading-logs)

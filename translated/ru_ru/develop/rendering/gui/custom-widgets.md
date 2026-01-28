@@ -9,18 +9,18 @@ authors:
 
 ## Создание виджета {#creating-a-widget}
 
-Существует несколько способов создания класса виджета, например, путем расширения `ClickableWidget`. Этот класс предоставляет множество полезных утилит, таких как управление шириной, высотой, положением и обработка событий. Он реализует интерфейсы `Drawable`, `Element`, `Narratable` и `Selectable`:
+There are multiple ways to create a widget class, such as extending `AbstractWidget`. This class provides a lot of useful utilities, such as managing width, height, position, and handling events - it implements the `Renderable`, `GuiEventListener`, `NarrationSupplier`, and `NarratableEntry` interfaces:
 
-- `Drawable` — для рендеринга — требуется для регистрации виджета на экране с помощью метода `addDrawableChild`.
-- `Элемент` — для событий — требуется, если вы хотите обрабатывать такие события, как щелчки мыши, нажатия клавиш и т. д.
-- `Narratable` — для доступности — требуется, чтобы сделать ваш виджет доступным для программ чтения с экрана и других инструментов обеспечения доступности.
-- `Selectable` — для выбора — требуется, если вы хотите сделать виджет доступным для выбора с помощью клавиши <kbd>Tab</kbd> - это также способствует повышению доступности.
+- `Renderable` - for rendering - Required to register the widget to the screen via the `addRenderableWidget` method.
+- `GuiEventListener` - for events - Required if you want to handle events such as mouse clicks, key presses, and more.
+- `NarrationSupplier` - for accessibility - Required to make your widget accessible to screen readers and other accessibility tools.
+- `NarratableEntry` - for selection - Required if you want to make your widget selectable using the <kbd>Tab</kbd> key - this also aids in accessibility.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomWidget.java)
 
 ## Добавление виджета на экран {#adding-the-widget-to-the-screen}
 
-Как и все виджеты, его необходимо добавить на экран с помощью метода `addDrawableChild`, который предоставляется классом `Screen`. Обязательно сделайте это в методе `init`.
+Like all widgets, you need to add it to the screen using the `addRenderableWidget` method, which is provided by the `Screen` class. Обязательно сделайте это в методе `init`.
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
@@ -28,9 +28,9 @@ authors:
 
 ## События виджета {#widget-events}
 
-Вы можете обрабатывать такие события, как щелчки мыши и нажатия клавиш, переопределяя методы `onMouseClicked`, `onMouseReleased`, `onKeyPressed` и другие.
+You can handle events such as mouse clicks, key presses, by overriding the `mouseClicked`, `afterMouseAction`, `keyPressed`, and other methods.
 
-Например, вы можете заставить виджет менять цвет при наведении на него курсора, используя метод `isHovered()`, предоставляемый классом `ClickableWidget`:
+For example, you can make the widget change color when it's hovered over by using the `isHovered()` method provided by the `AbstractWidget` class:
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomWidget.java)
 

@@ -1,12 +1,47 @@
 ---
 title: 개발 설명서
-description: 커뮤니티에서 엄선하여 작성한 개발 설명서는 개발 환경 설정처럼 기초적인 주제부터 렌더링, 네트워킹과 같은 고급 주제까지 광범위한 주제를 다루고 있습니다.
+description: Our community-written developer guides cover many topics, from creating a mod and setting up your environment, all the way to rendering, networking, data generation and more.
+authors:
+  - IMB11
+  - its-miroma
+  - itsmiir
+authors-nogithub:
+  - basil4088
 ---
 
-커뮤니티에서 엄선하여 작성한 개발 설명서는 개발 환경 설정처럼 기초적인 주제부터 렌더링, 네트워킹과 같은 고급 주제까지 광범위한 주제를 다루고 있습니다.
+Fabric is a lightweight modding toolchain for Minecraft: Java Edition, designed to be simple and easy-to-use. It allows developers to apply modifications ("mods") to the vanilla game, to add new features or change existing mechanics.
 
-메뉴에서 전체 설명서를 둘러볼 수 있습니다. 무언가 찾고 있다면, 우측 상단에 최고의 친구 검색 바가 기다리고 있습니다.
+This documentation will walk you through modding with Fabric, from [creating your first mod](./getting-started/creating-a-project) and [setting up your environment](./getting-started/setting-up), to advanced topics like [rendering](./rendering/basic-concepts), [networking](./networking), [data generation](./data-generation/setup) and much more.
 
-기억하세요: 문서에서 사용되는 모든 코드는 완전히 작동하는 예시 모드이며, [GitHub의 `/reference` 폴더](https://github.com/FabricMC/fabric-docs/tree/main/reference/latest) 전체 코드를 확인할 수 있습니다.
+Check out the sidebar for a list of the available pages.
 
-[GitHub](https://github.com/FabricMC/fabric-docs)에서 소스 코드를 찾을 수 있으며, Fabric 문서에 기여하고자 하는 경우 [기여 가이드라인](../contributing)을 준수해야 합니다.
+::: tip
+
+In case you need it at any time, a fully-working mod with all the source code of this documentation is available in the [`/reference` folder on GitHub](https://github.com/FabricMC/fabric-docs/tree/main/reference/latest).
+
+:::
+
+## Prerequisites {#prerequisites}
+
+Before you start modding with Fabric, you need to have some understanding of developing with Java, and of Object-Oriented Programming in general.
+
+Here are some resources that might help you familiarize with Java and OOP:
+
+- [W3: Java Tutorials](https://www.w3schools.com/java/)
+- [Codecademy: Learn Java](https://www.codecademy.com/learn/learn-java)
+- [W3: Java OOP](https://www.w3schools.com/java/java_oop.asp)
+- [Medium: Introduction to OOP](https://medium.com/@Adekola_Olawale/beginners-guide-to-object-oriented-programming-a94601ea2fbd)
+
+## What Does Fabric Offer? {#what-does-fabric-offer}
+
+The Fabric Project is centered around three main components:
+
+- **Fabric Loader**: a flexible, platform-independent loader of mods, primarily designed for Minecraft: Java Edition
+- **Fabric API**: a complementary set of APIs and tools mod developers can use when creating mods
+- **Fabric Loom**: a [Gradle](https://gradle.org/) plugin, enabling developers to easily develop and debug mods
+
+### What Does Fabric API Offer? {#what-does-fabric-api-offer}
+
+Fabric API provides a wide set of APIs that build on top of the vanilla functionality to allow advanced or simpler development.
+
+For example, it provides new hooks, events, utilities such as transitive access wideners, access to internal registries such as the compostable items registry, and more.

@@ -9,61 +9,49 @@ Gli oggetti basilari non possono arrivare lontano - prima o poi ti servirà un o
 
 Ci sono alcune classi chiave che devi comprendere prima di dare un'occhiata agli eventi degli oggetti vanilla.
 
-## TypedActionResult {#typedactionresult}
+## InteractionResult {#interactionresult}
 
-Per gli oggetti, il `TypedActionResult` che incontrerai più comunemente è per gli `ItemStacks` - questa classe informa il gioco riguardo a cosa sostituire (o non) nello stack di oggetti dopo che l'evento è avvenuto.
+An `InteractionResult` tells the game the status of the event, whether it was passed/ignored, failed or successful.
 
-Se non è successo nulla nell'evento, dovresti usare il metodo `TypedActionResult#pass(stack)`, dove `stack` è lo stack di oggetti corrente.
-
-Puoi ottenere lo stack di oggetti corrente ottenendo il contenuto della mano del giocatore. Di solito gli eventi che richiedono un `TypedActionResult` passano la mano al metodo dell'evento.
-
-```java
-TypedActionResult.pass(user.getStackInHand(hand))
-```
-
-Se passi lo stack corrente - nulla cambierà, anche dichiarando l'evento come fallito, saltato/ignorato o riuscito.
-
-Se volessi eliminare lo stack corrente, dovresti passarne uno vuoto. Lo stesso si può dire per la riduzione, puoi analizzare lo stack corrente e diminuirlo della quantità che vuoi:
+A succesful interaction can also be used to transform the stack in hand.
 
 ```java
 ItemStack heldStack = user.getStackInHand(hand);
 heldStack.decrement(1);
-TypedActionResult.success(heldStack);
+InteractionResult.SUCCESS.heldItemTransformedTo().success(heldStack);
 ```
-
-## ActionResult {#actionresult}
-
-Similmente, un `ActionResult` informa il gioco sullo stato dell'evento, sia che sia saltato/ignorato, fallito o riuscito.
 
 ## Event con Override {#overridable-events}
 
 Fortunatamente, la classe Item ha molti metodi di cui si può fare override per aggiungere funzionalità ai tuoi oggetti.
 
-:::info
-Un ottimo esempio di questi eventi in uso si trova nella pagina [Riprodurre Suoni](../sounds/using-sounds), che usa l'evento `useOnBlock` per riprodurre un suono quando il giocatore clicca un blocco con il tasto destro.
+::: info
+
+A great example of these events being used can be found in the [Playing SoundEvents](../sounds/using-sounds) page, which uses the `useOn` event to play a sound when the player right clicks a block.
+
 :::
 
-| Metodo          | Informazioni                                                                                            |
-| --------------- | ------------------------------------------------------------------------------------------------------- |
-| `postHit`       | Eseguito dopo che il giocatore colpisce un'entità.                                      |
-| `postMine`      | Eseguito dopo che il giocatore rompe un blocco.                                         |
-| `inventoryTick` | Eseguito ad ogni tick mentre l'oggetto è nell'inventario.                               |
-| `onCraft`       | Eseguito quando l'oggetto viene craftato.                                               |
-| `useOnBlock`    | Eseguito quando il giocatore clicca un blocco con il tasto destro, mentre ha l'oggetto. |
-| `use`           | Eseguito quando il giocatore clicca con il tasto destro mentre ha l'oggetto.            |
+| Method                 | Information                                                             |
+| ---------------------- | ----------------------------------------------------------------------- |
+| `hurtEnemy`            | Ran when the player hits an entity.                     |
+| `mineBlock`            | Ran when the player mines a block.                      |
+| `inventoryTick`        | Ran every tick whilst the item is in an inventory.      |
+| `onCraftedPostProcess` | Ran when the item is crafted.                           |
+| `useOn`                | Ran when the player right clicks a block with the item. |
+| `use`                  | Ran when the player right clicks the item.              |
 
-## L'Evento `use()` {#use-event}
+## The `use()` Event {#use-event}
 
-Immaginiamo che tu voglia fare in modo che l'oggetto crei un lampo davanti al giocatore - dovrai creare una classe personalizzata.
+Let's say you want to make an item that summons a lightning bolt in front of the player - you would need to create a custom class.
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-L'evento `use` è probabilmente il più utile tra tutti - puoi usare questo evento per generare il lampo, dovresti generarlo 10 blocchi davanti al giocatore, nella direzione verso cui è diretto.
+The `use` event is probably the most useful out of them all - you can use this event to spawn our lightning bolt, you should spawn it 10 blocks in front of the players facing direction.
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-Come sempre, dovresti registrare il tuo oggetto, aggiungere un modello e una texture.
+As usual, you should register your item, add a model and texture.
 
-Come puoi notare, il lampo dovrebbe essere generato 10 blocchi davanti a te, giocatore.
+As you can see, the lightning bolt should spawn 10 blocks in front of you - the player.
 
-<VideoPlayer src="/assets/develop/items/custom_items_0.webm">Usare il Bastone del Lampo</VideoPlayer>
+<VideoPlayer src="/assets/develop/items/custom_items_0.webm">Using the Lightning Stick</VideoPlayer>

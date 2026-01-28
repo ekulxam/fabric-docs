@@ -2,6 +2,7 @@
 title: 配方生成
 description: 使用 Datagen 设置配方生成的指南。
 authors:
+  - CelDaemon
   - skycatminepokie
   - Spinoscythe
 authors-nogithub:
@@ -9,40 +10,44 @@ authors-nogithub:
   - mcrafterzz
 ---
 
-:::info 前提
-首先，请确保你已完成 [Datagen 设置](./setup) 。
+<!---->
+
+:::info PREREQUISITES
+
+Make sure you've completed the [datagen setup](./setup) process first.
+
 :::
 
-## 设置 {#setup}
+## Setup {#setup}
 
-首先，我们需要提供程序。 创建一个 `extends FabricRecipeProvider` 的类。 我们所有的配方生成都将在提供程序的 `generate` 方法中进行。
+First, we'll need our provider. Make a class that extends `FabricRecipeProvider`. All our recipe generation will happen inside the `buildRecipes` method of our provider.
 
 @[code lang=java transcludeWith=:::datagen-recipes:provider](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModRecipeProvider.java)
 
-要完成设置，将此提供程序添加到 `onInitializeDataGenerator` 方法中的 `DataGeneratorEntrypoint`。
+To finish setup, add this provider to your `DataGeneratorEntrypoint` within the `onInitializeDataGenerator` method.
 
-@[code lang=java transclude={32-32}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code lang=java transcludeWith=:::datagen-recipes:register](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## 无序配方 {#shapeless-recipes}
+## Shapeless Recipes {#shapeless-recipes}
 
-无序配方相当的简单。 只需将它们添加到提供程序中的 `generate` 方法中：
+Shapeless recipes are fairly straightforward. Just add them to the `buildRecipes` method in your provider:
 
 @[code lang=java transcludeWith=:::datagen-recipes:shapeless](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModRecipeProvider.java)
 
-## 有序配方 {#shaped-recipes}
+## Shaped Recipes {#shaped-recipes}
 
-对于有序配方，可以使用 `String` 定义有序，然后定义 `String` 中每个 `char` 代表什么。
+For a shaped recipe, you define the shape using a `String`, then define what each `char` in the `String` represents.
 
 @[code lang=java transcludeWith=:::datagen-recipes:shaped](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModRecipeProvider.java)
 
-:::tip
-有很多辅助方法可用于创建普通配方。 查看 `RecipeProvider` 提供的内容！ 在 IntelliJ 中按 `Alt + 7` 打开类的结构，其中包括方法列表。
+::: tip
+
+There's a lot of helper methods for creating common recipes. Check out what `RecipeProvider` has to offer! Use <kbd>Alt</kbd>+<kbd>7</kbd> in IntelliJ to open the structure of a class, including a method list.
+
 :::
 
-## 其他配方 {#other-recipes}
+## Other Recipes {#other-recipes}
 
-其他配方的工作原理类似，但需要一些额外的参数。 比如烧炼配方需要了解奖励多少经验。
+Other recipes work similarly, but require a few extra parameters. For example, smelting recipes need to know how much experience to award.
 
 @[code lang=java transcludeWith=:::datagen-recipes:other](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModRecipeProvider.java)
-
-## 自定义配方类型 {#custom-recipe-types}

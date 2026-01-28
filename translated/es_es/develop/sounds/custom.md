@@ -15,9 +15,9 @@ Muchos software de DAWs (Estaciones de Trabajo de Audio Digitales) modernos pued
 
 En este ejemplo, un sonido de un [silbido](https://freesound.org/people/strongbot/sounds/568995/) es importado a Audacity. Actualmente está guardado como un archivo ".wav" y tiene dos canales de audio (Stereo). Edita el sonido a tu gusto y asegúrate de eliminar uno de los canales usando el menú desplegable encima del "track head" (cabeza de pista).
 
-![dividiendo la pista Estereo](/assets/develop/sounds/custom_sounds_1.png)
-
 ![eliminando uno de los canales](/assets/develop/sounds/custom_sounds_2.png)
+
+![dividiendo la pista Estereo](/assets/develop/sounds/custom_sounds_1.png)
 
 Al exportar o renderizar el archivo de audio, asegúrate de elegir el formato de archivo OGG. Algunos DAWs, como REAPER, pueden soportar múltiples capas de audio de OGG. En este caso, OGG Vorbis debería funcionar bien.
 
@@ -27,24 +27,24 @@ También ten en cuenta que los archivos de audio pueden aumentar el tamaño de t
 
 ## Cargando El Archivo de Audio
 
-Agrega un nuevo folder `resources/assets/<mod id here>/sounds` para los sonidos en tu mod, y pon el archivo de audio exportado `metal_whistle.ogg` ahí.
+Add the new `resources/assets/example-mod/sounds` directory for the sounds in your mod, and put the exported audio file `metal_whistle.ogg` in there.
 
-Continúa creando el archivo `resources/assets/<mod id here>/sounds.json` si no existe todavía y agrega tu sonido a las entradas de sonido.
+Continue with creating the `resources/assets/example-mod/sounds.json` file if it doesn't exist yet and add your sound to the sound entries.
 
 @[code lang=json](@/reference/latest/src/main/resources/assets/example-mod/sounds.json)
 
-La entrada de subtítulo provee más contexto para el jugador. El nombre del subtítulo es usado en los archivos de lenguaje en el folder de `resources/assets/<mod id here>/lang` y serán mostrados si la opción de subtítulos en el juego es activada y el sonido personalizado está siendo reproducido.
+La entrada de subtítulo provee más contexto para el jugador. The subtitle name is used in the language files in the `resources/assets/example-mod/lang` directory and will be displayed if the in-game subtitle setting is turned on and this custom sound is being played.
 
 ## Registrando el Sonido Personalizado
 
-Para agregar el sonido personalizado al mod, registra un SoundEvent (Evento de Sonido) en la clase que implemente la interfaz `ModInitializer`.
+To add the custom sound to the mod, register a SoundEvent in your [mod's initializer](../getting-started/project-structure#entrypoints).
 
 ```java
-Registry.register(Registries.SOUND_EVENT, Identifier.of(MOD_ID, "metal_whistle"),
-        SoundEvent.of(Identifier.of(MOD_ID, "metal_whistle")));
+Registry.register(BuiltInRegistries.SOUND_EVENT, Identifier.fromNamespaceAndPath(MOD_ID, "metal_whistle"),
+        SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(MOD_ID, "metal_whistle")));
 ```
 
-## Limpiando El Desorden
+## Cleaning up the Mess {#cleaning-up-the-mess}
 
 Dependiendo de cuantas entradas de Registro hayan, las cosas pueden enredarse rápidamente. Para evitar eso, podemos hacer uso de una nueva clase ayudante.
 
@@ -58,4 +58,4 @@ De esta manera, la clase implementadora de `ModInitializer` solo tiene que imple
 
 ## Usando el SoundEvent Personalizado
 
-Use la clase ayudante para acceder el SoundEvent personalizado. Echa un vistazo a la página de [Reproducir SoundEvents (Eventos de Sonido)](./using-sounds) para aprender a reproducir sonidos.
+Use la clase ayudante para acceder el SoundEvent personalizado. Check out the [Playing Sounds](./using-sounds) page to learn how to play sounds.

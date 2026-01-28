@@ -2,6 +2,7 @@
 title: Effetti d'Incantesimi Personalizzati
 description: Impara come creare i tuoi effetti d'incantesimi.
 authors:
+  - CelDaemon
   - krizh-p
 ---
 
@@ -9,52 +10,54 @@ A partire dalla versione 1.21, gli incantesimi personalizzati in Minecraft usano
 
 Una componente di un effetto contiene il codice che definisce gli effetti speciali di un incantesimo. Minecraft supporta vari effetti predefiniti, come danno degli oggetti, contraccolpo, ed esperienza.
 
-:::tip
-Assicurati di controllare se gli effetti predefiniti di Minecraft soddisfano le tue necessità visitando [la pagina sulle Componenti degli Effetti d'Incantesimi della Wiki di Minecraft](https://minecraft.wiki/w/Enchantment_definition#Effect_components). Questa guida suppone che tu comprenda come si configurino incantesimi "semplici" basati su dati, e si focalizza sulla creazione di effetti d'incantesimi personalizzati che non sono supportati in maniera predefinita.
+::: tip
+
+Be sure to check if the default Minecraft effects satisfy your needs by visiting [the Minecraft Wiki's Enchantment Effect Components page](https://minecraft.wiki/w/Enchantment_definition#Effect_components). This guide assumes you understand how to configure "simple" data-driven enchantments and focuses on creating custom enchantment effects that aren't supported by default.
+
 :::
 
-## Effetti d'Incantesimi Personalizzati {#custom-enchantment-effects}
+## Custom Enchantment Effects {#custom-enchantment-effects}
 
-Inizia con la creazione di una cartella `enchantment`, e in essa crea una cartella `effect`. In questa creeremo il record `LightningEnchantmentEffect`.
+Start by creating an `enchantment` folder, and within it, create an `effect` folder. Within that, we'll create the `LightningEnchantmentEffect` record.
 
-Poi possiamo creare un costruttore e fare override dei metodi dell'interfaccia `EnchantmentEntityEffect`. Creeremo anche una variabile `CODEC` per codificare e decodificare il nostro effetto; puoi leggere di più [riguardo ai Codec qui](../codecs).
+Next, we can create a constructor and override the `EnchantmentEntityEffect` interface methods. We'll also create a `CODEC` variable to encode and decode our effect; you can read more about [Codecs here](../codecs).
 
-La maggior parte del nostro codice andrà nell'evento `apply()`, che viene chiamato quando i criteri perché il tuo incantesimo funzioni sono soddisfatti. Dopo di che configureremo questo `Effect` in modo che sia chiamato quando un'entità è colpita, ma per ora scriviamo codice semplice per colpire l'obiettivo con un fulmine.
+The bulk of our code will go into the `apply()` event, which is called when the criteria for your enchantment to work is met. We'll later configure this `Effect` to be called when an entity is hit, but for now, let's write simple code to strike the target with lightning.
 
 @[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/enchantment/effect/LightningEnchantmentEffect.java)
 
-Qui, la variabile `amount` indica un valore ridimensionato in base al livello dell'incantesimo. Possiamo usare questa per modificare l'efficacia dell'incantesimo in base al livello. Nel codice sopra, stiamo usando il livello dell'incantesimo per determinare quanti fulmini vengono generati.
+Here, the `amount` variable indicates a value scaled to the level of the enchantment. We can use this to modify how effective the enchantment is based on level. In the code above, we are using the level of the enchantment to determine how many lightning strikes are spawned.
 
-## Registrare l'Effetto dell'Incantesimo {#registering-the-enchantment-effect}
+## Registering the Enchantment Effect {#registering-the-enchantment-effect}
 
-Come ogni altra componente della tua mod, dovremo aggiungere questo `EnchantmentEffect` alla registry di Minecraft. Per fare ciò, aggiungi una classe `ModEnchantmentEffects` (o un qualsiasi nome che tu voglia darle) e un metodo ausiliare per registrare l'incantesimo. Assicurati di chiamare il `registerModEnchantmentEffects()` nella tua classe principale, che contiene il metodo `onInitialize()`.
+Like every other component of your mod, we'll have to add this `EnchantmentEffect` to Minecraft's registry. To do so, add a class `ModEnchantmentEffects` (or whatever you want to name it) and a helper method to register the enchantment. Be sure to call the `registerModEnchantmentEffects()` in your main class, which contains the `onInitialize()` method.
 
 @[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/enchantment/ModEnchantmentEffects.java)
 
-## Creare l'Incantesimo {#creating-the-enchantment}
+## Creating the Enchantment {#creating-the-enchantment}
 
-Ora abbiamo un effetto d'incantesimo! Il passaggio finale è creare un incantesimo che applica il nostro effetto personalizzato. Anche se questo si potrebbe fare creando un file JSON in maniera simile a quella dei datapack, questa guida ti mostrerà come generare il JSON dinamicamente usando gli strumenti di generazione di dati di Fabric. Per cominciare, crea una classe `EnchantmentGenerator`.
+Now we have an enchantment effect! The final step is to create an enchantment that applies our custom effect. While this can be done by creating a JSON file similar to those in datapacks, this guide will show you how to generate the JSON dynamically using Fabric's data generation tools. To begin, create an `ExampleModEnchantmentGenerator` class.
 
-All'interno di questa classe registreremo anzitutto un nuovo incantesimo, e poi useremo il metodo `configure()` per creare il nostro JSON programmaticamente.
+Within this class, we'll first register a new enchantment, and then use the `configure()` method to create our JSON programmatically.
 
-@[code transcludeWith=#entrypoint](@/reference/latest/src/client/java/com/example/docs/datagen/EnchantmentGenerator.java)
+@[code transcludeWith=#entrypoint](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModEnchantmentGenerator.java)
 
-Prima di procedere dovresti assicurarti che il tuo progetto sia configurato per la generazione di dati; se non sei sicuro, [controlla la pagina corrispondente della documentazione](../data-generation/setup).
+Before proceeding, you should ensure your project is configured for data generation; if you are unsure, [view the respective docs page](../data-generation/setup).
 
-Infine, dobbiamo dire alla nostra mod di aggiungere il nostro `EnchantmentGenerator` alla lista di operazioni di generazione dati. Per fare questo, basta aggiungere il `EnchantmentGenerator` a questo all'interno del metodo `onInitializeDataGenerator`.
+Lastly, we must tell our mod to add our `EnchantmentGenerator` to the list of data generation tasks. To do so, simply add the `EnchantmentGenerator` to this inside of the `onInitializeDataGenerator` method.
 
-@[code transclude={24-24}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code transcludeWith=:::custom-enchantments:register-generator](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-Ora, eseguendo l'operazione di generazione dati della tua mod, i file JSON degli incantesimi verranno generati nella cartella `generated`. Ecco un esempio qua sotto:
+Now, when you run your mod's data generation task, enchantment JSONs will be generated inside the `generated` folder. An example can be seen below:
 
 @[code](@/reference/latest/src/main/generated/data/example-mod/enchantment/thundering.json)
 
-Dovresti anche aggiungere le traduzioni al tuo file `en_us.json` per dare al tuo incantesimo un nome leggibile:
+You should also add translations to your `en_us.json` file to give your enchantment a readable name:
 
 ```json
-"enchantment.ExampleMod.thundering": "Thundering",
+"enchantment.example-mod.thundering": "Thundering",
 ```
 
-Dovresti ora avere un effetto d'incantesimo personalizzato funzionante! Testalo incantando un'arma con l'incantesimo e colpendo un mob. Ecco un esempio nel video seguente:
+You should now have a working custom enchantment effect! Test it by enchanting a weapon with the enchantment and hitting a mob. An example is given in the following video:
 
-<VideoPlayer src="/assets/develop/enchantment-effects/thunder.webm">Usare l'Incantesimo Fulminazione</VideoPlayer>
+<VideoPlayer src="/assets/develop/enchantment-effects/thunder.webm">Using the Thundering Enchantment</VideoPlayer>

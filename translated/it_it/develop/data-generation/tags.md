@@ -2,6 +2,7 @@
 title: Generazione di Tag
 description: Una guida per configurare la generazione di tag con datagen.
 authors:
+  - CelDaemon
   - IMB11
   - skycatminepokie
   - Spinoscythe
@@ -9,34 +10,46 @@ authors-nogithub:
   - mcrafterzz
 ---
 
-:::info PREREQUISITI
-Assicurati di aver prima completato il processo di [configurazione della datagen](./setup).
+<!---->
+
+:::info PREREQUISITES
+
+Make sure you've completed the [datagen setup](./setup) process first.
+
 :::
 
-## Configurazione {#setup}
+## Setup {#setup}
 
-Anzitutto, crea la tua classe che `extends FabricTagProvider<T>`, dove `T` è il tipo di cosa per la quale vuoi fornire un tag. Questo è il tuo **fornitore**. Qui mostreremo come creare tag di `Item`, ma lo stesso principio si applica ad altre cose. Lascia che il tuo IDE compili il codice richiesto, poi sostituisci il parametro `registryKey` del costruttore con la `RegistryKey` per il tuo tipo:
+Here we'll show how to create `Item` tags, but the same principle applies for other things.
+
+Fabric provides several helper tag providers including one for items; `FabricTagProvider.ItemTagProvider`. We will use this helper class for this example.
+
+You can create your own class that extends `FabricTagProvider<T>`, where `T` is the type of thing you'd like to provide a tag for. This is your **provider**.
+
+Let your IDE fill in the required code, then replace the `resourceKey` constructor parameter with the `ResourceKey` for your type:
 
 @[code lang=java transcludeWith=:::datagen-tags:provider](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModItemTagProvider.java)
 
-:::tip
-Ti servirà un fornitore diverso per ogni tipo di tag (per esempio un `FabricTagProvider<EntityType<?>>` e un `FabricTagProvider<Item>`).
+::: tip
+
+You will need a different provider for each type of tag (eg. one `FabricTagProvider<EntityType<?>>` and one `FabricTagProvider<Item>`).
+
 :::
 
-Per completare la configurazione, aggiungi questo fornitore alla tua `DataGeneratorEntrypoint` nel metodo `onInitializeDataGenerator`.
+To finish setup, add this provider to your `DataGeneratorEntrypoint` within the `onInitializeDataGenerator` method.
 
-@[code lang=java transclude={30-30}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code lang=java transcludeWith=:::datagen-tags:register](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## Creare un Tag {#creating-a-tag}
+## Creating a Tag {#creating-a-tag}
 
-Ora che hai creato un fornitore, aggiungiamoci un tag. Anzitutto, crea una `TagKey<T>`:
+Now that you've created a provider, let's add a tag to it. First, create a `TagKey<T>`:
 
 @[code lang=java transcludeWith=:::datagen-tags:tag-key](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModItemTagProvider.java)
 
-Poi, chiama `getOrCreateTagBuilder` nel metodo `configure` del tuo fornitore. Da lì, puoi aggiungere oggetti individualmente, aggiungere altri tag, o fare in modo che questo tag ne sostituisca di preesistenti.
+Next, call `valueLookupBuilder` inside your provider's `configure` method. From there, you can add individual items, add other tags, or make this tag replace pre-existing tags.
 
-Se vuoi aggiungere un tag, usa `addOptionalTag`, poiché i contenuti del tag potrebbero non essere caricati durante la datagen. Se sei sicuro che il tag sia caricato, chiama `addTag`.
+If you want to add a tag, use `addOptionalTag`, as the tag's contents may not be loaded during datagen. If you are certain the tag is loaded, call `addTag`.
 
-Per aggiungere un tag forzatamente ignorando il formato errato, usa `forceAddTag`.
+To forcefully add a tag and ignore the broken format, use `forceAddTag`.
 
 @[code lang=java transcludeWith=:::datagen-tags:build](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModItemTagProvider.java)

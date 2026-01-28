@@ -15,15 +15,15 @@ A meno che tu non voglia creare una mod con oggetti troppo potenti, dovresti ten
 
 ## Aggiungere la Componente Alimento {#adding-the-food-component}
 
-Per aggiungere la componente alimentare ad un oggetto, possiamo passarla all'istanza `Item.Setttings`:
+To add a food component to an item, we can pass it to the `Item.Properties` instance:
 
 ```java
-new Item.Settings().food(new FoodComponent.Builder().build())
+new Item.Properties().food(new FoodProperties.Builder().build())
 ```
 
 Per ora questo rende l'oggetto edibile, e nulla di più.
 
-La classe `FoodComponent.Builder` ha qualche metodo che ti permette di modificare cosa succede quando un giocatore mangia il tuo oggetto:
+The `FoodProperties.Builder` class has some methods that allow you to modify what happens when a player eats your item:
 
 | Metodo               | Descrizione                                                                                        |
 | -------------------- | -------------------------------------------------------------------------------------------------- |
@@ -31,9 +31,9 @@ La classe `FoodComponent.Builder` ha qualche metodo che ti permette di modificar
 | `saturationModifier` | Imposta la quantita di punti di saturazione che l'oggetto aggiungerà.              |
 | `alwaysEdible`       | Permette al tuo oggetto di essere consumato indipendentemente dal livello di fame. |
 
-Quando avrai modificato il costruttore come preferisci, puoi chiamare il metodo `build()` per ottenere la `FoodComponent`.
+When you've modified the builder to your liking, you can call the `build()` method to get the `FoodProperties`.
 
-Se vuoi aggiungere effetti di stato al giocatore quando mangiano il tuo cibo, devi usare la classe `ConsumableComponent` assieme a `FoodComponent`, come noti nell'esempio seguente:
+If you want to add status effects to the player when they eat your food, you will need to add a `Consumable` component alongside the `FoodProperties` component as seen in the following example:
 
 @[code transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 

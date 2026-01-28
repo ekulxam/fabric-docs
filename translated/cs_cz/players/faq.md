@@ -1,29 +1,29 @@
 ---
-title: Často kladené otázky hráčů
-description: Často kladené otázky hráčů a administrátorů ohledně Fabricu.
+title: Frequently Asked Questions
+description: Questions about Fabric, frequently asked by players and server administrators.
 ---
 
 Je hodně otázek, které jsou často kladeny, proto jsme je shromáždili sem do listu.
 
-## Všeobecné otázky
-
-### Jaké verze Minecraftu Fabric podporuje?
+## Jaké verze Minecraftu Fabric podporuje? {#what-minecraft-versions-does-fabric-support}
 
 Fabric oficiálně podporuje všechny verze hry od snapshotu `18w34b`, a vydání `1.14`.
 
-### Kam mohu nahrát módy vytvořené přes Fabric?
+## Kam mohu nahrát módy vytvořené přes Fabric? {#where-can-i-download-published-fabric-mods}
 
-:::info
-Vždy byste měli zkontrolovat, zda jsou módy z důvěryhodného zdroje. Podívejte se na [Hledání důvěryhodných módů](./finding-mods) pro více informací.
+::: info
+
+You should always check if mods are from a trustworthy source. Check out the [Finding Trustworthy Mods](./finding-mods) guide for more information.
+
 :::
 
-Většina autorů módů publikuje své módy na [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) a [CurseForge](https://www.curseforge.com/minecraft/search?page=1&pageSize=20&sortType=1&class=mc-mods&gameFlavorsIds=4), avšak někteří mohou preferovat nahrávání na své stránky nebo na GitHub.
+The majority of authors publish their mods to [Modrinth](https://modrinth.com/mods?g=categories:%27fabric%27) and [CurseForge](https://www.curseforge.com/minecraft/search?class=mc-mods&gameVersionTypeId=4), however some may choose to upload them on their personal websites, or on other platforms, such as a GitHub repository.
 
-### Kde mohu nalézt předvytvořené Fabric modpacky?
+## Where Can I Find Pre-Made Fabric Modpacks? {#where-can-i-find-pre-made-fabric-modpacks}
 
-Můžete je nalézt na vícero platformách, např:
+You can find pre-made Fabric modpacks on a variety of platforms, such as:
 
 - [Modrinth](https://modrinth.com/modpacks?g=categories:%27fabric%27)
-- [CurseForge](https://www.curseforge.com/minecraft/search?page=1&pageSize=20&sortType=1&class=modpacks&gameFlavorsIds=4)
+- [CurseForge](https://www.curseforge.com/minecraft/search?class=modpacks&gameVersionTypeId=4)
 - [Feed The Beast](https://www.feed-the-beast.com/ftb-app)
 - [Technic](https://www.technicpack.net/modpacks)

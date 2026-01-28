@@ -3,7 +3,7 @@ title: 贡献指南
 description: Fabric 文档贡献指南
 ---
 
-此网站使用 [VitePress](https://vitepress.dev/) 从多个 Markdown 文件生成静态 HTML 网页。 您应该熟悉 VitePress 所支持的 Markdown 扩展语法，参见[此链接](https://vitepress.dev/guide/markdown#features)。
+此网站使用 [VitePress](https://vitepress.dev/) 从多个 Markdown 文件生成静态 HTML 网页。 You should familiarize yourself with the [Markdown extensions that VitePress supports](https://vitepress.dev/guide/markdown#features).
 
 贡献此网站有三种方法：
 
@@ -17,85 +17,87 @@ description: Fabric 文档贡献指南
 
 如果想将文档翻译为你的语言，可以在 [Fabric Crowdin 页面](https://zh.crowdin.com/project/fabricmc)翻译。
 
-<!-- markdownlint-disable-next-line titlecase-rule -->
+<!-- markdownlint-disable titlecase-rule -->
 
 ## <Badge type="tip">new-content</Badge> 贡献内容{#contributing-content}
 
-贡献内容是贡献 Fabric 文档的主要方式。
+<!-- markdownlint-enable titlecase-rule -->
 
-所有内容贡献都经过以下步骤，每个步骤都与一个标签相关联：
+Content contributions are the main way to contribute to the Fabric Documentation.
 
-1. <Badge type="tip">本地</Badge> 准备您的更改并推出一个PR
-2. <Badge type="tip">stage:expansion</Badge>：扩展指南（如果可能）
-3. <Badge type="tip">stage:verification</Badge>：内容验证
-4. <Badge type="tip">步骤：整理中</Badge>：语法检查中...
-5. <Badge type="tip">步骤：准备</Badge>：准备合并！
+All content contributions go through the following stages, each of which is associated with a label:
 
-所有的内容都应当遵循我们的[样式指南](#style-guidelines)。
+1. <Badge type="tip">locally</Badge> Prepare your changes and push a PR
+2. <Badge type="tip">stage:expansion</Badge>: Guidance for Expansion if needed
+3. <Badge type="tip">stage:verification</Badge>: Content verification
+4. <Badge type="tip">stage:cleanup</Badge>: Grammar, Linting...
+5. <Badge type="tip">stage:ready</Badge>: Ready to be merged!
 
-### 1. 准备你的更改{#1-prepare-your-changes}
+All content must follow our [style guidelines](#style-guidelines).
 
-网站是开源的，在 GitHub 仓库中开发，意味着我们依赖 GitHub 工作流。
+### 1. Prepare Your Changes {#1-prepare-your-changes}
 
-1. [复刻 GitHub 仓库](https://github.com/FabricMC/fabric-docs/fork)
-2. 为你的复刻创建新分支
-3. 在那个分支上做出更改
-4. 在源仓库开拉取请求
+This website is open-source, and it is developed in a GitHub repository, which means that we rely on the GitHub flow:
 
-可以在[这里](https://docs.github.com/en/get-started/using-github/github-flow)了解更多关于 GitHub 流。
+1. [Fork the GitHub repository](https://github.com/FabricMC/fabric-docs/fork)
+2. Create a new branch on your fork
+3. Make your changes on that branch
+4. Open a Pull Request to the original repository
 
-可以在 GitHub 网站界面上做出更改，也可以本地开发和预览网站。
+You can read more about the [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow).
 
-#### 克隆你的复刻{#clone-your-fork}
+You can either make changes from the web UI on GitHub, or you can develop and preview the website locally.
 
-如果想要本地克隆复刻，需要安装 [Git](https://git-scm.com/)。
+#### Cloning Your Fork {#clone-your-fork}
 
-然后，用以下代码克隆仓库的复刻：
+If you want to develop locally, you will need to install [Git](https://git-scm.com/).
+
+After that, clone your fork of the repository with:
 
 ```sh
 # make sure to replace "your-username" with your actual username
 git clone https://github.com/your-username/fabric-docs.git
 ```
 
-#### 安装依赖{#install-dependencies}
+#### Installing Dependencies {#install-dependencies}
 
-如果想要本地预览更改，需要安装 [Node.js 18+](https://nodejs.org/en/)。
+If you want to preview your changes locally, you will need to install [Node.js 18+](https://nodejs.org/en/).
 
-然后，确保用以下代码安装所有依赖：
+After that, make sure to install all dependencies with:
 
 ```sh
 npm install
 ```
 
-#### 运行开发服务器{#run-the-development-server}
+#### Running the Development Server {#run-the-development-server}
 
-这将允许您在本地地址 `localhost:3000` 预览您的更改，并自动在修改时重载页面。
+This will allow you to preview your changes locally at `localhost:5173` and will automatically reload the page when you make changes.
 
 ```sh
 npm run dev
 ```
 
-现在可以从浏览器访问 `http://localhost:5173` 打开和浏览网站。
+Now you can open and browse the website from the browser by visiting `http://localhost:5173`.
 
-#### 构建网站{#building-the-website}
+#### Building the Website {#building-the-website}
 
-这会把所有 Markdown 文件编译为静态 HTML 文件并保存至 `.vitepress/dist`：
+This will compile all Markdown files into static HTML files and place them in `.vitepress/dist`:
 
 ```sh
 npm run build
 ```
 
-#### 预览构建的网站{#previewing-the-built-website}
+#### Previewing the Built Website {#previewing-the-built-website}
 
-这将在端口 `4173` 启动本地服务器并展示 `.vitepress/dist` 中的网页：
+This will start a local server on port `4173` serving the content found in `.vitepress/dist`:
 
 ```sh
 npm run preview
 ```
 
-#### 打开拉取请求{#opening-a-pull-request}
+#### Opening a Pull Request {#opening-a-pull-request}
 
-对你的更改满意了，就可以 `推送（push）` 你的更改。
+Once you're happy with your changes, you may `push` your changes:
 
 ```sh
 git add .
@@ -103,56 +105,58 @@ git commit -m "Description of your changes"
 git push
 ```
 
-然后，跟随 `git push` 的输出打开拉取请求。
+Then, follow the link in the output of `git push` to open a PR.
 
-### 2. <Badge type="tip">stage:expansion</Badge> 需要时扩展指南{#2-guidance-for-expansion-if-needed}
+### 2. <Badge type="tip">stage:expansion</Badge> Guidance for Expansion if Needed {#2-guidance-for-expansion-if-needed}
 
-如果文档团队认为您需要拓展您的拉去请求，团队成员将添加 <Badge type="tip">stage:expansion</Badge> 标签到您的拉去请求，并附上一条评论解释为什么他认为可以拓展。 如果同意建议，可以扩展你的拉取请求。
+If the documentation team thinks that you could expand upon your pull request, a member of the team will add the <Badge type="tip">stage:expansion</Badge> label to your pull request alongside a comment explaining what they think you could expand upon. If you agree with the suggestion, you can expand upon your pull request.
 
-如果不想扩展您的拉取请求，但乐于让其他人在未来扩展它，最好在[议题页面](https://github.com/FabricMC/fabric-docs/issues)创建议题，并解释您想如何扩展。 之后文档制作团队将会在你的PR中加入<Badge type="tip">帮助-追踪</Badge>标签
+If you do not want to expand upon your pull request, but you are happy for someone else to expand upon it at a later date, you should create an issue on the [Issues page](https://github.com/FabricMC/fabric-docs/issues) and explain what you think could be expanded upon. The documentation team will then add the <Badge type="tip">help-wanted</Badge> label to your PR.
 
-### 3. <Badge type="tip">stage:verification</Badge> 内容验证{#3-content-verification}
+### 3. <Badge type="tip">stage:verification</Badge> Content Verification {#3-content-verification}
 
-这是最重要的阶段，因为这能确保内容准确且遵循 Fabric 文档的样式指南。
+This is the most important stage as it ensures that the content is accurate and follows the Fabric Documentation style guide.
 
-在这一步，以下问题应被回答：
+In this stage, the following questions should be answered:
 
-- 所有内容都正确吗？
-- 所有内容都是最新的吗？
-- 内容是否涵盖所有情况，例如不同的操作系统？
+- Is all of the content correct?
+- Is all of the content up-to-date?
+- Does the content cover all cases, such as different operating systems?
 
-### 4. <Badge type="tip">stage:cleanup</Badge> 清理{#4-cleanup}
+### 4. <Badge type="tip">stage:cleanup</Badge> Cleanup {#4-cleanup}
 
-在这一步，会发生以下内容：
+In this stage, the following happens:
 
-- 使用[LanguageTool](https://languagetool.org/)来修复一切语法问题
-- 使用 [`markdownlint`](https://github.com/DavidAnson/markdownlint) 检查所有 Markdown 文件
-- 使用[检查工具](https://checkstyle.sourceforge.io/)来格式化所有Java代码
-- 其它杂项翻译或优化
+- Fixing of any grammar issues using [LanguageTool](https://languagetool.org/)
+- Linting of all Markdown files using [`markdownlint`](https://github.com/DavidAnson/markdownlint)
+- Formatting of all Java code using [Checkstyle](https://checkstyle.sourceforge.io/)
+- Other miscellaneous fixes or improvements
 
-## <Badge type="tip">framework</Badge> 贡献网页框架{#contributing-framework}
+## <Badge type="tip">framework</Badge> Contributing Framework {#contributing-framework}
 
-“框架”指的是网站的内部结构，任何修改网站框架的拉取请求都应该用 <Badge type="tip">framework</Badge> 标签标记。
+Framework refers to the internal structure of the website, any pull requests that modify the framework of the website will be labeled with the <Badge type="tip">framework</Badge> label.
 
-您应该在咨询了 [Fabric Discord](https://discord.gg/v6v4pMv) 上的文档团队或通过一个 issue 后再发起框架相关的拉取请求。
+You should really only make framework pull requests after consulting with the documentation team on the [Fabric Discord](https://discord.fabricmc.net/) or via an issue.
 
-:::info
-修改侧边栏文件和导航栏配置不算作框架拉取请求。
+::: info
+
+Modifying sidebar files and the navigation bar configuration does not count as a framework pull request.
+
 :::
 
-## 样式指南{#style-guidelines}
+## Style Guidelines {#style-guidelines}
 
-如果有任何疑问，请在 [Fabric Discord](https://discord.gg/v6v4pMv) 或 GitHub Discussions 中提出。
+If you are unsure about anything, you can ask in the [Fabric Discord](https://discord.fabricmc.net/) or via GitHub Discussions.
 
-### 用美式英语写原文{#write-the-original-in-american-english}
+### Write the Original in American English {#write-the-original-in-american-english}
 
-所有原始文档都使用英文书写，遵循美国的语法规则。
+All original documentation is written in English, following the American rules of grammar.
 
-### 给 Frontmatter 添加数据{#add-data-to-the-frontmatter}
+### Add Data to the Frontmatter {#add-data-to-the-frontmatter}
 
-所有页面必须在 frontmatter 中有 `title` 和 `description`。
+Each page must have a `title` and a `description` in the frontmatter.
 
-记得还要在 Markdown 文件的 frontmatter 中的 `authors` 添加你的 GitHub 用户名！ 这种方式可以给你适当的致谢。
+Remember to also add your GitHub username to `authors` in the frontmatter of the Markdown file! This way we can give you proper credit.
 
 ```yaml
 ---
@@ -163,21 +167,21 @@ authors:
 ---
 ```
 
-### 给标题添加锚点{#add-anchors-to-headings}
+### Add Anchors to Headings {#add-anchors-to-headings}
 
-每个标题都必须要有个锚点，用于链接至那个标题：
+Each heading must have an anchor, which is used to link to that heading:
 
 ```md
 ## This Is a Heading {#this-is-a-heading}
 ```
 
-锚点必须使用小写字母、数字和横杠
+The anchor must use lowercase characters, numbers and dashes.
 
-### 将代码置于 `/reference` 模组中{#place-code-within-the-reference-mod}
+### Place Code Within the Example Mod {#place-code-within-the-example-mod}
 
-如果创建或修改包含代码的页面，将代码置于参考模组（位于目录的 `/reference` 文件夹内）的适当位置。 然后，使用[由 VitePress 提供的代码片段功能](https://vitepress.dev/guide/markdown#import-code-snippets)来嵌入代码。
+If you create or modify pages containing code, place the code in an appropriate location within the example mod (located in the `/reference` folder of the repository). Then, use the [code snippet feature offered by VitePress](https://vitepress.dev/guide/markdown#import-code-snippets) to embed the code.
 
-例如，高亮参考模组中的 `ExampleMod.java` 的第 15-21 行：
+For example, to highlight lines 15-21 of the `ExampleMod.java` file from the mod:
 
 ::: code-group
 
@@ -189,9 +193,9 @@ authors:
 
 :::
 
-如果需要更大范围的控制，可以使用[来自 `markdown-it-vuepress-code-snippet-enhanced` 的 transclude 功能](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced)。
+If you need a greater span of control, you can use the [transclude feature from `markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
 
-例如，这会嵌入上面的文件中被标记 `#entrypoint` 标签的部分：
+For example, this will embed the sections of the file above that are marked with the `#entrypoint` tag:
 
 ::: code-group
 
@@ -203,29 +207,29 @@ authors:
 
 :::
 
-### 为每个新段落创建侧边栏{#create-a-sidebar-for-each-new-section}
+### Create a Sidebar for Each New Section {#create-a-sidebar-for-each-new-section}
 
-如果创建新章节，你应该在 `.vitepress/sidebars` 文件夹中创建新的侧边栏，并添加到 `i18n.mts` 文件。
+If you're creating a new section, you should create a new sidebar in the `.vitepress/sidebars` folder and add it to the `i18n.mts` file.
 
-如果这个需要帮助，请在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#docs` 频道提问。
+If you need assistance with this, please ask in the [Fabric Discord](https://discord.fabricmc.net/)'s `#docs` channel.
 
-### 将新页面添加到相关的侧边栏{#add-new-pages-to-the-relevant-sidebars}
+### Add New Pages to the Relevant Sidebars {#add-new-pages-to-the-relevant-sidebars}
 
-写新页面时，应该将其添加到 `.vitepress/sidebars` 文件夹中的相关侧边栏。
+When creating a new page, you should add it to the relevant sidebar in the `.vitepress/sidebars` folder.
 
-还是那句，如果需要帮助，请在 Fabric Discord 的 `#docs` 频道提问。
+Again, if you need assistance, ask in the Fabric Discord in the `#docs` channel.
 
-### 把媒体放在 `/assets` 中{#place-media-in-assets}
+### Place Media in `/assets` {#place-media-in-assets}
 
-任何图片都应该放在 `/assets` 文件夹中的适当位置。
+Any images should be placed in a suitable place in the `/public/assets` folder.
 
-### 使用相对链接！ 使用相对链接！ {#use-relative-links}
+### Use Relative Links! {#use-relative-links}
 
-这是因为现有的版本控制系统会预处理链接，以便事先添加版本号。 如果您使用绝对链接，版本号将不会添加到链接中。
+This is because of the versioning system in place, which will process the links to add the version beforehand. If you use absolute links, the version number will not be added to the link.
 
-你也不能够给链接添加扩展名。
+You must also not add the file extension to the link either.
 
-例如，要从页面 `/players/index.md` 链接到位于 `/players/installing-fabric.md` 的页面，需要进行以下操作：
+For example, to link to the page found in `/players/index.md` from the page `/develop/index.md`, you would have to do the following:
 
 ::: code-group
 
@@ -245,3 +249,5 @@ This relative link has the file extension.
 ```
 
 :::
+
+<!---->

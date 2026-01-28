@@ -2,6 +2,7 @@
 title: Pozioni
 description: Impara come aggiungere pozioni personalizzate per vari effetti di stato.
 authors:
+  - cassiancc
   - dicedpixels
   - Drakonkinst
   - JaaiDead
@@ -16,32 +17,35 @@ Proprio come gli oggetti e i blocchi, le pozioni devono essere registrate.
 
 ### Creare la Pozione {#creating-the-potion}
 
-Iniziamo dichiarando un attributo per conservare la tua istanza `Potion`. Useremo direttamente una classe che implementi `ModInitializer` per conservarla.
+Let's start by declaring a field to hold your `Potion` instance. Useremo direttamente una classe che implementi `ModInitializer` per conservarla. Note the use of `Registry.registerForHolder`, as, like mob effects, most vanilla methods that use potions prefer them as holders.
 
 @[code lang=java transclude={18-27}](@/reference/latest/src/main/java/com/example/docs/potion/ExampleModPotions.java)
 
-Passiamo una istanza di `StatusEffectInstance`, che accetta 3 parametri:
+We pass an instance of `MobEffectInstance`, which takes 3 parameters:
 
-- `RegistryEntry<StatusEffect> type` - Un effetto. Qui usiamo il nostro effetto personalizzato. In alternativa puoi accedere agli effetti vanilla attraverso la classe vanilla `StatusEffects`.
+- `Holder<MobEffect> type` - An effect, represented as a holder. Qui usiamo il nostro effetto personalizzato. Alternatively you can access vanilla effects
+  through vanilla's `MobEffects` class.
 - `int duration` - Durata dell'effetto espressa in tick di gioco.
 - `int amplifier` - Un amplificatore per l'effetto. Per esempio, Sollecitudine II avrebbe un amplificatore di 1.
 
-:::info
-Per creare il tuo effetto personalizzato per la pozione, per favore guarda la guida [Effetti](../entities/effects).
+::: info
+
+To create your own potion effect, please see the [Effects](../entities/effects) guide.
+
 :::
 
-### Registrare la Pozione {#registering-the-potion}
+### Registering the Potion {#registering-the-potion}
 
-Nel nostro initializer, useremo l'evento `FabricBrewingRecipeRegistryBuilder.BUILD` per registrare la nostra pozione usando il metodo `BrewingRecipeRegistry.registerPotionRecipe`.
+In our initializer, we will use the `FabricBrewingRecipeRegistryBuilder.BUILD` event to register our potion using the `BrewingRecipeRegistry.registerPotionRecipe` method.
 
 @[code lang=java transclude={29-40}](@/reference/latest/src/main/java/com/example/docs/potion/ExampleModPotions.java)
 
-`registerPotionRecipe` accetta 3 parametri:
+`registerPotionRecipe` takes 3 parameters:
 
-- `RegistryEntry<Potion> input` - La voce di registry della pozione iniziale. Solitamente questa può essere una Ampolla d'Acqua o una Pozione Strana.
-- `Item item` - L'oggetto che rappresenta l'ingrediente principale della pozione.
-- `RegistryEntry<Potion> output` - La voce di registry della pozione risultante.
+- `Holder<Potion> input` - The starting potion, represented by a holder. Usually this can be a Water Bottle or an Awkward Potion.
+- `Item item` - The item which is the main ingredient of the potion.
+- `Holder<Potion> output` - The resultant potion, represented by a holder.
 
-Una volta registrato, puoi distillare una pozione Tater usando una patata.
+Once registered, you can brew a Tater potion using a potato.
 
-![Effetto nell'inventario del giocatore](/assets/develop/tater-potion.png)
+![Effect in player inventory](/assets/develop/tater-potion.png)

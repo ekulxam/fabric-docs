@@ -3,7 +3,7 @@ title: 貢献ガイドライン
 description: Fabricドキュメントへの貢献ガイドライン
 ---
 
-このWebサイトは、Markdownファイルから静的HTMLを生成するのに [VitePress](https://vitepress.dev/) を使っています。 VitePress がサポートする Markdown 拡張機能については、[こちら](https://vitepress.dev/guide/markdown#features)でよく理解しておく必要があります。
+このWebサイトは、Markdownファイルから静的HTMLを生成するのに [VitePress](https://vitepress.dev/) を使っています。 You should familiarize yourself with the [Markdown extensions that VitePress supports](https://vitepress.dev/guide/markdown#features).
 
 この Web サイトに貢献するには、次の 3 つの方法があります。
 
@@ -17,85 +17,87 @@ description: Fabricドキュメントへの貢献ガイドライン
 
 ドキュメントを自分の言語に翻訳したい場合は、[Fabric Crowdin ページ](https://crowdin.com/project/fabricmc)で行うことができます。
 
-<!-- markdownlint-disable-next-line titlecase-rule -->
+<!-- markdownlint-disable titlecase-rule -->
 
 ## <Badge type="tip">new-content</Badge> コンテンツの寄稿 {#contributing-content}
 
-コンテンツの寄稿は、Fabric ドキュメントに貢献する主な方法です。
+<!-- markdownlint-enable titlecase-rule -->
 
-すべてのコンテンツ投稿は次の段階を経て行われ、各段階にはラベルが関連付けられます。
+Content contributions are the main way to contribute to the Fabric Documentation.
 
-1. <Badge type="tip">locally</Badge> 変更を準備してPRをプッシュ
-2. <Badge type="tip">stage:expansion</Badge>: 必要に応じて拡張するためのガイダンス
-3. <Badge type="tip">stage:verification</Badge>: コンテンツの検証
-4. <Badge type="tip">stage:cleanup</Badge>: 文法、添削...
-5. <0>stage:ready</0>: マージの準備完了！
+All content contributions go through the following stages, each of which is associated with a label:
 
-すべてのコンテンツは、[スタイルガイドライン](#style-guidelines)に従ってください。
+1. <Badge type="tip">locally</Badge> Prepare your changes and push a PR
+2. <Badge type="tip">stage:expansion</Badge>: Guidance for Expansion if needed
+3. <Badge type="tip">stage:verification</Badge>: Content verification
+4. <Badge type="tip">stage:cleanup</Badge>: Grammar, Linting...
+5. <Badge type="tip">stage:ready</Badge>: Ready to be merged!
 
-### 1. 変更を準備 {#1-prepare-your-changes}
+All content must follow our [style guidelines](#style-guidelines).
 
-このWebサイトはオープンソースで、Githubのリポジトリで管理されているため、Githubでの手順に依存しています。
+### 1. Prepare Your Changes {#1-prepare-your-changes}
 
-1. [GitHubのリポジトリをForkする](https://github.com/FabricMC/fabric-docs/fork)
-2. あなたのForkで新しいブランチを作成する
-3. そのブランチで変更を作る
-4. 元のリポジトリにPull Requestを作る
+This website is open-source, and it is developed in a GitHub repository, which means that we rely on the GitHub flow:
 
-Github フローについて詳しくは[こちら](https://docs.github.com/en/get-started/using-github/github-flow)をご覧ください。
+1. [Fork the GitHub repository](https://github.com/FabricMC/fabric-docs/fork)
+2. Create a new branch on your fork
+3. Make your changes on that branch
+4. Open a Pull Request to the original repository
 
-GitHub のWebインターフェースから編集するか、ローカルでWebサイトを構築してプレビューすることもできます。
+You can read more about the [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow).
 
-#### あなたのForkをクローンする {#clone-your-fork}
+You can either make changes from the web UI on GitHub, or you can develop and preview the website locally.
 
-ローカルで開発する場合は、[Git](https://git-scm.com/)をインストールする必要があります。
+#### Cloning Your Fork {#clone-your-fork}
 
-そのあと、あなたのリポジトリをクローンします。
+If you want to develop locally, you will need to install [Git](https://git-scm.com/).
+
+After that, clone your fork of the repository with:
 
 ```sh
 # make sure to replace "your-username" with your actual username
 git clone https://github.com/your-username/fabric-docs.git
 ```
 
-#### 依存関係のインストール {#install-dependencies}
+#### Installing Dependencies {#install-dependencies}
 
-もしローカルで変更をプレビューしたい場合、[Node.js 18+](https://nodejs.org/en/)をインストールする必要があります。
+If you want to preview your changes locally, you will need to install [Node.js 18+](https://nodejs.org/en/).
 
-その後、次のコマンドを使用してすべての依存関係を必ずインストールしてください。
+After that, make sure to install all dependencies with:
 
 ```sh
 npm install
 ```
 
-#### 開発サーバーの実行 {#run-the-development-server}
+#### Running the Development Server {#run-the-development-server}
 
-`localhost:5173` でローカルに変更をプレビューできるようになり、変更を加えるとページが自動的にリロードされます。
+This will allow you to preview your changes locally at `localhost:5173` and will automatically reload the page when you make changes.
 
 ```sh
 npm run dev
 ```
 
-これで、`http://localhost:5173` にアクセスして、ブラウザからWebサイトを開いて閲覧できるようになります。
+Now you can open and browse the website from the browser by visiting `http://localhost:5173`.
 
-#### ウェブサイトの構築 {#building-the-website}
+#### Building the Website {#building-the-website}
 
-これによりすべての Markdown ファイルが静的 HTML ファイルにコンパイルされ、`.vitepress/dist` に配置されます。
+This will compile all Markdown files into static HTML files and place them in `.vitepress/dist`:
 
 ```sh
 npm run build
 ```
 
-#### 構築した Web サイトのプレビュー {#previewing-the-built-website}
+#### Previewing the Built Website {#previewing-the-built-website}
 
-これにより、`.vitepress/dist` にあるコンテンツを提供するポート `4173` でローカル サーバーが起動します。
+This will start a local server on port `4173` serving the content found in `.vitepress/dist`:
 
 ```sh
 npm run preview
 ```
 
-#### Pull Requestを作る {#opening-a-pull-request}
+#### Opening a Pull Request {#opening-a-pull-request}
 
-変更内容に満足したら、変更内容を `push` できます。
+Once you're happy with your changes, you may `push` your changes:
 
 ```sh
 git add .
@@ -103,56 +105,58 @@ git commit -m "Description of your changes"
 git push
 ```
 
-次に、`git push` の出力にあるリンクに従って PR を開きます。
+Then, follow the link in the output of `git push` to open a PR.
 
-### 2. <Badge type="tip">stage:expansion</Badge> 必要に応じて拡張するためのガイダンス {#2-guidance-for-expansion-if-needed}
+### 2. <Badge type="tip">stage:expansion</Badge> Guidance for Expansion if Needed {#2-guidance-for-expansion-if-needed}
 
-ドキュメンテーションチームがPull Requestを拡張できると判断した場合、チームのメンバーがPull Requestに <Badge type="tip">stage:expansion</Badge> ラベルを追加し、拡張できると思われる内容を説明するコメントをします。 提案に同意する場合は、Pull Requestを拡張できます。 提案に同意する場合は、Pull Requestを拡張できます。 提案に同意する場合は、Pull Requestを拡張できます。
+If the documentation team thinks that you could expand upon your pull request, a member of the team will add the <Badge type="tip">stage:expansion</Badge> label to your pull request alongside a comment explaining what they think you could expand upon. If you agree with the suggestion, you can expand upon your pull request.
 
-自分でPull Requestを拡張するつもりはないが、後日他のユーザーが拡張しても構わない場合は、[Issueページ](https://github.com/FabricMC/fabric-docs/issues) で新しいIssueを作成し、拡張が必要と思われる内容を説明してください。 ドキュメンテーションチームは、あなたのPull Requestに <Badge type="tip">help-wanted</Badge> ラベルを追加します。
+If you do not want to expand upon your pull request, but you are happy for someone else to expand upon it at a later date, you should create an issue on the [Issues page](https://github.com/FabricMC/fabric-docs/issues) and explain what you think could be expanded upon. The documentation team will then add the <Badge type="tip">help-wanted</Badge> label to your PR.
 
-### 3. <Badge type="tip">stage:verification</Badge> コンテンツの検証 {#3-content-verification}
+### 3. <Badge type="tip">stage:verification</Badge> Content Verification {#3-content-verification}
 
-コンテンツが正確で、Fabricドキュメントのスタイルガイドに従っていることを確認するため、このステージが最も重要です。
+This is the most important stage as it ensures that the content is accurate and follows the Fabric Documentation style guide.
 
-このステージでは、次の質問に答える必要があります。
+In this stage, the following questions should be answered:
 
-- すべての内容が正確ですか？
-- すべての内容が最新ですか？
-- 内容はOSの違いなど、あらゆる場合をカバーしているか？
+- Is all of the content correct?
+- Is all of the content up-to-date?
+- Does the content cover all cases, such as different operating systems?
 
-### 4. <Badge type="tip">stage:cleanup</Badge> クリーンアップ {#4-cleanup}
+### 4. <Badge type="tip">stage:cleanup</Badge> Cleanup {#4-cleanup}
 
-このステージでは、次のことが行われます。
+In this stage, the following happens:
 
-- [LanguageTool](https://languagetool.org/)を使って、文法の問題や誤字を修正します。
-- [`markdownlint`](https://github.com/DavidAnson/markdownlint)を使って、リンティングします。
-- [Checkstyle](https://checkstyle.sourceforge.io/)を使って、Javaのコードをフォーマットします。
-- その他の修正や改善
+- Fixing of any grammar issues using [LanguageTool](https://languagetool.org/)
+- Linting of all Markdown files using [`markdownlint`](https://github.com/DavidAnson/markdownlint)
+- Formatting of all Java code using [Checkstyle](https://checkstyle.sourceforge.io/)
+- Other miscellaneous fixes or improvements
 
-## <Badge type="tip">framework</Badge> コントリビュートの枠組み {#contributing-framework}
+## <Badge type="tip">framework</Badge> Contributing Framework {#contributing-framework}
 
-フレームワークとは、Webサイトの構造のことを指します。フレームワークを変更するPull Requestには <Badge type="tip">framework</Badge> ラベルがつけられます。
+Framework refers to the internal structure of the website, any pull requests that modify the framework of the website will be labeled with the <Badge type="tip">framework</Badge> label.
 
-フレームワークのPull Requestは、[Fabric Discord](https://discord.gg/v6v4pMv)またはissueでドキュメントチームに相談した後にのみ行う必要があります。
+You should really only make framework pull requests after consulting with the documentation team on the [Fabric Discord](https://discord.fabricmc.net/) or via an issue.
 
-:::info
-サイドバーとナビゲーションバーの設定の変更は、フレームワークのPull Requestとしてみなされません。
+::: info
+
+Modifying sidebar files and the navigation bar configuration does not count as a framework pull request.
+
 :::
 
-## スタイルガイドライン {#style-guidelines}
+## Style Guidelines {#style-guidelines}
 
-分からないことがあれば、[Fabric Discord](https://discord.gg/v6v4pMv)またはGitHub Discussionsで聞いてください。
+If you are unsure about anything, you can ask in the [Fabric Discord](https://discord.fabricmc.net/) or via GitHub Discussions.
 
-### 原文をアメリカ英語で書く {#write-the-original-in-american-english}
+### Write the Original in American English {#write-the-original-in-american-english}
 
-オリジナルドキュメントはすべて、アメリカの文法規則に従って英語で書かれています。
+All original documentation is written in English, following the American rules of grammar.
 
-### Frontmatterにデータを追加 {#add-data-to-the-frontmatter}
+### Add Data to the Frontmatter {#add-data-to-the-frontmatter}
 
-それぞれのページは`titile`と`description`をfrontmatterに含んでいる必要があります。
+Each page must have a `title` and a `description` in the frontmatter.
 
-Markdownファイルのfrontmatterの`authors`にあなたのGitHubのユーザー名も忘れずに追加してください！ そうすればあなたに適切なクレジットを付与することができます。 そうすればあなたに適切なクレジットを付与することができます。 そうすればあなたに適切なクレジットを付与することができます。
+Remember to also add your GitHub username to `authors` in the frontmatter of the Markdown file! This way we can give you proper credit.
 
 ```yaml
 ---
@@ -163,21 +167,21 @@ authors:
 ---
 ```
 
-### 見出しにアンカーを追加する {#add-anchors-to-headings}
+### Add Anchors to Headings {#add-anchors-to-headings}
 
-それぞれの見出しには、その見出しへのリンクに使用されるアンカーが必要です。
+Each heading must have an anchor, which is used to link to that heading:
 
 ```md
 ## This Is a Heading {#this-is-a-heading}
 ```
 
-アンカーには、英小文字, 数字, ハイフン(-) のみを使用してください。
+The anchor must use lowercase characters, numbers and dashes.
 
-### コードを`/reference`のModに配置する {#place-code-within-the-reference-mod}
+### Place Code Within the Example Mod {#place-code-within-the-example-mod}
 
-コードを含むページを作成または変更する場合は、リファレンスMOD（リポジトリの `/reference` フォルダにあります）内の適切な場所にコードを配置してください。 コードを含むページを作成または変更する場合は、リファレンスMOD（リポジトリの `/reference` フォルダにあります）内の適切な場所にコードを配置してください。 そして、[VitePressが提供するコードスニペット機能](https://vitepress.dev/guide/markdown#import-code-snippets)を使ってコードを埋め込みます。 コードを含むページを作成または変更する場合は、リファレンスMOD（リポジトリの `/reference` フォルダにあります）内の適切な場所にコードを配置してください。 そして、[VitePressが提供するコードスニペット機能](https://vitepress.dev/guide/markdown#import-code-snippets)を使ってコードを埋め込みます。
+If you create or modify pages containing code, place the code in an appropriate location within the example mod (located in the `/reference` folder of the repository). Then, use the [code snippet feature offered by VitePress](https://vitepress.dev/guide/markdown#import-code-snippets) to embed the code.
 
-たとえば、`ExampleMod.java`ファイルの15行目から21行目をリファレンスモッドからハイライトするには
+For example, to highlight lines 15-21 of the `ExampleMod.java` file from the mod:
 
 ::: code-group
 
@@ -189,9 +193,9 @@ authors:
 
 :::
 
-より大きな制御範囲が必要な場合は、[`markdown-it-vuepress-code-snippet-enhanced`のtransclude機能](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced)を使うことができます。
+If you need a greater span of control, you can use the [transclude feature from `markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
 
-たとえば、これは上のファイルの `#entrypoint` タグでマークされた部分を埋め込むには
+For example, this will embed the sections of the file above that are marked with the `#entrypoint` tag:
 
 ::: code-group
 
@@ -203,29 +207,29 @@ authors:
 
 :::
 
-### 新しいセクションごとにサイドバーを作る {#create-a-sidebar-for-each-new-section}
+### Create a Sidebar for Each New Section {#create-a-sidebar-for-each-new-section}
 
-新しいセクションを作成する場合は、`.vitepress/sidebars`フォルダに新しいサイドバーを作成し、`i18n.mts`ファイルに追加してください。
+If you're creating a new section, you should create a new sidebar in the `.vitepress/sidebars` folder and add it to the `i18n.mts` file.
 
-サポートが必要な場合は、[Fabric Discord](https://discord.gg/v6v4pMv) の `#docs` チャンネルで聞いてください。
+If you need assistance with this, please ask in the [Fabric Discord](https://discord.fabricmc.net/)'s `#docs` channel.
 
-### 関連するサイドバーに新しいページを追加する {#add-new-pages-to-the-relevant-sidebars}
+### Add New Pages to the Relevant Sidebars {#add-new-pages-to-the-relevant-sidebars}
 
-新しいページを作成する際は、`.vitepress/sidebars`フォルダ内の関連するサイドバーに追加してください。
+When creating a new page, you should add it to the relevant sidebar in the `.vitepress/sidebars` folder.
 
-繰り返しになりますが、サポートが必要な場合はFabric Discordの `#docs` チャンネルで聞いてください。
+Again, if you need assistance, ask in the Fabric Discord in the `#docs` channel.
 
-### 画像を`/assets`に配置する {#place-media-in-assets}
+### Place Media in `/assets` {#place-media-in-assets}
 
-画像は`/public/assets`内の適切な場所に配置してください。
+Any images should be placed in a suitable place in the `/public/assets` folder.
 
-### 相対リンクを使う！ 相対リンクを使う！ 相対リンクを使う！ {#use-relative-links}
+### Use Relative Links! {#use-relative-links}
 
-これはバージョン管理が導入されているためで、リンクはあらかじめバージョンを追加するように処理されます。 これはバージョン管理が導入されているためで、リンクはあらかじめバージョンを追加するように処理されます。 これはバージョン管理が導入されているためで、リンクはあらかじめバージョンを追加するように処理されます。 絶対リンクを使う場合、バージョン番号はリンクに追加されません。
+This is because of the versioning system in place, which will process the links to add the version beforehand. If you use absolute links, the version number will not be added to the link.
 
-また、リンクにファイルの拡張子を追加しないでください。
+You must also not add the file extension to the link either.
 
-たとえば、`/develop/index.md`から`/players/index.md`にリンクを貼るには、次のようにする必要があります。
+For example, to link to the page found in `/players/index.md` from the page `/develop/index.md`, you would have to do the following:
 
 ::: code-group
 
@@ -245,3 +249,5 @@ This relative link has the file extension.
 ```
 
 :::
+
+<!---->

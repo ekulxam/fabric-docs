@@ -20,91 +20,115 @@ Zarejestrowanie `BlockEntity` daje w wyniku `BlockEntityType` podobny do `COUNTE
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/block/entity/ModBlockEntities.java)
 
-:::tip
-Zwróć uwagę, że konstruktor `CounterBlockEntity` przyjmuje dwa parametry, natomiast konstruktor `BlockEntity` przyjmuje trzy: `BlockEntityType`, `BlockPos` i `BlockState`.
-Gdybyśmy nie zakodowali na stałe `BlockEntityType`, klasa `ModBlockEntities` nie skompilowałaby się! Dzieje się tak, ponieważ `BlockEntityFactory`, jest interfejsem funkcyjnym, opisuje funkcję, która przyjmuje tylko dwa parametry, podobnie jak nasz konstruktor.
+::: tip
+
+Note how the constructor of the `CounterBlockEntity` takes two parameters, but the `BlockEntity` constructor takes three: the `BlockEntityType`, the `BlockPos`, and the `BlockState`.
+If we didn't hard-code the `BlockEntityType`, the `ModBlockEntities` class wouldn't compile! This is because the `BlockEntityFactory`, which is a functional interface, describes a function that only takes two parameters, just like our constructor.
+
 :::
 
-## Tworzenie Bloku {#creating-the-block}
+## Creating the Block {#creating-the-block}
 
-Następnie, aby faktycznie użyć bytu bloku, potrzebujemy bloku implementującego `BlockEntityProvider`. Utwórzmy jeden i nazwijmy go `CounterBlock`.
+Next, to actually use the block entity, we need a block that implements `EntityBlock`. Let's create one and call it `CounterBlock`.
 
-:::tip
-Można do tego podejść na dwa sposoby:
+::: tip
 
-- utworzyć blok rozszerzający `BlockWithEntity` i zaimplementować metodę `createBlockEntity`
-- utworzyć blok, który implementuje `BlockEntityProvider` samodzielnie i nadpisać metodę `createBlockEntity`
+There's two ways to approach this:
 
-W tym przykładzie wykorzystamy pierwsze podejście, ponieważ `BlockWithEntity` również udostępnia przydatne narzędzia.
+- create a block that extends `BaseEntityBlock` and implement the `createBlockEntity` method
+- create a block that implements `EntityBlock` by itself and override the `createBlockEntity` method
+
+We'll use the first approach in this example, since `BaseEntityBlock` also provides some nice utilities.
+
 :::
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/block/custom/CounterBlock.java)
 
-Użycie `BlockWithEntity` jako klasy nadrzędnej oznacza, że musimy również zaimplementować metodę `createCodec`, co jest dość proste.
+Using `BaseEntityBlock` as the parent class means we also need to implement the `createCodec` method, which is rather easy.
 
-W przeciwieństwie do bloków, które są singletonami, dla każdego bytu bloku tworzony jest nowy element bloku. Do tego celu służy metoda `createBlockEntity`, która przyjmuje pozycję i `BlockState`, i zwraca `BlockEntity` lub `null`, jeśli nie powinno go być.
+Unlike blocks, which are singletons, a new block entity is created for every instance of the block. This is done with the `createBlockEntity` method, which takes the position and `BlockState`, and returns a `BlockEntity`, or `null` if there shouldn't be one.
 
-Nie zapomnij zarejestrować bloku w klasie `ModBlocks` tak jak w poradniku [Tworzenie pierwszego bloku](../blocks/first-block):
+Don't forget to register the block in the `ModBlocks` class, just like in the [Creating Your First Block](../blocks/first-block) guide:
 
 @[code transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
-## Korzystanie z bytów bloków {#using-the-block-entity}
+## Using the Block Entity {#using-the-block-entity}
 
-Teraz gdy mamy blok, możemy go użyć do zapisania liczby kliknięć prawym przyciskiem myszy na bloku. Zrobimy to, dodając pole `clicks` do klasy `CounterBlockEntity`:
+Now that we have a block entity, we can use it to store the number of times the block has been right-clicked. We'll do this by adding a `clicks` field to the `CounterBlockEntity` class:
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/block/entity/custom/CounterBlockEntity.java)
 
-Metoda `markDirty` używana w `incrementClicks` informuje grę, że dane tego bytu zostały zaktualizowane. Będzie to przydatne, gdy dodamy metody serializujące licznik i wczytujące go z pliku zapisu.
+The `setChanged` method, used in `incrementClicks`, tells the game that this entity's data has been updated; this will be useful when we add the methods to serialize the counter and load it back from the save file.
 
-Następnie musimy zwiększać wartość tego pola za każdym razem, gdy klikniemy prawym przyciskiem myszy na bloku. Można to zrobić poprzez nadpisanie metody `onUse` w klasie `CounterBlock`:
+Next, we need to increment this field every time the block is right-clicked. This is done by overriding the `useWithoutItem` method in the `CounterBlock` class:
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/block/custom/CounterBlock.java)
 
-Ponieważ `BlockEntity` nie jest przekazywany do metody, używamy `world.getBlockEntity(pos)` i jeśli `BlockEntity` jest nieprawidłowy, zwracamy z metody.
+Since the `BlockEntity` is not passed into the method, we use `level.getBlockEntity(pos)`, and if the `BlockEntity` is not valid, return from the method.
 
-![Komunikat "You've clicked the block for the 6th time" na ekranie po kliknięciu prawym przyciskiem myszy](/assets/develop/blocks/block_entities_1.png)
+!["You've clicked the block for the 6th time" message on screen after right-clicking](/assets/develop/blocks/block_entities_1.png)
 
-## Zapisywanie i ładowanie danych {#saving-loading}
+## Saving and Loading Data {#saving-loading}
 
-Teraz gdy mamy już blok funkcjonalny, powinniśmy sprawić, aby licznik nie resetował się pomiędzy restartami gry. Można to zrobić poprzez serializację do NBT podczas zapisywania gry i deserializację podczas jej ładowania.
+Now that we have a functional block, we should make it so that the counter doesn't reset between game restarts. This is done by serializing it into NBT when the game saves, and deserializing when it's loading.
 
-Serializacja odbywa się za pomocą metody `writeNbt`:
+Saving to NBT is done through `ValueInput`s and `ValueOutput`s. These views are responsible for storing errors from encoding/decoding, and keeping track of registries throughout the serialization process.
+
+You can read from a `ValueInput` using the `read` method, passing in a `Codec` for the desired type. Likewise, you can write to a `ValueOutput` by using the `store` method, passing in a Codec for the type, and the value.
+
+There are also methods for primitives, such as `getInt`, `getShort`, `getBoolean` etc. for reading and `putInt`, `putShort`, `putBoolean` etc. for writing. The View also provides methods for working with lists, nullable types, and nested objects.
+
+Serialization is done with the `saveAdditional` method:
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/block/entity/custom/CounterBlockEntity.java)
 
-Tutaj dodajemy pola, które powinny zostać zapisane w przekazanym `NbtCompound`: w przypadku bloku licznika jest to pole `clicks`.
+Here, we add the fields that should be saved into the passed `ValueOutput`: in the case of the counter block, that's the `clicks` field.
 
-Odczyt przebiega podobnie, jednak, zamiast zapisywać w `NbtCompound` otrzymujesz wcześniej zapisane wartości i zapisujesz je w polach BlockEntity:
+Reading is similar, you get the values you saved previously from the `ValueInput`, and save them in the BlockEntity's fields:
 
 @[code transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/block/entity/custom/CounterBlockEntity.java)
 
-Teraz, jeśli zapiszemy i ponownie wczytamy grę, blok licznika powinien być kontynuowany od miejsca, w którym został przerwany podczas zapisywania.
+Now, if we save and reload the game, the counter block should continue from where it left off when saved.
 
-## Tickery {#tickers}
+While `saveAdditional` and `loadAdditional` handle saving and loading to and from disk, there is still an issue:
 
-Interfejs `BlockEntityProvider` definiuje również metodę o nazwie `getTicker`, która może być używana do uruchamiania kodu przy każdym cyklu dla każdej instancji bloku. Możemy to zaimplementować, tworząc metodę statyczną, która będzie używana jako `BlockEntityTicker`:
+- The server knows the correct `clicks` value.
+- The client does not receive the correct value when loading a chunk.
 
-Metoda `getTicker` powinna również sprawdzać, czy przekazany typ `BlockEntityType` jest taki sam, jak ten, którego używamy, i jeśli tak, zwracać funkcję, która będzie wywołana przy każdym ticku. Na szczęście istnieje funkcja narzędziowa, która wykonuje sprawdzenie w `BlockWithEntity`:
+To fix this, we override `getUpdateTag`:
+
+@[code transcludeWith=:::7](@/reference/latest/src/main/java/com/example/docs/block/entity/custom/CounterBlockEntity.java)
+
+Now, when a player logs in or moves into a chunk where the block exists, they will see the correct counter value right away.
+
+## Tickers {#tickers}
+
+The `EntityBlock` interface also defines a method called `getTicker`, which can be used to run code every tick for each instance of the block. We can implement that by creating a static method that will be used as the `BlockEntityTicker`:
+
+The `getTicker` method should also check if the passed `BlockEntityType` is the same as the one we're using, and if it is, return the function that will be called every tick. Thankfully, there is a utility function that does the check in `BaseEntityBlock`:
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/block/custom/CounterBlock.java)
 
-`CounterBlockEntity::tick` to odwołanie do metody statycznej `tick`, którą powinniśmy utworzyć w klasie `CounterBlockEntity`. Takie strukturyzowanie nie jest konieczne, ale dobrym zwyczajem jest zachowanie czystości i organizacji kodu.
+`CounterBlockEntity::tick` is a reference to the static method `tick` we should create in the `CounterBlockEntity` class. Structuring it like this is not required, but it's a good practice to keep the code clean and organized.
 
-Załóżmy, że chcemy, aby licznik można było zwiększać tylko raz na 10 ticków (2 razy na sekundę). Możemy to zrobić, dodając pole `ticksSinceLast` do klasy `CounterBlockEntity` i zwiększając je co każdy tick:
+Let's say we want to make it so that the counter can only be incremented once every 10 ticks (2 times a second). We can do this by adding a `ticksSinceLast` field to the `CounterBlockEntity` class, and increasing it every tick:
 
 @[code transcludeWith=:::5](@/reference/latest/src/main/java/com/example/docs/block/entity/custom/CounterBlockEntity.java)
 
-Nie zapomnij o serializacji i deserializacji tego pola!
+Don't forget to serialize and deserialize this field!
 
-Teraz możemy użyć `ticksSinceLast`, aby sprawdzić, czy licznik można zwiększyć w `incrementClicks`:
+Now we can use `ticksSinceLast` to check if the counter can be increased in `incrementClicks`:
 
 @[code transcludeWith=:::6](@/reference/latest/src/main/java/com/example/docs/block/entity/custom/CounterBlockEntity.java)
 
-:::tip
-Jeśli byt bloku nie jest zaznaczony, spróbuj sprawdzić kod rejestracyjny! Powinien przekazać bloki, które są prawidłowe dla tego bytu, do `BlockEntityType.Builder`, w przeciwnym razie w konsoli pojawi się ostrzeżenie:
+::: tip
 
-```text
+If the block entity does not seem to tick, try checking the registration code! It should pass the blocks that are valid for this entity into the `BlockEntityType.Builder`, or else it will give a warning in the console:
+
+```log
 [13:27:55] [Server thread/WARN] (Minecraft) Block entity example-mod:counter @ BlockPos{x=-29, y=125, z=18} state Block{example-mod:counter_block} invalid for ticking:
 ```
 
 :::
+
+<!---->

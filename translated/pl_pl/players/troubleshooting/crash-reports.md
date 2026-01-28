@@ -5,100 +5,106 @@ authors:
   - IMB11
 ---
 
-:::tip
-Jeśli masz jakiekolwiek problemy ze znalezieniem przyczyny awarii, możesz poprosić o pomoc na [Discordzie Fabric](https://discord.gg/v6v4pMv) na kanale `#player-support` lub `#server-admin-support`.
+<!---->
+
+::: tip
+
+If you're having any difficulty with finding the cause of the crash, you can ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` or `#server-admin-support` channel.
+
 :::
 
-Raporty awarii są bardzo ważną częścią rozwiązywania problemów z grą lub serwerem. Zawierają one dużo informacji na temat awarii i mogą pomóc w ustaleniu jej przyczyny.
+Crash reports are a very important part of troubleshooting issues with your game or server. They contain a lot of information about the crash, and can help you find the cause of the crash.
 
-## Znajdowanie raportów awarii {#finding-crash-reports}
+## Finding Crash Reports {#finding-crash-reports}
 
-Raporty awarii są przechowywane w folderze `crash-reports` w katalogu gry. W przypadku serwera przechowywane są w folderze `crash-reports` w katalogu serwera.
+Crash reports are stored in the `crash-reports` folder in your game directory. If you are using a server, they are stored in the `crash-reports` folder in the server directory.
 
-W przypadku innych launcherów należy zapoznać się z ich dokumentacją, aby wiedzieć, gdzie znaleźć raporty awarii.
+For third party launchers, you should refer to their documentation on where to find crash reports.
 
-Raporty awarii znajdziesz w następujących lokalizacjach:
+Crash reports can be found in the following locations:
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft\crash-reports
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft/crash-reports
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft/crash-reports
 ```
 
 :::
 
-## Odczytywanie raportów awarii {#reading-crash-reports}
+## Reading Crash Reports {#reading-crash-reports}
 
-Raporty awarii są bardzo długie i potrafią być skomplikowane do odczytania. Zawierają one jednak dużo informacji na temat awarii i mogą pomóc w ustaleniu jej przyczyny.
+Crash reports are very long, and can be very confusing to read. However, they contain a lot of information about the crash, and can help you find the cause of the crash.
 
-W tym przewodniku będziemy wykorzystywać [ten raport awarii](/assets/players/crash-report-example.log).
+For this guide, we will be using [this crash report](/assets/players/crash-report-example.log).
 
-:::details Pokaż raport awarii
+:::details Show Crash Report
 
-<<< @/public/assets/players/crash-report-example.log{log}
-
-:::
-
-### Sekcje raportu awarii {#crash-report-sections}
-
-Raporty awarii składają się z kilku sekcji, a każda z nich oddzielona jest nagłówkiem:
-
-- `---- Minecraft Crash Report ----`, podsumowanie raportu. Ta sekcja zawiera główny błąd, który spowodował awarię, godzinę jego wystąpienia oraz powiązany ślad stosu. Jest to najważniejsza sekcja raportu awarii, ponieważ ślad stosu zazwyczaj zawiera odniesienia do moda, który spowodował awarię.
-- `-- Last Reload --`, ta sekcja nie jest szczególnie przydatna, chyba że awaria wystąpiła podczas przeładowywania zasobów (<kbd>F3</kbd>+<kbd>T</kbd>). Zawiera ona godzinę ostatniego przeładowania i powiązany ślad stosu wszelkich błędów, które wystąpiły podczas procesu przeładowywania. Błędy te są zazwyczaj powodowane przez paczki zasobów i można je zignorować, chyba że powodują problemy z grą.
-- `-- System Details --`, ta sekcja zawiera informacje o Twoim systemie, takie jak system operacyjny, wersja Javy i ilość pamięci przydzielonej grze. Jest przydatna do określenia, czy używasz odpowiedniej wersji Javy oraz czy grze została przydzielona wystarczająca ilość pamięci.
-  - W tej sekcji Fabric doda niestandardową linijkę `Fabric Mods`, a po niej listę wszystkich zainstalowanych modów. Ta sekcja jest przydatna do określenia, czy między modami mogły wystąpić jakiekolwiek konflikty.
-
-### Analizowanie raportu awarii {#breaking-down-the-crash-report}
-
-Teraz, gdy już wiemy, co zawiera każda sekcja raportu awarii, możemy zacząć go analizować i znaleźć przyczynę awarii.
-
-Korzystając z powyższego przykładu, możemy przeanalizować raport awarii i znaleźć jej przyczynę, w tym mody, które ją spowodowały.
-
-Ślad stosu w sekcji `---- Minecraft Crash Report ----` jest w tym przypadku najważniejszy, ponieważ zawiera główny błąd, który spowodował awarię.
-
-:::details Pokaż błąd
-
-<<< @/public/assets/players/crash-report-example.log{7 log}
+<<< @/public/assets/players/crash-report-example.log
 
 :::
 
-Ze względu na liczbę modów wymienionych w śladzie stosu, może być trudno od razu wskazać winowajcę, ale pierwszą rzeczą, jaką należy zrobić, jest poszukanie moda, który spowodował awarię.
+### Crash Report Sections {#crash-report-sections}
 
-W tym przypadku modem, który spowodował awarię jest `snownee`, ponieważ jest to pierwszy mod wymieniony w śladzie stosu.
+Crash reports consist of several sections, each separated using a header:
 
-Patrząc jednak na liczbę wymienionych modów, możliwe jest, że istnieją pewne problemy z kompatybilnością między modami, a mod, który spowodował awarię, może nie być winowajcą. W takim przypadku najlepiej zgłosić awarię autorowi moda i pozwolić mu ją zbadać.
+- `---- Minecraft Crash Report ----`, the summary of the report. This section will contain the main error that caused the crash, the time it occurred, and the relevant stack trace. This is the most important section of the crash report as the stack trace can usually contain references to the mod that caused the crash.
+- `-- Last Reload --`, this section isn't really useful unless the crash occurred during a resource reload (<kbd>F3</kbd>+<kbd>T</kbd>). This section will contain the time of the last reload, and the relevant stack trace of any errors that occurred during the reload process. These errors are usually caused by resource packs, and can be ignored unless they are causing issues with the game.
+- `-- System Details --`, this section contains information about your system, such as the operating system, Java version, and the amount of memory allocated to the game. This section is useful for determining if you are using the correct version of Java, and if you have allocated enough memory to the game.
+  - In this section, Fabric will have included a custom line that says `Fabric Mods:`, followed by a list of all the mods you have installed. This section is useful for determining if any conflicts could have occurred between mods.
 
-## Awarie mixinów {#mixin-crashes}
+### Breaking Down the Crash Report {#breaking-down-the-crash-report}
 
-:::info
-Mixiny są sposobem, w jaki mody mogą modyfikować grę bez konieczności modyfikowania jej kodu źródłowego. Są one używane przez wiele modów i stanowią bardzo potężne narzędzie dla twórców modów.
+Now that we know what each section of the crash report is, we can start to break down the crash report and find the cause of the crash.
+
+Using the example linked above, we can analyze the crash report and find the cause of the crash, including the mods that caused the crash.
+
+The stack trace in the `---- Minecraft Crash Report ----` section is the most important in this case, as it contains the main error that caused the crash.
+
+:::details Show Error
+
+<<< @/public/assets/players/crash-report-example.log{7}
+
 :::
 
-Kiedy mixin ulegnie awarii, zazwyczaj zostanie wspomniany w śladzie stosu wraz z klasą, którą modyfikuje.
+With the amount of mods mentioned in the stack trace, it can be difficult to point fingers, but the first thing to do is to look for the mod that caused the crash.
 
-Metody mixinów będą zawierać w śladzie stosu `mod-id$handlerName`, gdzie `mod-id` to ID moda, a `handlerName` to nazwa obsługi mixina.
+In this case, the mod that caused the crash is `snownee`, as it is the first mod mentioned in the stack trace.
 
-```:no-line-numbers
+However, with the amount of mods mentioned, it could mean there are some compatibility issues between the mods, and the mod that caused the crash may not be the mod that is at fault. In this case, it is best to report the crash to the mod author, and let them investigate the crash.
+
+## Mixin Crashes {#mixin-crashes}
+
+::: info
+
+Mixins are a way for mods to modify the game without having to modify the game's source code. They are used by many mods, and are a very powerful tool for mod developers.
+
+:::
+
+When a mixin crashes, it will usually mention the mixin in the stack trace, and the class that the mixin is modifying.
+
+Method mixins will contain `mod-id$handlerName` in the stack trace, where `mod-id` is the mod's ID, and `handlerName` is the name of the mixin handler.
+
+```text:no-line-numbers
 ... net.minecraft.class_2248.method_3821$$$mod-id$handlerName() ... // [!code focus]
 ```
 
-Możesz wykorzystać te informacje, aby znaleźć moda, który spowodował awarię, a następnie zgłosić ją autorowi moda.
+You can use this information to find the mod that caused the crash, and report the crash to the mod author.
 
-## Co robić z raportami awarii {#what-to-do-with-crash-reports}
+## What to Do with Crash Reports {#what-to-do-with-crash-reports}
 
-Najlepszą rzeczą, jaką można zrobić z raportami awarii to przesłanie ich na stronę do wklejania tekstów, a następnie udostępnienie linku autorowi moda przez jego system zgłaszania błędów lub jakąkolwiek inną formą komunikacji (np. na Discordzie).
+The best thing to do with crash reports is to upload them to a paste site, and then share the link with the mod author, either on their issue trackers or through some form of communication (Discord etc.).
 
-Pozwoli to autorowi moda na zbadanie awarii, potencjalne jej odtworzenie i rozwiązanie problemu, który ją spowodował.
+This will allow the mod author to investigate the crash, potentially reproduce it, and solve the problem that caused it.
 
-Popularne strony do wklejania i udostępniania raportów awarii:
+Common paste sites that are used frequently for crash reports are:
 
 - [GitHub Gist](https://gist.github.com/)
 - [mclo.gs](https://mclo.gs/)

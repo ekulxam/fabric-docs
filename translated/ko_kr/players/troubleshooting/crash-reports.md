@@ -5,100 +5,106 @@ authors:
   - IMB11
 ---
 
-:::tip
-충돌의 원인을 찾는 데 어려움이 있으시다면, [Fabric Discord (영어)](https://discord.gg/v6v4pMv) 의 `#player-support` 또는 `#server-admin-support` 채널에 도움을 요청할 수 있습니다.
+<!---->
+
+::: tip
+
+If you're having any difficulty with finding the cause of the crash, you can ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` or `#server-admin-support` channel.
+
 :::
 
-충돌 보고서는 게임 또는 서버의 문제를 해결하기 위해 굉장히 중요한 부분 중 하나입니다. 이러한 충돌 보고서는 충돌에 관련된 많은 정보를 포함하고 있으며, 충돌의 원인을 찾는 데 도움이 됩니다.
+Crash reports are a very important part of troubleshooting issues with your game or server. They contain a lot of information about the crash, and can help you find the cause of the crash.
 
-## 충돌 보고서 찾기 {#finding-crash-reports}
+## Finding Crash Reports {#finding-crash-reports}
 
-충돌 보고서는 게임 디렉토리의 `crash-reports` 폴더에 저장됩니다. 서버의 경우, 서버 디렉토리의 `crash-reports` 폴더에 저장됩니다.
+Crash reports are stored in the `crash-reports` folder in your game directory. If you are using a server, they are stored in the `crash-reports` folder in the server directory.
 
-서드 파티 런처의 경우, 충돌 보고서를 찾으려면 해당 런처의 문서를 참고해야 할 수 있습니다.
+For third party launchers, you should refer to their documentation on where to find crash reports.
 
-충돌 보고서는 다음과 같은 위치에서 찾을 수 있습니다:
+Crash reports can be found in the following locations:
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft\crash-reports
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft/crash-reports
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft/crash-reports
 ```
 
 :::
 
-## 충돌 보고서 읽기 {#reading-crash-reports}
+## Reading Crash Reports {#reading-crash-reports}
 
-충돌 보고서는 매우 길고, 읽기 어려울 수 있습니다. 하지만, 보고서에는 충돌에 관련된 많은 정보가 포함되어 있고, 이는 충돌의 원인을 찾는데 유용합니다.
+Crash reports are very long, and can be very confusing to read. However, they contain a lot of information about the crash, and can help you find the cause of the crash.
 
-이 가이드에선, [이 충돌 보고서를](/assets/players/crash-report-example.log) 예시로 읽어볼 것입니다.
+For this guide, we will be using [this crash report](/assets/players/crash-report-example.log).
 
-:::details 충돌 보고서 보기
+:::details Show Crash Report
 
-<<< @/public/assets/players/crash-report-example.log{log}
-
-:::
-
-### 충돌 보고서의 목차 {#crash-report-sections}
-
-충돌 보고서는 여러 목차로 이루어져 있으며, 각 목차는 다음과 같은 제목을 가집니다:
-
-- `---- Minecraft Crash Report ----` – 보고서 요약본. 이 목차에서는 충돌을 일으킨 주요 원인, 발생한 시간, 그리고 관련 스택 추적으로 이루어집니다. 대부분의 경우, 스택 추적에 충돌을 일으킨 모드의 참조가 포함되기 때문에, 보고서의 가장 중요한 부분이라고 할 수 있습니다.
-- `-- Last Reload --` – 충돌이 리소스 다시 로드 (<kbd>F3</kbd>+<kbd>T</kbd>) 도중 발생하지 않았다면 대부분 불필요합니다. 다시 로드가 진행된 시간, 다시 로드 중 발생한 오류와 관련된 스택 추적 등을 포함합니다. 이러한 오류는 대부분 리소스 팩에서 발생하며, 게임에 문제를 일으키지 않는 한 신경 쓸 필요는 없습니다.
-- `-- System Details --` – 운영 체제, Java 버전, 게임에 할당된 메모리의 양 등 시스템에 대한 정보가 기록됩니다. 게임에 적당한 양의 메모리가 할당되었는지, 올바른 Java 버전을 사용했는지 등을 확인할 때 유용합니다.
-  - Fabric의 경우, 이 목차에 설치된 모드가 기록되는 `Fabric Mods:` 가 추가됩니다. 이 섹션은 모드 간 충돌을 파악할 때 유용합니다.
-
-### 충돌 보고서 분석하기 {#breaking-down-the-crash-report}
-
-이제 충돌 보고서의 목차를 알았으니, 충돌 보고서를 분해해서 충돌의 원인이 무엇인지 파악할 수 있게 되었습니다.
-
-위에서 첨부된 예시를 통해, 충돌 보고서를 분석하고 충돌을 일으킨 원인과 모드를 찾아봅시다.
-
-이 예시에서는 `---- Minecraft Crash Report ----` 목차의 스택 추적에서 충돌을 일으킨 주요 오류가 기록되어 있기 때문에 가장 중요한 부분이라고 할 수 있습니다.
-
-:::details 오류 보기
-
-<<< @/public/assets/players/crash-report-example.log{7 log}
+<<< @/public/assets/players/crash-report-example.log
 
 :::
 
-스택 추적에 언급된 모드의 개수에 따라, 정확히 지목하기 어려울 수 있지만, 가장 먼저 해야 할 일은 충돌을 일으킨 모드를 찾는 것입니다.
+### Crash Report Sections {#crash-report-sections}
 
-이 예시에서는, `snownee`가 스택 분석에서 처음으로 언급되었기 때문에 충돌을 일으킨 모드라고 볼 수 있습니다.
+Crash reports consist of several sections, each separated using a header:
 
-하지만, 여러 모드가 언급되었다면 모드 간의 호환성 문제일 수도 있으며, 충돌을 일으킨 모드 자체에는 문제가 없을 가능성도 있습니다. 이러한 경우에는, 모드 개발자에게 충돌을 신고하고 충돌을 조사할 수 있도록 하는 것이 최선책입니다.
+- `---- Minecraft Crash Report ----`, the summary of the report. This section will contain the main error that caused the crash, the time it occurred, and the relevant stack trace. This is the most important section of the crash report as the stack trace can usually contain references to the mod that caused the crash.
+- `-- Last Reload --`, this section isn't really useful unless the crash occurred during a resource reload (<kbd>F3</kbd>+<kbd>T</kbd>). This section will contain the time of the last reload, and the relevant stack trace of any errors that occurred during the reload process. These errors are usually caused by resource packs, and can be ignored unless they are causing issues with the game.
+- `-- System Details --`, this section contains information about your system, such as the operating system, Java version, and the amount of memory allocated to the game. This section is useful for determining if you are using the correct version of Java, and if you have allocated enough memory to the game.
+  - In this section, Fabric will have included a custom line that says `Fabric Mods:`, followed by a list of all the mods you have installed. This section is useful for determining if any conflicts could have occurred between mods.
 
-## Mixin 충돌 {#mixin-crashes}
+### Breaking Down the Crash Report {#breaking-down-the-crash-report}
 
-:::info
-Mixin은 모드가 게임의 소스 코드를 직접적으로 수정하지 않고도 게임을 수정할 수 있도록 하는 방법 중 하나입니다. 이는 여러 모드에서 사용되고, 개발자에게 가장 강력한 도구가 됩니다.
+Now that we know what each section of the crash report is, we can start to break down the crash report and find the cause of the crash.
+
+Using the example linked above, we can analyze the crash report and find the cause of the crash, including the mods that caused the crash.
+
+The stack trace in the `---- Minecraft Crash Report ----` section is the most important in this case, as it contains the main error that caused the crash.
+
+:::details Show Error
+
+<<< @/public/assets/players/crash-report-example.log{7}
+
 :::
 
-Mixin이 충돌하면, 스택 추적에는 충돌한 Mixin과 그 Mixin이 수정하려고 한 클래스가 기록됩니다.
+With the amount of mods mentioned in the stack trace, it can be difficult to point fingers, but the first thing to do is to look for the mod that caused the crash.
 
-메소드 Mixin은 스택 추적에 `mod-id$handlerName`과 같이 기록되는데, `mod-id`는 모드의 ID, `handlerName`은 Mixin 처리기의 이름입니다.
+In this case, the mod that caused the crash is `snownee`, as it is the first mod mentioned in the stack trace.
 
-```:no-line-numbers
+However, with the amount of mods mentioned, it could mean there are some compatibility issues between the mods, and the mod that caused the crash may not be the mod that is at fault. In this case, it is best to report the crash to the mod author, and let them investigate the crash.
+
+## Mixin Crashes {#mixin-crashes}
+
+::: info
+
+Mixins are a way for mods to modify the game without having to modify the game's source code. They are used by many mods, and are a very powerful tool for mod developers.
+
+:::
+
+When a mixin crashes, it will usually mention the mixin in the stack trace, and the class that the mixin is modifying.
+
+Method mixins will contain `mod-id$handlerName` in the stack trace, where `mod-id` is the mod's ID, and `handlerName` is the name of the mixin handler.
+
+```text:no-line-numbers
 ... net.minecraft.class_2248.method_3821$$$mod-id$handlerName() ... // [!code focus]
 ```
 
-이 정보를 통해 충돌을 일으킨 모드를 찾고, 모드 개발자에게 충돌을 신고할 수 있게 됩니다.
+You can use this information to find the mod that caused the crash, and report the crash to the mod author.
 
-## 충돌 보고서로 할 수 있는 것 {#what-to-do-with-crash-reports}
+## What to Do with Crash Reports {#what-to-do-with-crash-reports}
 
-충돌 보고서로 할 수 있는 최고의 행동은 보고서를 기록 사이트에 업로드하고, 이슈 트래커 또는 커뮤니티(Discord 등)에 게시하여 모드 개발자에게 공유하는 것입니다.
+The best thing to do with crash reports is to upload them to a paste site, and then share the link with the mod author, either on their issue trackers or through some form of communication (Discord etc.).
 
-이는 모드 개발자에게 충돌을 재현하는 등 분석하고, 충돌을 해결하기 위한 중요한 자료가 됩니다.
+This will allow the mod author to investigate the crash, potentially reproduce it, and solve the problem that caused it.
 
-일반적으로 보고서 업로드에 사용되는 기록 사이트는 다음과 같습니다:
+Common paste sites that are used frequently for crash reports are:
 
 - [GitHub Gist](https://gist.github.com/)
 - [mclo.gs](https://mclo.gs/)

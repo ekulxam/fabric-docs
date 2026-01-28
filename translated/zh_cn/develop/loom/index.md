@@ -18,7 +18,20 @@ Loom 提供在开发环境中安装 Minecraft 和模组的实用程序，以便�
 
 Loom 支持 Minecraft 的 _所有_ 版本，甚至包括那些未被 Fabric API 官方支持的版本，因为它与版本无关。
 
-本页面是 Loom 所有选项和功能的参考。 如果你刚刚开始，请参阅[入门](getting-started/setting-up-a-development-environment)页面。
+:::warning 重要
+
+This page is a reference of all options and features of Loom. If you are just getting started, please read the [Introduction to Fabric](../).
+
+:::
+
+## Plugin IDs {#plugin-ids}
+
+Loom uses multiple different plugin IDs:
+
+- `net.fabricmc.fabric-loom`, for non-obfuscated versions (Minecraft 26.1 or newer)
+- `net.fabricmc.fabric-loom-remap`, for obfuscated versions (Minecraft 1.21.11 or older)
+- `fabric-loom` (legacy), only supported for backwards compatibility with obfuscated versions. Use `net.fabricmc.fabric-loom-remap` instead
+- `net.fabricmc.fabric-loom-companion`, in advanced multi-project setups. Read more about [Sub Projects](./classpath-groups#multi-project)
 
 ## 依赖子项目 {#subprojects}
 
@@ -30,7 +43,7 @@ dependencies {
 }
 ```
 
-如果您在多项目构建中使用拆分源集，则还需要为其他项目的客户端源集添加依赖项。
+如果你在多项目构建中使用拆分源集，则还需要为其他项目的客户端源集添加依赖项。
 
 ```groovy
 dependencies {

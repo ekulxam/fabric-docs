@@ -2,6 +2,7 @@
 title: Generazione di Traduzioni
 description: Una guida per configurare la generazione di traduzioni con datagen.
 authors:
+  - CelDaemon
   - IMB11
   - MattiDragon
   - skycatminepokie
@@ -12,36 +13,42 @@ authors-nogithub:
   - sjk1949
 ---
 
-:::info PREREQUISITI
-Assicurati di aver prima completato il processo di [configurazione della datagen](./setup).
+<!---->
+
+:::info PREREQUISITES
+
+Make sure you've completed the [datagen setup](./setup) process first.
+
 :::
 
-## Configurazione {#setup}
+## Setup {#setup}
 
-Anzitutto, creeremo il nostro **fornitore**. Ricorda: i fornitori sono ciò che ci genera effettivamente i dati. Crea una classe che `extends FabricLanguageProvider` e compilane i metodi di base:
+First, we'll make our **provider**. Remember, providers are what actually generate data for us. Create a class that extends `FabricLanguageProvider` and fill out the base methods:
 
 @[code lang=java transcludeWith=:::datagen-translations:provider](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModEnglishLangProvider.java)
 
-:::tip
-Ti servirà un fornitore diverso per ogni lingua che vorrai generare (per esempio un `ExampleEnglishLangProvider` e un `ExamplePirateLangProvider`).
+::: tip
+
+You will need a different provider for each language you want to generate (eg. one `ExampleEnglishLangProvider` and one `ExamplePirateLangProvider`).
+
 :::
 
-Per completare la configurazione, aggiungi questo fornitore alla tua `DataGeneratorEntrypoint` nel metodo `onInitializeDataGenerator`.
+To finish setup, add this provider to your `DataGeneratorEntrypoint` within the `onInitializeDataGenerator` method.
 
-@[code lang=java transclude={28-28}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code lang=java transcludeWith=:::datagen-translations:register](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## Creare Traduzioni {#creating-translations}
+## Creating Translations {#creating-translations}
 
-Oltre a creare traduzioni crude, traduzioni da `Identifier`, e copiarli da un altro file esistente (passando un `Path`), ci sono metodi ausiliari per tradurre oggetti, blocchi, tag, statistiche, entità, effetti di stato, gruppi di oggetti, attributi di entità, e incantesimi. Basta chiamare `add` sul `translationBuilder` con ciò che vuoi tradurre e ciò a cui dovrebbe essere tradotto:
+Along with creating raw translations, translations from `Identifier`s, and copying them from an already existing file (by passing a `Path`), there are helper methods for translating items, blocks, tags, stats, entities, status effects, creative tabs, entity attributes, and enchantments. Simply call `add` on the `translationBuilder` with what you want to translate and what it should translate to:
 
 @[code lang=java transcludeWith=:::datagen-translations:build](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModEnglishLangProvider.java)
 
-## Usare le Traduzioni {#using-translations}
+## Using Translations {#using-translations}
 
-Le traduzioni generate prendono il posto di molte traduzioni aggiunte in altri tutorial, ma puoi anche usarle in ogni punto in cui usi un oggetto `Text`. Nel nostro esempio, se volessimo permettere ai pacchetti risorse di tradurre il nostro saluto, usiamo `Text.translatable` invece di `Text.of`:
+Generated translations take the place of a lot of translations added in other tutorials, but you can also use them anywhere you use a `Component` object. In our example, if we wanted to allow resource packs to translate our greeting, we use `Component.translatable` instead of `Component.literal`:
 
 ```java
-ChatHud chatHud = MinecraftClient.getInstance().inGameHud.getChatHud();
-chatHud.addMessage(Text.literal("Hello there!")); // [!code --]
-chatHud.addMessage(Text.translatable("text.example-mod.greeting")); // [!code ++]
+ChatComponent chatHud = Minecraft.getInstance().gui.getChat();
+chatHud.addMessage(Component.literal("Hello there!")); // [!code --]
+chatHud.addMessage(Component.translatable("text.example-mod.greeting")); // [!code ++]
 ```

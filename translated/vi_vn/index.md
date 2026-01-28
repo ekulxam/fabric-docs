@@ -1,27 +1,23 @@
 ---
 title: Tài Liệu Fabric
-description: Tài liệu chính thức của Fabric, một công cụ modding dành cho Minecraft.
+description: Tài liệu tham khảo chính thức của Fabric, một công cụ modding dành cho Minecraft.
 layout: home
+
 hero:
   name: Tài Liệu Fabric
-  tagline: Tài liệu chính thức của Fabric, một công cụ modding dành cho Minecraft.
+  tagline: The official curated documentation for Fabric,<br />a modding toolchain for Minecraft.
+
 features:
-  - title: Developer Guides
-    icon: 🛠️
-    details: Our curated developer guides, written by the community, span a wide range of topics from setting up a development environment to more advanced topics, such as rendering and networking.
-    link: /vi_vn/develop/
-    linkText: Khởi Đầu
   - title: Hướng Dẫn Cho Người Chơi
     icon: 📚
-    details: Có phải bạn đang tìm kiếm cách chạy các bản mod dành cho Fabric? Bộ hướng dẫn của chúng tôi sẽ giúp bạn điều đó. Những cách này sẽ giúp bạn trong việc tải xuống, cài đặt và khắc phục sự cố khi dùng mod Fabric.
+    details: Có phải bạn đang tìm kiếm cách chạy các mod dành cho Fabric? Bộ hướng dẫn của chúng tôi sẽ giúp bạn. Những hướng dẫn này sẽ giúp bạn tải xuống, cài đặt và khắc phục sự cố khi dùng mod Fabric.
     link: /vi_vn/players/
+    linkText: Khởi Đầu
+  - title: Hướng Dẫn Cho Nhà Phát Triển
+    icon: 🛠️
+    details: Our community-written developer guides cover everything from setting up your development environment to advanced topics like rendering and networking.
+    link: /vi_vn/develop/
     linkText: Đọc Thêm
 ---
 
-<div class="vp-doc homepage-container">
-
-## Muốn đóng góp?
-
-If you want to contribute to the Fabric Documentation, you can find the source code on [GitHub](https://github.com/FabricMC/fabric-docs), and the relevant [contribution guidelines](./contributing).
-
-</div>
+Nếu bạn muốn đóng góp vào Tài Liệu Tham Khảo Fabric, bạn có thể tìm mã nguồn trên [GitHub](https://github.com/FabricMC/fabric-docs), và [nguyên tắc đóng góp](./contributing).

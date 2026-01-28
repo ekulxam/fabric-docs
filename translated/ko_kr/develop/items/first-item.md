@@ -2,8 +2,9 @@
 title: 첫 번째 아이템 만들기
 description: 간단한 아이템을 등록하고, 텍스처와 모델, 이름을 적용하는 방법에 대해 알아보세요.
 authors:
-  - IMB11
   - dicedpixels
+  - Earthcomputer
+  - IMB11
   - RaphProductions
 ---
 
@@ -13,7 +14,7 @@ authors:
 
 ## 아이템 클래스 준비하기 {#preparing-your-items-class}
 
-아이템의 등록을 단순화하기 위하여, 아이템의 인스턴스와 문자열 식별자를 입력받는 메소드를 만들 수 있습니다.
+To simplify the registering of items, you can create a method that accepts a string identifier, some item properties and a factory to create the `Item` instance.
 
 이 메소드는 입력된 식별자로 아이템을 만들어 게임의 아이템 레지스트리에 등록할 것입니다.
 
@@ -23,57 +24,65 @@ Mojang에서도 아이템에 이러한 작업을 수행합니다! 영감을 얻�
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
+Notice how we're using a `GenericItem`, which allows us to use the same method `register` for registering any type of item that extends `Item`. We're also using a [`Function`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html) interface for the factory, which allows us to specify how we want our item to be created given the item properties.
+
 ## 아이템 등록하기 {#registering-an-item}
 
 이제 메소드를 사용하여 아이템을 등록할 수 있습니다.
 
-아이템 생성자는 `Items.Settings` 클래스의 인스턴스를 매개변수로 입력받습니다. 이 클래스는 다양한 빌더 메소드를 사용하여 아이템의 속성을 구성할 수 있도록 합니다.
+The register method takes in an instance of the `Item.Properties` class as a parameter. 이 클래스는 다양한 빌더 메소드를 사용하여 아이템의 속성을 구성할 수 있도록 합니다.
 
 ::: tip
-If you want to change your item's stack size, you can use the `maxCount` method in the `Items.Settings`/`FabricItemSettings` class.
+
+If you want to change your item's stack size, you can use the `stacksTo` method in the `Item.Properties` class.
 
 다만 아이템을 손상 가능하게(damageable) 설정하면 작동하지 않습니다. 손상 가능한 아이템은 복사 취약점을 막기 위하여 항상 최대 스택 크기가 1로 고정되기 때문입니다.
+
 :::
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-하지만, 변경 사항이 적용된 클라이언트를 실행하려고 해도, 아직 아이템이 게임에 존재하지 않는 것을 확인할 수 있을 것입니다! 이는 클래스가 정적으로 초기화되지 않았기 때문입니다.
+`Item::new` tells the register function to create an `Item` instance from an `Item.Properties` by calling the `Item` constructor (`new Item(...)`), which takes an `Item.Properties` as a parameter.
 
-이를 위해선, 아이템 클래스에 정적 초기화 메소드를 추가하고 [모드 진입점](../getting-started/project-structure#entrypoints) 클래스에서 호출해야 합니다. 지금은, 이 메소드는 내부에 아무것도 필요로 하지 않습니다.
+However, if you now try to run the modified client, you can see that our item doesn't exist in-game yet! This is because you didn't statically initialize the class.
+
+To do this, you can add a public static initialize method to your class and call it from your [mod's initializer](../getting-started/project-structure#entrypoints) class. Currently, this method doesn't need anything inside it.
 
 @[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/item/ExampleModItems.java)
 
-이전에 로드되지 않은 클래스의 메소드를 호출하면 클래스가 정적으로 초기화됩니다. 다시 말하자면 모든 `static` 필드가 실행되게 됩니다. 이것이 더미 `initialize` 메소드가 필요한 이유입니다.
+Calling a method on a class statically initializes it if it hasn't been previously loaded - this means that all `static` fields are evaluated. This is what this dummy `initialize` method is for.
 
-## 아이템 그룹에 아이템 추가하기 {#adding-the-item-to-an-item-group}
+## Adding the Item to a Creative Tab {#adding-the-item-to-a-creative-tab}
 
-:::info
-아이템을 사용자 지정 `ItemGroup`에 추가하고자 한다면, 자세한 내용은 [사용자 지정 아이템 그룹](./custom-item-groups)을 참조하십시오.
+::: info
+
+If you want to add the item to a custom `CreativeModeTab`, check out the [Custom Creative Tabs](./custom-item-groups) page for more information.
+
 :::
 
-예제에서는 아이템을 재료 `ItemGroup`에 추가할 것이며, 이를 위해선 Fabric API 아이템 그룹 이벤트(정확히는 `ItemGroupEvents.modifyEntriesEvent`)를 이용해야 합니다.
+For example purposes, we will add this item to the ingredients `CreativeModeTab`, you will need to use Fabric API's creative tab events - specifically `ItemGroupEvents.modifyEntriesEvent`
 
-이는 아이템 클래스의 `initialize` 메소드에서 실행될 수 있습니다.
+This can be done in the `initialize` method of your items class.
 
 @[code transcludeWith=:::4](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-게임을 실행하면, 아이템에 등록되고 재료 아이템 그룹에 추가된 것을 확인할 수 있을 것입니다.
+Loading into the game, you can see that our item has been registered, and is in the Ingredients creative tab:
 
-![재료 아이템 그룹에 아이템이 추가된 모습](/assets/develop/items/first_item_0.png)
+![Item in the ingredients group](/assets/develop/items/first_item_0.png)
 
-하지만, 몇 가지 빠진 것을 확인할 수 있습니다:
+However, it's missing the following:
 
-- 아이템 모델
-- 텍스처
-- 번역 (이름)
+- Item Model
+- Texture
+- Translation (name)
 
-## 아이템 이름 짓기 {#naming-the-item}
+## Naming The Item {#naming-the-item}
 
-아이템에 아직 번역이 없기 때문에, 번역을 추가해야 합니다. 번역 키는 이미 Minecraft에서 제공하고 있으며, 예제의 경우에는 `item.example-mod.suspicious_substance` 입니다.
+The item currently doesn't have a translation, so you will need to add one. The translation key has already been provided by Minecraft: `item.example-mod.suspicious_substance`.
 
-`src/main/resources/assets/example-mod/lang/en_us.json`에 새로운 JSON 파일을 생성하고, 다음과 같이 번역 키를 추가합니다:
+Create a new JSON file at: `src/main/resources/assets/example-mod/lang/en_us.json` and put in the translation key, and its value:
 
 ```json
 {
@@ -81,84 +90,102 @@ If you want to change your item's stack size, you can use the `maxCount` method 
 }
 ```
 
-게임을 재시작하거나 모드를 빌드한 다음 <kbd>F3</kbd> + <kbd>T</kbd>키를 눌러 변경 사항을 적용할 수 있습니다.
+You can either restart the game or build your mod and press <kbd>F3</kbd>+<kbd>T</kbd> to apply changes.
 
-## 텍스처와 모델 적용하기 {#adding-a-texture-and-model}
+## Adding a Client Item, Texture and Model {#adding-a-client-item-texture-and-model}
 
-아이템에 텍스처와 모델을 적용하려면, 간단히 16x16 텍스처 이미지를 만든 다음 `src/main/resources/assets/example-mod/textures/item` 폴더에 저장합니다. 텍스처 파일의 이름을 아이템의 식별자와 같게 지정하고, 파일 확장자는 `.png`로 설정합니다.
+For your item to have a proper appearance, it requires:
 
-예제에서는, 텍스처 파일의 이름을 `suspicious_substance.png`로 설정하였습니다.
+- [An item texture](https://minecraft.wiki/w/Textures#Items)
+- [An item model](https://minecraft.wiki/w/Model#Item_models)
+- [A client item](https://minecraft.wiki/w/Items_model_definition)
 
-<DownloadEntry visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png">텍스처</DownloadEntry>
+### Adding a Texture {#adding-a-texture}
 
-게임을 재시작/다시로드 하더라도 아이템에 텍스처가 적용되지 않은 것을 확인할 수 있습니다. 텍스처를 사용하기 위해서는 모델이 필요하기 때문입니다.
+::: info
 
-텍스처 입력만 받는, 간단한 `item/generated` 모델을 만들어 봅시다.
+For more information on this topic, see the [Item Models](./item-models) page.
 
-`src/main/resources/assets/example-mod/models/item` 폴더에, 아이템과 같은 식별자(예제의 경우 `suspicious_substance.json`) 이름의 JSON 파일을 생성한 다음 아래와 같이 입력합니다:
+:::
+
+To give your item a texture and model, simply create a 16x16 texture image for your item and save it in the `assets/example-mod/textures/item` folder. Name the texture file the same as the item's identifier, but with a `.png` extension.
+
+For example purposes, you can use this example texture for `suspicious_substance.png`
+
+<DownloadEntry visualURL="/assets/develop/items/first_item_1.png" downloadURL="/assets/develop/items/first_item_1_small.png">Texture</DownloadEntry>
+
+### Adding a Model {#adding-a-model}
+
+When restarting/reloading the game - you should see that the item still has no texture, that's because you will need to add a model that uses this texture.
+
+You're going to create a simple `item/generated` model, which takes in an input texture and nothing else.
+
+Create the model JSON in the `assets/example-mod/models/item` folder, with the same name as the item; `suspicious_substance.json`
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/item/suspicious_substance.json)
 
-### 모델 JSON 분석하기 {#breaking-down-the-model-json}
+#### Breaking Down the Model JSON {#breaking-down-the-model-json}
 
-- `parent`: 이 모델이 상속받은 부모 모델의 식별자. 예제의 경우에는, `item/generated` 모델을 사용합니다.
-- `textures`: 모델에 사용할 텍스처. 예제의 경우에는, `layer0`이 모델에서 사용할 텍스처입니다.
+- `parent`: This is the parent model that this model will inherit from. In this case, it's the `item/generated` model.
+- `textures`: This is where you define the textures for the model. The `layer0` key is the texture that the model will use.
 
-대부분의 아이템은 부모 모델로 `item/generated` 모델을 사용하며, 이는 텍스처를 표시하기만 하는 간단한 모델입니다.
+Most items will use the `item/generated` model as their parent, as it's a simple model that just displays the texture.
 
-도구와 같이, 플레이어의 손에 "들어지는" 아이템에 사용되는 `item/handheld` 모델과 같이, 다른 모델도 사용할 수 있습니다.
+There are alternatives, such as `item/handheld` which is used for items that are "held" in the player's hand, such as tools.
 
-## 아이템 모델 설명 만들기 {#creating-the-item-model-description}
+### Creating the Client Item {#creating-the-client-item}
 
-마인크래프트는 아이템의 모델 파일을 어디서 찾는지 자동으로 알지 못하므로, 아이템 모델 설명을 만들어야 합니다.
+Minecraft doesn't automatically know where your items' model files can be found, we need to provide a client item.
 
-`src/main/resources/assets/example-mod/items` 폴더에, 아이템과 같은 식별자(`suspicious_substance.json`)를 이름으로 가지는 아이템 설명 JSON 파일을 생성한 다음, 다음과 같이 입력합니다:
+Create the client item JSON in the `assets/example-mod/items`, with the same file name as the identifier of the item: `suspicious_substance.json`.
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/items/suspicious_substance.json)
 
-### 아이템 모델 설명 JSON 분석하기 {#breaking-down-the-item-model-description-json}
+#### Breaking Down the Client Item JSON {#breaking-down-the-client-item-json}
 
-- `model`: 모델에 대한 리퍼런스가 포함되는 속성.
-  - `type`: 모델의 형태. 대부분의 아이템은, `minecraft:model`이어야 합니다.
-  - `model`: 모델 식별자. `example-mod:item/item_name`과 같은 형태여야 합니다.
+- `model`: This is the property that contains the reference to our model.
+  - `type`: This is the type of our model. For most items, this should be `minecraft:model`
+  - `model`: This is the model's identifier. It should have this form: `example-mod:item/item_name`
 
-이제 인게임에서 아래와 같이 아이템이 표시될 것입니다:
+Your item should now look like this in-game:
 
-![올바른 모델이 적용된 아이템](/assets/develop/items/first_item_2.png)
+![Item with correct model](/assets/develop/items/first_item_2.png)
 
-## 아이템을 퇴비 또는 연료로 사용할 수 있게 하기 {#making-the-item-compostable-or-a-fuel}
+## Making the Item Compostable or a Fuel {#making-the-item-compostable-or-a-fuel}
 
-Fabric API는 아이템 속성에 추가적인 속성을 적용할 수 있는 다양한 레지스트리를 제공하고 있습니다.
+Fabric API provides various registries that can be used to add additional properties to your item.
 
-예를 들어, 아이템을 퇴비통에 사용할 수 있게 만들고 싶다면, 다음과 같이 `CompostableItemRegistry`를 사용할 수 있습니다:
+For example, if you want to make your item compostable, you can use the `CompostingChanceRegistry`:
 
-@[code transcludeWith=:::_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_10](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-또는, 아이템을 연료로 사용할 수 있게 만드려면, 다음과 같이 `FuelRegistryEvents.BUILD` 이벤트를 사용할 수도 있습니다:
+Alternatively, if you want to make your item a fuel, you can use the `FuelRegistryEvents.BUILD` event:
 
-@[code transcludeWith=:::_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
+@[code transcludeWith=:::\_11](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-## 기본적인 제작법 추가하기 {#adding-a-basic-crafting-recipe}
+## Adding a Basic Crafting Recipe {#adding-a-basic-crafting-recipe}
 
 <!-- In the future, an entire section on recipes and recipe types should be created. For now, this suffices. -->
 
-아이템에 제작법을 추가하고자 한다면, `src/main/resources/data/example-mod/recipe` 폴더에 제작법 JSON을 추가해야 합니다.
+If you want to add a crafting recipe for your item, you will need to place a recipe JSON file in the `data/example-mod/recipe` folder.
 
-제작법 포맷에 관한 자세한 내용은 다음 리소스를 참조하여 주십시오:
+For more information on the recipe format, check out these resources:
 
 - [Recipe JSON Generator](https://crafting.thedestruc7i0n.ca/)
-- [Recipe: JSON Format - Minecraft Wiki](https://minecraft.wiki/w/Recipe#JSON_Format)
+- [Minecraft Wiki - Recipe JSON](https://minecraft.wiki/w/Recipe#JSON_Format)
 
-## 사용자 지정 도구 설명 {#custom-tooltips}
+## Custom Tooltips {#custom-tooltips}
 
-아이템에 사용자 지정 도구 설명을 추가하려면, `Item` 클래스를 상속하는 클래스를 만들고 `appendTooltip` 메소드를 오버라이드(Override)해야 합니다.
+If you want your item to have a custom tooltip, you will need to create a class that extends `Item` and override the `appendHoverText` method.
 
-:::info
-이 예제에서는 [사용자 지정 아이템 상호 작용](./custom-item-interactions)에서 만든 `LightningStick` 클래스를 사용합니다.
+::: info
+
+This example uses the `LightningStick` class created in the [Custom Item Interactions](./custom-item-interactions) page.
+
 :::
 
 @[code lang=java transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/item/custom/LightningStick.java)
 
-`add()` 메소드를 호출하며 도구 설명에 새로운 줄을 추가할 수 있습니다.
+Each call to `accept()` will add one line to the tooltip.
 
-![사용자 지정 도구 설명이 표시되는 모습](/assets/develop/items/first_item_3.png)
+![Tooltip Showcase](/assets/develop/items/first_item_3.png)

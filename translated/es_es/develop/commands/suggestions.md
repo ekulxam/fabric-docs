@@ -7,17 +7,19 @@ authors:
 
 Minecraft tiene un poderoso sistema de sugerencias de comandos que es usado en muchos lugares, como en el comanado de `/give`. Este sistema te permite sugerir valores para argumentos de comandos al usuario, donde este puede escoger de estos valores - es una buena manera de hacer tus comandos más ergonómicos y amigables al usuario.
 
-## Proveedores de Sugerencias
+## Suggestion Providers {#suggestion-providers}
 
 Un `SuggestionProvider` (Proveedor de Sugerencias) es usado para crear una lista de sugerencias que serán enviadas al cliente. Un proveedor de sugerencias es una interfaz funcional que tiene un parámetro de `CommandContext` y un `SuggestionBuilder` (Constructor de Sugerencias), y retorna algunos `Suggestions` (Sugerencias). El `SuggestionProvider` retorna un `CompletableFuture` (Completador a Futuro) ya que las sugerencias pueden no estar disponibles inmediatamente.
 
-## Usar Proveedores de Sugerencias
+## Using Suggestion Providers {#using-suggestion-providers}
 
 Para usar un proveedor de sugerencias, tienes que llamar el método `suggests` en el constructor del argumento. Este método tiene un parámetro `SuggestionProvider` y retorna un nuevo constructor de argumento con el proveedor de sugerencias adjuntado.
 
-@[code java transcludeWith=:::9 highlight={4}](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+@[code java highlight={4} transcludeWith=:::command_with_suggestions](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
-## Proveedores de Sugerencias Incluidos
+@[code java transcludeWith=:::execute_command_with_suggestions](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+
+## Built-in Suggestion Providers {#built-in-suggestion-providers}
 
 Hay algunos proveedores de sugerencias incluidos que puedes usar:
 
@@ -37,6 +39,10 @@ Para este ejemplo, haremos un proveedor de sugerencias que sugiere todos los nom
 @[code java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/command/PlayerSuggestionProvider.java)
 
 Para usar este proveedor de sugerencias, simplemente pasa una instancia de él en el método `.suggests` en el constructor del argumento.
+
+@[code java highlight={4} transcludeWith=:::command_with_custom_suggestions](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
+
+@[code java transcludeWith=:::execute_command_with_custom_suggestions](@/reference/latest/src/main/java/com/example/docs/command/ExampleModCommands.java)
 
 Obviamente, los proveedores de sugerencias pueden ser más complejos, ya que también el contexto del comando para proveer sugerencias basadas en el estado del comando - como los argumentos que ya han sido dados.
 

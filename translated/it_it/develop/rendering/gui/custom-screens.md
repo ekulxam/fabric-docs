@@ -5,58 +5,62 @@ authors:
   - IMB11
 ---
 
-:::info
-Questa pagina si riferisce a schermate normali, non quelle gestite - queste schermate sono quelle aperte dal giocatore sul client, non quelle gestite dal server.
+<!---->
+
+::: info
+
+This page refers to normal screens, not handled ones - these screens are the ones that are opened by the player on the client, not the ones that are handled by the server.
+
 :::
 
-Le schermate sono essenzialmente le GUI con cui il giocatore interagisce, come la schermata del titolo, la schermata di pausa ecc.
+Screens are essentially the GUIs that the player interacts with, such as the title screen, pause screen etc.
 
-Puoi creare le tue schermate per mostrare contenuti personalizzati, un menu delle impostazioni personalizzato, e altro.
+You can create your own screens to display custom content, a custom settings menu, or more.
 
-## Creare una Schermata {#creating-a-screen}
+## Creating a Screen {#creating-a-screen}
 
-Per creare una schermata, devi estendere la classe `Screen` e fare override del metodo `init` - puoi anche eventualmente fare override del metodo `render` - ma assicurati di chiamare il suo metodo super altrimenti non renderizzerà lo sfondo, i widget ecc.
+To create a screen, you need to extend the `Screen` class and override the `init` method - you may optionally override the `render` method as well - but make sure to call it's super method or it wont render the background, widgets etc.
 
-Dovresti prendere nota del fatto che:
+You should take note that:
 
-- I Widget non vengono creati nel costruttore perché la schermata non è stata ancora inizializzata a quel punto - e alcune variabili, come `width` e `height`, non sono ancora disponibili o non sono ancora accurate.
-- Il metodo `init` viene chiamato quando lo schermo viene inizializzato, e questo è il posto migliore per creare i widget.
-  - Si aggiungono widget usando il metodo `addDrawableChild`, che accetta qualsiasi widget disegnabile.
-- Il metodo `render` viene chiamato ogni frame - puoi accedere al contesto di disegno, e alla posizione del mouse da questo metodo.
+- Widgets are not being created in the constructor because the screen is not yet initialized at that point - and certain variables, such as `width` and `height`, are not yet available or not yet accurate.
+- The `init` method is called when the screen is being initialized, and it is the best place to create widgets.
+  - You add widgets using the `addRenderableWidget` method, which accepts any drawable widget.
+- The `render` method is called every frame - you can access the draw context, and the mouse position from this method.
 
-Ad esempio, possiamo creare una semplice schermata che ha un pulsante e un'etichetta al di sopra.
+As an example, we can create a simple screen that has a button and a label above it.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
-![Schermata Personalizzata 1](/assets/develop/rendering/gui/custom-1-example.png)
+![Custom Screen 1](/assets/develop/rendering/gui/custom-1-example.png)
 
-## Aprire la Schermata {#opening-the-screen}
+## Opening the Screen {#opening-the-screen}
 
-Puoi aprire la schermata usando il metodo `setScreen` di `MinecraftClient` - puoi farlo da vari posti, come un'associazione a un tasto, un comando, o un gestore dei pacchetti del client.
+You can open the screen using the `Minecraft`'s `setScreen` method - you can do this from many places, such as a key binding, a command, or a client packet handler.
 
 ```java
-MinecraftClient.getInstance().setScreen(
-  new CustomScreen(Text.empty())
+Minecraft.getInstance().setScreen(
+  new CustomScreen(Component.empty())
 );
 ```
 
-## Chiudere la Schermata {#closing-the-screen}
+## Closing the Screen {#closing-the-screen}
 
-Se vuoi chiudere lo schermo, semplicemente imposta la schermata a `null`:
+If you want to close the screen, simply set the screen to `null`:
 
 ```java
-MinecraftClient.getInstance().setScreen(null);
+Minecraft.getInstance().setScreen(null);
 ```
 
-Se vuoi essere sofisticato, e tornare alla schermata precedente, puoi passare la schermata corrente nel costruttore `CustomScreen` e conservala in una variabile, per poi tornare alla schermata precedente usando il metodo `close`.
+If you want to be fancy, and return to the previous screen, you can pass the current screen into the `CustomScreen` constructor and store it in a field, then use it to return to the previous screen when the `close` method is called.
 
 @[code lang=java transcludeWith=:::2](@/reference/latest/src/client/java/com/example/docs/rendering/screens/CustomScreen.java)
 
-Ora, aprendo la schermata personalizzata, puoi passare la schermata corrente come secondo argomento - quindi quando chiami `CustomScreen#close` - ritornerà alla schermata precedente.
+Now, when opening the custom screen, you can pass the current screen as the second argument - so when you call `CustomScreen#close` - it will return to the previous screen.
 
 ```java
-Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-MinecraftClient.getInstance().setScreen(
-  new CustomScreen(Text.empty(), currentScreen)
+Screen currentScreen = Minecraft.getInstance().currentScreen;
+Minecraft.getInstance().setScreen(
+  new CustomScreen(Component.empty(), currentScreen)
 );
 ```

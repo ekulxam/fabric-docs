@@ -1,67 +1,93 @@
 ---
-title: Efectos de Estado
-description: Aprende a añadir efectos de estado personalizados.
+title: Mob Effects
+description: Learn how to add custom mob effects.
 authors:
   - dicedpixels
-  - YanisBft
-  - FireBlast
   - Friendly-Banana
+  - Manchick0
   - SattesKrokodil
+  - FireBlast
+  - YanisBft
 authors-nogithub:
   - siglong
   - tao0lu
 ---
 
-Los efectos de estado, o simplemente estados, son una condición que puede afectar a una entidad. Pueden ser positivos, negativos o neutrales en naturaleza. El juego base aplica estos efectos de varias maneras como comida, pociones, etc.
+Mob effects, also known as status effects or simply effects, are a condition that can affect an entity. Pueden ser positivos, negativos o neutrales en naturaleza. El juego base aplica estos efectos de varias maneras como comida, pociones, etc.
 
 El comando `/effect` puede ser usado para aplicar efectos en una entidad.
 
-## Efectos de Estado Personalizados
+## Custom Mob Effects {#custom-mob-effects}
 
 En este tutorial añadiremos un nuevo efecto de estado personalizado llamado _Tater_, el cual te da un punto de experiencia por cada tick del juego.
 
-### Extiende `StatusEffect`
+### Extend `MobEffect` {#extend-mobeffect}
 
-Vamos a crear una para nuestro efecto de estado personalizado extendiendo la clase `StatusEffect`, el cual es la clase base para todos los efectos.
+Let's create a custom effect class by extending `MobEffect`, which is the base class for all effects.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/effect/TaterEffect.java)
 
 ### Registrar tu Efecto Personalizado
 
-Similar a la registración de bloques e items, usamos `Registry.register` para registrar nuestro efecto personalizado en el registro de `STATUS_EFFECT`. Esto se puede hacer en nuestro inicializador.
+Similar to block and item registration, we use `Registry.register` to register our custom effect into the
+`MOB_EFFECT` registry. Esto se puede hacer en nuestro inicializador.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/effect/ExampleModEffects.java)
 
-### Traducciones y Texturas
+### Textura
 
-Puedes asignar un nombre a tu efecto de estado y proveer una textura de ícono para que aparezca en la pantalla de inventario.
+The mob effect icon is a 18x18 PNG which will appear in the player's inventory screen. Coloca tu ícono personalizado en:
 
-#### Textura
-
-El ícono del efecto de estado es una imagen PNG de 18x18 pixeles. Coloca tu ícono personalizado en:
-
-```:no-line-numbers
+```text:no-line-numbers
 resources/assets/example-mod/textures/mob_effect/tater.png
 ```
 
-![Efecto en el inventario del jugador](/assets/develop/tater-effect.png)
+<DownloadEntry visualURL="/assets/develop/tater-effect.png" downloadURL="/assets/develop/tater-effect-icon.png">Example Texture</DownloadEntry>
 
-#### Traducciones
+### Traducciones
 
-Como cualquier otra traducción, puedes agregar una entrada con el formato de ID `"effect.example-mod.effect-identifier": "Valor"` al archivo de idioma.
+Like any other translation, you can add an entry with ID format `"effect.example-mod.effect-identifier": "Value"` to the
+language file.
 
-::: code-group
-
-```json[assets/example-mod/lang/en_us.json]
+```json
 {
   "effect.example-mod.tater": "Tater"
 }
 ```
 
-### Probando
+### Applying The Effect {#applying-the-effect}
 
-Usa el comando `/effect give @p example-mod:tater` para darle al jugador nuestro efecto Tater. Usa el comando `/effect clear` para remover el efecto.
+It's worth taking a look at how you'd typically apply an effect to an entity.
+
+::: tip
+
+For a quick test, it might be a better idea to use the previously mentioned `/effect` command:
+
+```mcfunction
+effect give @p example-mod:tater
+```
+
+:::
+
+To apply an effect internally, you'd want to use the `LivingEntity#addMobEffect` method, which takes in
+a `MobEffectInstance`, and returns a boolean, specifying whether the effect was successfully applied.
+
+@[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/ReferenceMethods.java)
+
+| Argument          | Type                | Description                                                                                                                                                                                                                                                                                                                      |
+| ----------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Efectos de Estado | `Holder<MobEffect>` | A holder that represents the effect.                                                                                                                                                                                                                                                                             |
+| `duration`        | `int`               | The duration of the effect **in ticks**; **not** seconds                                                                                                                                                                                                                                                                         |
+| `amplifier`       | `int`               | The amplifier to the level of the effect. It doesn't correspond to the **level** of the effect, but is rather added on top. Hence, `amplifier` of `4` => level of `5`                                                                                                                            |
+| `ambient`         | `boolean`           | This is a tricky one. It basically specifies that the effect was added by the environment (e.g. a **Beacon**) and doesn't have a direct cause. If `true`, the icon of the effect in the HUD will appear with an aqua overlay. |
+| `particles`       | `boolean`           | Whether to show particles.                                                                                                                                                                                                                                                                                       |
+| `icon`            | `boolean`           | Whether to display an icon of the effect in the HUD. The effect will be displayed in the inventory regardless of this flag.                                                                                                                                                                      |
+
+::: info
 
 ::: info
 Para crear una poción que use este efecto, por favor visita la guía sobre [Pociones](../items/potions).
+
 :::
+
+<!---->

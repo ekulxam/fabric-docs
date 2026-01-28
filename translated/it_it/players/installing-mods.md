@@ -11,55 +11,57 @@ Per launcher di terze parti, dovresti consultare la loro documentazione.
 
 ## 1. Scarica la Mod {#1-download-the-mod}
 
-:::warning
-Dovresti solo scaricare mod da fonti di cui ti fidi. Per maggiori informazioni su come trovare le mod, vedi la guida [Trovare Mod Affidabili](./finding-mods).
+::: warning
+
+You should only download mods from sources you trust. For more information on finding mods, see the [Finding Trustworthy Mods](./finding-mods) guide.
+
 :::
 
-La maggior parte delle mod richiede anche l'API di Fabric, che può essere scaricata da [Modrinth](https://modrinth.com/mod/fabric-api) o da [CurseForge](https://curseforge.com/minecraft/mc-mods/fabric-api).
+The majority of mods require Fabric API as well, which can be downloaded from [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://curseforge.com/minecraft/mc-mods/fabric-api).
 
-Quando scarichi delle mod, assicurati che:
+When downloading mods, ensure that:
 
-- Funzionino nella versione di Minecraft su cui vuoi giocare. Una mod che funziona sulla versione 1.20, per esempio, potrebbe non funzionare sulla versione 1.20.2.
-- Siano per Fabric e non per un altro loader di mod.
-- Inoltre, che siano per la corretta edizione di Minecraft (Java Edition).
+- They work on the version of Minecraft you want to play on. A mod that worked on version 1.21.8 for instance, might not work anymore on 1.21.11.
+- They are for Fabric and not another mod loader.
+- Furthermore, they are for the correct edition of Minecraft (Java Edition).
 
-## 2. Sposta le Mod nella Cartella `mods` {#2-move-the-mod-to-the-mods-folder}
+## 2. Move the Mod to the `mods` Folder {#2-move-the-mod-to-the-mods-folder}
 
-La cartella mods può essere trovata nelle posizioni seguenti per ciascun sistema operativo.
+The mods folder can be found in the following locations for each operating system.
 
-Puoi solitamente incollare questi percorsi nella barra degli indirizzi del tuo gestore di file per navigare velocemente alla cartella.
+You can usually paste these paths into the address bar of your file explorer to quickly navigate to the folder.
 
 ::: code-group
 
-```:no-line-numbers [Windows]
+```text:no-line-numbers [Windows]
 %appdata%\.minecraft\mods
 ```
 
-```:no-line-numbers [macOS]
+```text:no-line-numbers [macOS]
 ~/Library/Application Support/minecraft/mods
 ```
 
-```:no-line-numbers [Linux]
+```text:no-line-numbers [Linux]
 ~/.minecraft/mods
 ```
 
 :::
 
-Una volta che hai trovato la cartella `mods`, puoi muovere i file `.jar` della mod in essa.
+Once you've found the `mods` folder, you can move the mod `.jar` files into it.
 
-![Mod installate nella cartella mods](/assets/players/installing-mods.png)
+![Installed mods in the mods folder](/assets/players/installing-mods.png)
 
-## 3. Hai Finito! {#3-you-re-done}
+## 3. You're Done! {#3-you-re-done}
 
-Una volta che hai spostato le mod nella cartella `mods`, puoi aprire il Launcher di Minecraft e selezionare il profilo Fabric dal menu a tendina nell'angolo in basso a sinistra e premere gioca!
+Once you've moved the mods into the `mods` folder, you can open the Minecraft Launcher and select the Fabric profile from the dropdown in the bottom-left corner and press play!
 
-![Launcher di Minecraft con il profilo Fabric selezionato](/assets/players/installing-fabric/launcher-screen.png)
+![Minecraft Launcher with Fabric profile selected](/assets/players/installing-fabric/launcher-screen.png)
 
-## Risoluzione dei Problemi {#troubleshooting}
+## Troubleshooting {#troubleshooting}
 
-Se incontri qualsiasi problema nel seguire questa guida, puoi chiedere aiuto nel [Discord di Fabric](https://discord.gg/v6v4pMv) nel canale `#player-support`.
+If you encounter any issues whilst following this guide, you can ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.
 
-Puoi anche tentare di risolvere il problema da solo leggendo le seguenti pagine di risoluzione dei problemi:
+You can also attempt to troubleshoot the issue yourself by reading the troubleshooting pages:
 
-- [Segnalazioni dei Crash](./troubleshooting/crash-reports)
-- [Caricare i Log](./troubleshooting/uploading-logs)
+- [Crash Reports](./troubleshooting/crash-reports)
+- [Uploading Logs](./troubleshooting/uploading-logs)

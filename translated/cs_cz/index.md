@@ -2,9 +2,11 @@
 title: Fabric Dokumentace
 description: Oficiální dokumentace pro Fabric, modovací toolchain pro Minecraft.
 layout: home
+
 hero:
   name: Fabric Dokumentace
-  tagline: Oficiální dokumentace pro Fabric, modovací toolchain pro Minecraft.
+  tagline: The official curated documentation for Fabric,<br />a modding toolchain for Minecraft.
+
 features:
   - title: Hráčské Návody
     icon: 📚

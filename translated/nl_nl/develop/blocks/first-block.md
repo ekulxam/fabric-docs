@@ -2,9 +2,11 @@
 title: Maak Je Eerste Blok
 description: Leer hoe je je eerste zelfgemaakte blok kunt maken in Minecraft.
 authors:
+  - CelDaemon
+  - Earthcomputer
   - IMB11
-  - xEobardThawne
   - its-miroma
+  - xEobardThawne
 ---
 
 Blokken vormen de basis van Minecraft – letterlijk en figuurlijk. Net als alles in de game, worden ze netjes opgeborgen in registers.
@@ -19,14 +21,14 @@ Mojang doet iets soortgelijks als dit met vanilla blokken; je kunt de klasse `Bl
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
----
-
 Net als bij items moet je ervoor zorgen dat de klasse wordt geladen, zodat alle statische velden die je blokinstanties bevatten, worden geïnitialiseerd.
 
-Je kunt dit doen door een dummy `initialize`-methode te maken, die in je mod-initialisator kan worden aangeroepen om de statische initialisatie te activeren.
+You can do this by creating a dummy `initialize` method, which can be called in your [mod's initializer](../getting-started/project-structure#entrypoints) to trigger the static initialization.
 
-:::info
-Voor het geval dat je niet weet wat statische initialisatie is: dit is het proces van het initialiseren van statische velden in een klasse. Dit wordt gedaan wanneer de klasse door de JVM wordt geladen, en gebeurt voordat er exemplaren van de klasse worden gemaakt.
+::: info
+
+If you are unaware of what static initialization is, it is the process of initializing static fields in a class. This is done when the class is loaded by the JVM, and is done before any instances of the class are created.
+
 :::
 
 ```java
@@ -39,130 +41,142 @@ public class ModBlocks {
 
 @[code transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/block/ExampleModBlocks.java)
 
-## Het Maken En Registreren Van Je Blok {#creating-and-registering-your-block}
+## Creating And Registering Your Block {#creating-and-registering-your-block}
 
-Net als voorwerpen hebben blokken een klasse `Blocks.Settings` in hun constructor, die eigenschappen over het blok specificeert, zoals de geluidseffecten en het mining-niveau.
+Similarly to items, blocks take a `BlockBehavior.Properties` class in their constructor, which specifies properties about the block, such as its sound effects and mining level.
 
-We zullen hier niet alle opties behandelen; je kunt de klasse zelf bekijken om de verschillende opties te zien, die voor zich spreken.
+We will not cover all the options here: you can view the class yourself to see the various options, which should be self-explanatory.
 
-Ter voorbeeld zullen we een simpel blok maken dat de eigenschappen heeft van aarde, maar het is een ander materiaal.
+For example purposes, we will be creating a simple block that has the properties of dirt, but is a different material.
 
-:::tip
-Je kunt ook `AbstractBlock.Settings.copy(AbstractBlock block)` gebruiken om de instellingen van een bestaand blok te kopiëren. In dit geval hadden we `Blocks.DIRT` kunnen gebruiken om de instellingen van aarde te kopiëren, maar voor het voorbeeld gebruiken we de bouwer.
+- We create our block settings in a similar way to how we created item settings in the item tutorial.
+- We tell the `register` method to create a `Block` instance from the block settings by calling the `Block` constructor.
+
+::: tip
+
+You can also use `BlockBehavior.Properties.ofFullCopy(BlockBehavior block)` to copy the settings of an existing block, in this case, we could have used `Blocks.DIRT` to copy the settings of dirt, but for example purposes we'll use the builder.
+
 :::
 
 @[code transcludeWith=:::2](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
-Om het blokvoorwerp automatisch te maken, kunnen we `true` doorgeven aan de parameter `shouldRegisterItem` van de `register`-methode die we in de vorige stap hebben gemaakt.
+To automatically create the block item, we can pass `true` to the `shouldRegisterItem` parameter of the `register` method we created in the previous step.
 
-### Je Blokvoorwerp Toevoegen aan een Voorwerpgroep {#adding-your-block-to-an-item-group}
+### Adding Your Block's Item to a Creative Tab {#adding-your-block-s-item-to-a-creative-tab}
 
-Omdat 'BlockItem' automatisch wordt aangemaakt en geregistreerd, moet je, om het aan een voorwerpgroep toe te voegen, de methode 'Block.asItem()' gebruiken om de instantie 'BlockItem' op te halen.
+Since the `BlockItem` is automatically created and registered, to add it to a creative tab, you must use the `Block.asItem()` method to get the `BlockItem` instance.
 
-Voor dit voorbeeld gebruiken we een aangepaste artikelgroep die is gemaakt op de pagina [Aangepaste Voorwerpgroepen](../items/custom-item-groups).
+For this example, we will add the block to the `BUILDING_BLOCKS` tab. To instead add the block to a custom creative tab, see [Custom Creative Tabs](../items/custom-item-groups).
 
-@[code transcludeWith=:::3](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
+@[code transcludeWith=:::6](@/reference/latest/src/main/java/com/example/docs/block/ModBlocks.java)
 
----
+You should place this within the `initialize()` function of your class.
 
-Je zou nu moeten merken dat jouw blok in de creatieve inventaris staat en in de wereld kan worden geplaatst!
+You should now notice that your block is in the creative inventory, and can be placed in the world!
 
 ![Block in world without suitable model or texture](/assets/develop/blocks/first_block_0.png)
 
-Er zijn wel een paar problemen: het blokvoorwerp heeft geen naam en het blok heeft geen textuur, blokmodel of voorwerpmodel.
+There are a few issues though - the block item is not named, and the block has no texture, block model or item model.
 
-## Blokvertalingen toevoegen {#adding-block-translations}
+## Adding Block Translations {#adding-block-translations}
 
-Om een ​​vertaling toe te voegen, moet je een vertaalsleutel aanmaken in je vertaalbestand - `assets/<mod id here>/lang/nl_nl.json` (`us_en.json` voor Engels).
+To add a translation, you must create a translation key in your translation file - `assets/example-mod/lang/en_us.json`.
 
-Minecraft zal deze vertaling gebruiken in de creatieve inventaris en op andere plaatsen waar de bloknaam wordt weergegeven, zoals bij commandofeedback.
+Minecraft will use this translation in the creative inventory and other places where the block name is displayed, such as command feedback.
 
 ```json
 {
-    "block.example-mod.condensed_dirt": "Condensed Dirt"
+  "block.example-mod.condensed_dirt": "Condensed Dirt"
 }
 ```
 
-Je kunt het spel opnieuw starten of je mod bouwen en op <kbd>F3</kbd>+<kbd>T</kbd> drukken om de wijzigingen toe te passen - en je zou moeten zien dat het blok een naam heeft in de creatieve inventaris en op andere plaatsen zoals het statistiekenscherm.
+You can either restart the game or build your mod and press <kbd>F3</kbd>+<kbd>T</kbd> to apply changes - and you should see that the block has a name in the creative inventory and other places such as the statistics screen.
 
-## Modellen en Texturen {#models-and-textures}
+## Models and Textures {#models-and-textures}
 
-Alle bloktexturen zijn te vinden in de map `assets/<mod id here>/textures/block` - een voorbeeldtextuur voor het blok "Condensed Dirt" is gratis te gebruiken.
+All block textures can be found in the `assets/example-mod/textures/block` folder - an example texture for the "Condensed Dirt" block is free to use.
 
-<DownloadEntry type="Texture" visualURL="/assets/develop/blocks/first_block_1.png" downloadURL="/assets/develop/blocks/first_block_1_small.png" />
+<DownloadEntry visualURL="/assets/develop/blocks/first_block_1.png" downloadURL="/assets/develop/blocks/first_block_1_small.png">Texture</DownloadEntry>
 
-Om de textuur in het spel te laten verschijnen, moet je een blok- en voorwerpmodel maken dat je kunt vinden op de respectievelijke locaties voor het blok "Condensed Dirt":
+To make the texture show up in-game, you must create a block model which can be found in the `assets/example-mod/models/block/condensed_dirt.json` file for the "Condensed Dirt" block. For this block, we're going to use the `block/cube_all` model type.
 
-- `assets/<mod id here>/models/block/condensed_dirt.json`
-- `assets/<mod id here>/models/item/condensed_dirt.json`
+@[code](@/reference/latest/src/main/generated/assets/example-mod/models/block/condensed_dirt.json)
 
-Het voorwerpmodel is vrij eenvoudig, het kan gewoon het blokmodel als ouder gebruiken - aangezien de meeste blokmodellen ondersteuning bieden voor weergave in een GUI:
+For the block to show in your inventory, you will need to create a [Client Item](../items/first-item#creating-the-client-item) that points to your block model. For this example, the client item for the "Condensed Dirt" block can be found at `assets/example-mod/items/condensed_dirt.json`.
 
-@[code](@/reference/latest/src/main/resources/assets/example-mod/models/item/condensed_dirt.json)
+@[code](@/reference/latest/src/main/generated/assets/example-mod/items/condensed_dirt.json)
 
-Het blokmodel moet in ons geval echter als ouder het `block/cube_all`-model hebben:
+::: tip
 
-@[code](@/reference/latest/src/main/resources/assets/example-mod/models/block/condensed_dirt.json)
+You only need to create a client item if you've registered a `BlockItem` along with your block!
 
-Wanneer je het spel laadt, merk je misschien dat de textuur nog steeds ontbreekt. Dit komt omdat je een blockstaat-definitie moet toevoegen.
+:::
 
-## Het Maken van De Blokstaat-definitie {#creating-the-block-state-definition}
+When you load into the game, you may notice that the texture is still missing. This is because you need to add a blockstate definition.
 
-De blokstaat-definitie wordt gebruikt om het spel te instrueren op basis van de huidige status van het blok.
+## Creating the Block State Definition {#creating-the-block-state-definition}
 
-Voor het voorbeeldblok, dat geen complexe blokstaat heeft, is slechts één invoer in de definitie nodig.
+The blockstate definition is used to instruct the game on which model to render based on the current state of the block.
 
-Dit bestand moet zich in de map `assets/example-mod/blockstates` bevinden en de naam ervan moet overeenkomen met het blok-ID dat is gebruikt bij het registreren van uw blok in de klasse `ModBlokken`. Als het blok-ID bijvoorbeeld `condensed_dirt` is, moet het bestand `condensed_dirt.json` heten.
+For the example block, which doesn't have a complex blockstate, only one entry is needed in the definition.
 
-@[code](@/reference/latest/src/main/resources/assets/example-mod/blockstates/condensed_dirt.json)
+This file should be located in the `assets/example-mod/blockstates` folder, and its name should match the block ID used when registering your block in the `ModBlocks` class. For instance, if the block ID is `condensed_dirt`, the file should be named `condensed_dirt.json`.
 
-Blockstaten zijn erg complex en daarom worden ze op een volgende pagina behandeld: [Blockstaten](./blockstates)
+@[code](@/reference/latest/src/main/generated/assets/example-mod/blockstates/condensed_dirt.json)
 
-Als je het spel opnieuw start, of herlaadt via <kbd>F3</kbd>+<kbd>T</kbd> om wijzigingen toe te passen, zou je de bloktextuur in de inventaris en fysiek in de wereld moeten kunnen zien:
+::: tip
+
+Blockstates are incredibly complex, which is why they will be covered next in [their own separate page](./blockstates).
+
+:::
+
+Restarting the game, or reloading via <kbd>F3</kbd>+<kbd>T</kbd> to apply changes - you should be able to see the block texture in the inventory and physically in the world:
 
 ![Block in world with suitable texture and model](/assets/develop/blocks/first_block_4.png)
 
-## Blokdrops toevoegen {#adding-block-drops}
+## Adding Block Drops {#adding-block-drops}
 
-Wanneer je het blok breekt in overleefmodus, zie je misschien dat het blok niet valt. Misschien wil je deze functionaliteit, maar om je blok als een voorwerp te laten vallen, moet je de buittabel implementeren. Het buittabelbestand moet in de map `data/<0>/loot_table/blocks/` worden geplaatst.
+When breaking the block in survival, you may see that the block does not drop - you might want this functionality, however to make your block drop as an item on break you must implement its loot table - the loot table file should be placed in the `data/example-mod/loot_table/blocks/` folder.
 
-:::info
-Voor een beter begrip van buittabellen kun je de pagina [Minecraft Wiki - Buittabellen](https://nl.minecraft.wiki/w/Buittabel) raadplegen.
+::: info
+
+For a greater understanding of loot tables, you can refer to the [Minecraft Wiki - Loot Tables](https://minecraft.wiki/w/Loot_table) page.
+
 :::
 
 @[code](@/reference/latest/src/main/resources/data/example-mod/loot_tables/blocks/condensed_dirt.json)
 
-Deze buittabel biedt een eenmalige voorwerpval van het blokvoorwerp wanneer het blok wordt gebroken en wanneer het wordt opgeblazen door een explosie.
+This loot table provides a single item drop of the block item when the block is broken, and when it is blown up by an explosion.
 
-## Een Oogstinstrument Voorstellen {#recommending-a-harvesting-tool}
+## Recommending a Harvesting Tool {#recommending-a-harvesting-tool}
 
-Mogelijk wil je ook dat je blok alleen met een specifiek gereedschap kan worden geoogst. Misschien wilt je je blok bijvoorbeeld sneller laten oogsten met een schep.
+You may also want your block to be harvestable only by a specific tool - for example, you may want to make your block faster to harvest with a shovel.
 
-Alle gereedschapstags moeten in de map `data/minecraft/tags/block/mineable/` worden geplaatst - waarbij de naam van het bestand afhangt van het type tool dat wordt gebruikt, een van de volgende:
+All the tool tags should be placed in the `data/minecraft/tags/block/mineable/` folder - where the name of the file depends on the type of tool used, one of the following:
 
-- `hoe.json` (schoffel)
-- `axe.json` (bijl)
-- `pickaxe.json` (houweel)
-- `shovel.json` (schep)
+- `hoe.json`
+- `axe.json`
+- `pickaxe.json`
+- `shovel.json`
 
-De inhoud van het bestand is vrij eenvoudig: het is een lijst met items die aan de tag moeten worden toegevoegd.
+The contents of the file are quite simple - it is a list of items that should be added to the tag.
 
-In dit voorbeeld wordt het blok "Condensed Dirt" toegevoegd aan de tag `shovel`.
+This example adds the "Condensed Dirt" block to the `shovel` tag.
 
 @[code](@/reference/latest/src/main/resources/data/minecraft/tags/mineable/shovel.json)
 
-Als je wilt dat er een tool nodig is om het blok te breken, kun je `.requiresTool()` toevoegen aan je blokinstellingen, en ook de juiste mining-tag toevoegen.
+If you wish for a tool to be required to mine the block, you'll want to append `.requiresCorrectToolForDrops()` to your block settings, as well as add the appropriate mining level tag.
 
-## Miningniveaus {#mining-levels}
+## Mining Levels {#mining-levels}
 
-Op dezelfde manier kan de tag voor miningniveau worden gevonden in de map `data/minecraft/tags/block/` en respecteert het volgende formaat:
+Similarly, the mining level tag can be found in the `data/minecraft/tags/block/` folder, and respects the following format:
 
-- `needs_stone_tool.json` - Een minimumniveau aan stenen gereedschap
-- `needs_iron_tool.json` - Een minimumniveau aan ijzeren gereedschap
-- `needs_diamond_tool.json` - Een minimumniveau aan diamanten gereedschap.
+- `needs_stone_tool.json` - A minimum level of stone tools
+- `needs_iron_tool.json` - A minimum level of iron tools
+- `needs_diamond_tool.json` - A minimum level of diamond tools.
 
-Het bestand heeft hetzelfde formaat als het oogstinstrumentbestand: een lijst met items die aan de tag moeten worden toegevoegd.
+The file has the same format as the harvesting tool file - a list of items to be added to the tag.
 
-## Extra Notities {#extra-notes}
+## Extra Notes {#extra-notes}
 
-Als je meerdere blokken aan je mod toevoegt, kunt je overwegen om [Data Generatie](https://fabricmc.net/wiki/tutorial:datagen_setup) te gebruiken om het proces van het maken van blok- en voorwerpmodellen, blokstaatdefinities en buittafels te automatiseren.
+If you're adding multiple blocks to your mod, you may want to consider using [Data Generation](../data-generation/setup) to automate the process of creating block and item models, blockstate definitions, and loot tables.

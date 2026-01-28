@@ -1,8 +1,10 @@
 ---
 title: 在 Windows 上安裝 Java
-description: 在 Windows 上安裝 Java 的逐步指南。
+description: A step-by-step guide on how to install Java on Windows.
 authors:
   - IMB11
+  - skycatminepokie
+next: false
 ---
 
 這個指南將引導你在 Windows 上安裝 Java 21。
@@ -13,7 +15,7 @@ Minecraft 啟動器附帶了自己的 Java 安裝，因此這部分只在你想�
 
 要檢查 Java 是否已安裝，你首先必須開啟命令提示字元。
 
-你可以透過按下 <kbd>Win</kbd>+<kbd>R</kbd> 並在出現的對話方塊中輸入 `cmd.exe` 來執行這項操作。
+You can do this by pressing <kbd>Windows</kbd>+<kbd>R</kbd> and typing `cmd.exe` into the box that appears.
 
 ![Windows執行對話方塊中的「cmd.exe」](/assets/players/installing-java/windows-run-dialog.png)
 
@@ -23,39 +25,51 @@ Minecraft 啟動器附帶了自己的 Java 安裝，因此這部分只在你想�
 
 ![命令提示字元中輸入了「java -version」](/assets/players/installing-java/windows-java-version.png)
 
-:::warning
-要使用 Minecraft 1.21，你至少需要安裝 Java 21。 如果這個指令顯示任何低於 21 的版本，則需要更新現有的 Java 安裝。 如果這個指令顯示任何低於 21 的版本，則需要更新現有的 Java 安裝。 如果這個指令顯示任何低於 21 的版本，則需要更新現有的 Java 安裝。
+::: warning
+
+To use Minecraft 1.21.11, you'll need at least Java 21 installed.
+
+If this command displays any version lower than 21, you'll need to update your existing Java installation; keep reading this page.
+
 :::
 
-## 2. 下載Java 21安裝程式 {#2-download-the-java-installer}
+## 2. Download the Java 21 Installer {#2-download-the-java-installer}
 
-要安裝Java 21，你需要從 Adoptium 下載安裝程式。
+To install Java 21, you'll need to download the installer from [Adoptium](https://adoptium.net/temurin/releases?version=21&os=windows&arch=any&mode=filter).
 
-你需要下載 `Windows Installer (.msi)` 版本：
+You'll want to download the `Windows Installer (.msi)` version:
 
-![Adoptium 下載頁面，突顯了 Windows 安裝程式 (.msi)](/assets/players/installing-java/windows-download-java.png)
+![Adoptium download page with Windows Installer (.msi) highlighted](/assets/players/installing-java/windows-download-java.png)
 
-如果你有 32 位元作業系統，應該選擇 `x86`；如果你有 64 位元作業系統，則應該選擇 `x64`。
+You should choose `x86` if you have a 32-bit operating system, or `x64` if you have a 64-bit operating system.
 
-現代大多數電腦都執行 64 位元作業系統。 如果你不確定，請嘗試使用 64 位元的下載。 如果你不確定，請嘗試使用 64 位元的下載。 要檢查 Java 是否已安裝，你首先必須開啟命令提示字元。
+The majority of modern computers will have a 64-bit operating system. If you are unsure, try using the 64-bit download.
 
-## 3. 執行安裝程式！ 執行安裝程式！ {#3-run-the-installer} 執行安裝程式！ {#3-run-the-installer}
+## 3. Run the Installer! {#3-run-the-installer}
 
-依照安裝程式中的步驟安裝Java 21。 當你到達這個頁面時，你應該將以下功能設為「整個功能將安裝在本機硬碟上」： 當你到達這個頁面時，你應該將以下功能設為「整個功能將安裝在本機硬碟上」： 當你到達這個頁面時，你應該將以下功能設為「整個功能將安裝在本機硬碟上」：
+Follow the steps in the installer to install Java 21. When you reach this page, you should set the following features to "Entire feature will be installed on local hard drive":
 
-- `設定 JAVA_HOME 變數` - 這將加入到你的 PATH 中。
-- `JavaSoft (Oracle) 登錄機碼`
+- `Set JAVA_HOME environment variable` - This will be added to your PATH.
+- `JavaSoft (Oracle) registry keys`
 
-![Java 21 安裝程式，其中「設定 JAVA\\_HOME 變數」和「JavaSoft (Oracle) 登錄機碼」已醒目提示](/assets/players/installing-java/windows-wizard-screenshot.png)
+![Java 21 installer with "Set JAVA_HOME variable" and "JavaSoft (Oracle) registry keys" highlighted](/assets/players/installing-java/windows-wizard-screenshot.png)
 
-完成後，你可以按 `下一步` 繼續安裝。
+Once you've done that, you can click `Next` and continue with the installation.
 
-## 4. 驗證 Java 21 是否已安裝 {#4-verify-that-java-is-installed}
+::: warning
 
-安裝完成後，你可以再次開啟命令提示字元，並輸入 `java -version` 來驗證 Java 21 是否已安裝。
+Windows won't always tell other programs that Java is installed until you restart your computer.
 
-如果這個命令成功執行，你將看到類似於以前顯示的內容，其中顯示了 Java 版本：
+**Make sure to restart your computer before continuing!**
+
+:::
+
+## 4. Verify That Java 21 Is Installed {#4-verify-that-java-is-installed}
+
+Once the installation is complete, you can verify that Java 21 is installed by opening the command prompt again and typing `java -version`.
+
+If the command runs successfully, you will see something like shown before, where the Java version is displayed:
 
 ![命令提示字元中輸入了「java -version」](/assets/players/installing-java/windows-java-version.png)
 
-如果遇到任何問題，你可以在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#player-support` 頻道中尋求幫助。
+If you encounter any issues, feel free to ask for help in the [Fabric Discord](https://discord.fabricmc.net/) in the `#player-support` channel.

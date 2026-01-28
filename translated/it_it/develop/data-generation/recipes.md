@@ -2,6 +2,7 @@
 title: Generazione di Ricette
 description: Una guida per configurare la generazione di ricette con datagen.
 authors:
+  - CelDaemon
   - skycatminepokie
   - Spinoscythe
 authors-nogithub:
@@ -9,40 +10,44 @@ authors-nogithub:
   - mcrafterzz
 ---
 
-:::info PREREQUISITI
-Assicurati di aver prima completato il processo di [configurazione della datagen](./setup).
+<!---->
+
+:::info PREREQUISITES
+
+Make sure you've completed the [datagen setup](./setup) process first.
+
 :::
 
-## Configurazione {#setup}
+## Setup {#setup}
 
-Anzitutto, ci serve il nostro fornitore. Crea una classe che `extends FabricRecipeProvider`. Tutta la nostra generazione di ricette avverrà nel metodo `generate` del nostro fornitore.
+First, we'll need our provider. Make a class that extends `FabricRecipeProvider`. All our recipe generation will happen inside the `buildRecipes` method of our provider.
 
 @[code lang=java transcludeWith=:::datagen-recipes:provider](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModRecipeProvider.java)
 
-Per completare la configurazione, aggiungi questo fornitore alla tua `DataGeneratorEntrypoint` nel metodo `onInitializeDataGenerator`.
+To finish setup, add this provider to your `DataGeneratorEntrypoint` within the `onInitializeDataGenerator` method.
 
-@[code lang=java transclude={32-32}](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
+@[code lang=java transcludeWith=:::datagen-recipes:register](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModDataGenerator.java)
 
-## Ricette Senza Forma {#shapeless-recipes}
+## Shapeless Recipes {#shapeless-recipes}
 
-Le ricette senza forma non sono complesse. Basta aggiungerle al metodo `generate` nel tuo fornitore:
+Shapeless recipes are fairly straightforward. Just add them to the `buildRecipes` method in your provider:
 
 @[code lang=java transcludeWith=:::datagen-recipes:shapeless](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModRecipeProvider.java)
 
-## Ricette Con Forma {#shaped-recipes}
+## Shaped Recipes {#shaped-recipes}
 
-Per una ricetta con forma, dovrai definire la forma con una `String`, poi definire ciò che ogni `char` della `String` rappresenta.
+For a shaped recipe, you define the shape using a `String`, then define what each `char` in the `String` represents.
 
 @[code lang=java transcludeWith=:::datagen-recipes:shaped](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModRecipeProvider.java)
 
-:::tip
-Ci sono tanti metodi ausiliari per la creazione di ricette tipiche. Controlla ciò che `RecipeProvider` ha da offrire! Usa `Alt + 7` in IntelliJ per aprire la struttura di una classe, inclusa una lista dei metodi.
+::: tip
+
+There's a lot of helper methods for creating common recipes. Check out what `RecipeProvider` has to offer! Use <kbd>Alt</kbd>+<kbd>7</kbd> in IntelliJ to open the structure of a class, including a method list.
+
 :::
 
-## Altre Ricette {#other-recipes}
+## Other Recipes {#other-recipes}
 
-Altre ricette funzionano in maniera simile, ma richiedono alcuni parametri aggiuntivi. Per esempio, le ricette di fusioni devono includere la quantità di esperienza da assegnare.
+Other recipes work similarly, but require a few extra parameters. For example, smelting recipes need to know how much experience to award.
 
 @[code lang=java transcludeWith=:::datagen-recipes:other](@/reference/latest/src/client/java/com/example/docs/datagen/ExampleModRecipeProvider.java)
-
-## Tipi di Ricette Personalizzati {#custom-recipe-types}

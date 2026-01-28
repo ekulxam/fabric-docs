@@ -1,6 +1,6 @@
 ---
-title: Эффекты состояния
-description: Узнайте, как создавать свои собственные эффекты состояния.
+title: Mob Effects
+description: Learn how to add custom mob effects.
 authors:
   - dicedpixels
   - Friendly-Banana
@@ -13,31 +13,32 @@ authors-nogithub:
   - tao0lu
 ---
 
-Эффекты состояния, также известные как просто эффекты, представляют собой состояние, которое может воздействовать на сущность. Они могут сказываться положительно, отрицательно или нейтрально на сущности. В обычном случае в игре эти эффекты применяются несколькими способами, такими как поедание еды, распитие зелий и так далее.
+Mob effects, also known as status effects or simply effects, are a condition that can affect an entity. Они могут сказываться положительно, отрицательно или нейтрально на сущности. В обычном случае в игре эти эффекты применяются несколькими способами, такими как поедание еды, распитие зелий и так далее.
 
 Можно использовать команду `/effect` для применения эффектов к сущности.
 
-## Свои эффекты состояния {#custom-status-effects}
+## Custom Mob Effects {#custom-mob-effects}
 
 В этом руководстве мы добавим новый эффект под названием _Tater_, который даёт игроку одно очко опыта каждый игровой такт.
 
-### Расширение `StatusEffect` {#extend-statuseffect}
+### Extend `MobEffect` {#extend-mobeffect}
 
-Давайте создадим класс нашего эффекта, который будет наследовать основной класс всех эффектов — `StatusEffect`.
+Let's create a custom effect class by extending `MobEffect`, which is the base class for all effects.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/effect/TaterEffect.java)
 
 ### Регистрация своего эффекта {#registering-your-custom-effect}
 
-Схожим с регистрацией блоков и предметов образом, мы используем `Registry.register`, чтобы зарегистрировать наш эффект в реестре `STATUS_EFFECT`. Это можно сделать в нашем инициализаторе.
+Similar to block and item registration, we use `Registry.register` to register our custom effect into the
+`MOB_EFFECT` registry. Это можно сделать в нашем инициализаторе.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/effect/ExampleModEffects.java)
 
 ### Текстура
 
-Иконка эффекта состояния представляет собой PNG-файл размером 18×18 пикселей. Поместите свою иконку в папку:
+The mob effect icon is a 18x18 PNG which will appear in the player's inventory screen. Поместите свою иконку в папку:
 
-```:no-line-numbers
+```text:no-line-numbers
 resources/assets/example-mod/textures/mob_effect/tater.png
 ```
 
@@ -45,7 +46,8 @@ resources/assets/example-mod/textures/mob_effect/tater.png
 
 ### Переводы {#translations}
 
-Как и с любыми другими переводами, вы можете добавить запись формата `"effect.example-mod.effect-identifier": "Значение"` в языковой файл.
+Как и любой другой перевод, вы можете добавить запись с ID формата `"effect.example-mod.effect-identifier": "Значение"` в
+языковой файл.
 
 ```json
 {
@@ -58,6 +60,7 @@ resources/assets/example-mod/textures/mob_effect/tater.png
 Стоит взглянуть на то, как вы обычно применяете эффект к объекту.
 
 ::: tip
+
 For a quick test, it might be a better idea to use the previously mentioned `/effect` command:
 
 ```mcfunction
@@ -66,21 +69,25 @@ effect give @p example-mod:tater
 
 :::
 
-Чтобы применить эффект внутри, вам нужно использовать метод `LivingEntity#addStatusEffect`, который принимает
-`StatusEffectInstance` и возвращает логическое значение, указывающее, был ли эффект успешно применен.
+To apply an effect internally, you'd want to use the `LivingEntity#addMobEffect` method, which takes in
+a `MobEffectInstance`, and returns a boolean, specifying whether the effect was successfully applied.
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/ReferenceMethods.java)
 
-| Аргумент    | Тип                           | Описание                                                                                                                                                                                                                                                                                                                    |
-| ----------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `effect`    | `RegistryEntry<StatusEffect>` | Запись в реестре, представляющая этот эффект.                                                                                                                                                                                                                                                               |
-| `duration`  | `int`                         | Продолжительность эффекта **в тиках**; **не** секундах                                                                                                                                                                                                                                                                      |
-| `amplifier` | `int`                         | Усилитель соответствует уровню эффекта. Это не соответствует **уровню** эффекта, а скорее добавляется сверху. Следовательно, `усилитель` на уровне `4` => уровень `5`                                                                                                                       |
-| `ambient`   | `boolean`                     | Это очень сложный вопрос. Это в основном указывает на то, что эффект был добавлен окружающей средой (например, **Маяком**) и не имеет прямой причины. Если установлено значение `true`, то на экране появится значок эффекта с аквамариновым наложением. |
-| `particles` | `boolean`                     | Показывать ли частицы.                                                                                                                                                                                                                                                                                      |
-| `icon`      | `boolean`                     | Отображать ли значок эффекта в HUD. Эффект будет отображаться в инвентаре независимо от этого флага.                                                                                                                                                                                        |
+| Аргумент    | Тип                 | Описание                                                                                                                                                                                                                                                                                                                    |
+| ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `effect`    | `Holder<MobEffect>` | A holder that represents the effect.                                                                                                                                                                                                                                                                        |
+| `duration`  | `int`               | Продолжительность эффекта **в тиках**; **не** секундах                                                                                                                                                                                                                                                                      |
+| `amplifier` | `int`               | Усилитель соответствует уровню эффекта. Это не соответствует **уровню** эффекта, а скорее добавляется сверху. Следовательно, `усилитель` на уровне `4` => уровень `5`                                                                                                                       |
+| `ambient`   | `boolean`           | Это очень сложный вопрос. Это в основном указывает на то, что эффект был добавлен окружающей средой (например, **Маяком**) и не имеет прямой причины. Если установлено значение `true`, то на экране появится значок эффекта с аквамариновым наложением. |
+| `particles` | `boolean`           | Показывать ли частицы.                                                                                                                                                                                                                                                                                      |
+| `icon`      | `boolean`           | Отображать ли значок эффекта в HUD. Эффект будет отображаться в инвентаре независимо от этого флага.                                                                                                                                                                                        |
 
-:::info
+::: info
+
 ::: info
 Чтобы узнать, как создать зелье, накладывающее этот эффект, ознакомьтесь с руководством по [зельям](../items/potions).
+
 :::
+
+<!---->

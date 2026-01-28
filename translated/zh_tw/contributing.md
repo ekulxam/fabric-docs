@@ -1,179 +1,253 @@
-# Fabric 文件貢獻指南
+---
+title: 貢獻指南
+description: Fabric 文件貢獻指南
+---
 
-這個網站使用 [VitePress](https://vitepress.dev/) 來將各種 Markdown 檔案轉換成靜態 HTML。 這個網站使用 [VitePress](https://vitepress.dev/) 來從各種 Markdown 檔案轉換成靜態 HTML。 這個網站使用 [VitePress](https://vitepress.dev/) 來從各種 Markdown 檔案轉換成靜態 HTML。 這個網站使用 [VitePress](https://vitepress.dev/) 來從各種 Markdown 檔案轉換成靜態 HTML。 這個網站使用 [VitePress](https://vitepress.dev/) 來從各種 Markdown 檔案轉換成靜態 HTML。 你應該熟悉 VitePress 支援的 Markdown 擴充功能，詳細內容請參閱[這裡](https://vitepress.dev/guide/markdown#features)。
+這個網站使用 [VitePress](https://vitepress.dev/) 來將各種 Markdown 檔案轉換成靜態 HTML。 You should familiarize yourself with the [Markdown extensions that VitePress supports](https://vitepress.dev/guide/markdown#features).
 
-## 目錄
+你可以透過三種方式為本網站貢獻：
 
-- [Fabric 文件貢獻指南](#fabric-documentation-contribution-guidelines)
-  - [如何貢獻](#how-to-contribute)
-  - [貢獻框架](#contributing-framework)
-  - [貢獻內容](#contributing-content)
-    - [格式指南](#style-guidelines)
-    - [擴充指南](#guidance-for-expansion)
-    - [內容驗證](#guidance-for-expansion)
-    - [清理](#cleanup)
-  - [翻譯文件](#translating-documentation)
+- [翻譯文件](#translating-documentation)
+- [貢獻內容](#contributing-content)
+- [貢獻框架](#contributing-framework)
 
-## 如何貢獻
+所有貢獻都必須遵循我們的 [風格指南](#style-guidelines)。
 
-我們建議每次送出合併請求時，都在你的儲存庫中新增一個分支。 這讓同時管理多個合併請求變得更加容易。
+## 翻譯文件 {#translating-documentation}
 
-如果你想在本機預覽你的變更，你需要安裝 [Node.js 18+](https://nodejs.org/zh-tw/)。
+如果想將文件翻譯成別的語言，你可以在[Fabric Crowdin](https://crowdin.com/project/fabricmc)頁面上翻譯。
 
-在執行以下指令前，請先執行 `npm install` 來安裝所有相依項。
+<!-- markdownlint-disable titlecase-rule -->
 
-**正在執行程式開發伺服器：**
+## <Badge type="tip">new-content</Badge> 貢獻內容 {#contributing-content}
 
-這將讓你能在本機預覽你的變更，網址是 `localhost:3000`，並且在你進行變更時會自動重新載入頁面。
+<!-- markdownlint-enable titlecase-rule -->
+
+Content contributions are the main way to contribute to the Fabric Documentation.
+
+All content contributions go through the following stages, each of which is associated with a label:
+
+1. <Badge type="tip">locally</Badge> Prepare your changes and push a PR
+2. <Badge type="tip">stage:expansion</Badge>: Guidance for Expansion if needed
+3. <Badge type="tip">stage:verification</Badge>: Content verification
+4. <Badge type="tip">stage:cleanup</Badge>: Grammar, Linting...
+5. <Badge type="tip">stage:ready</Badge>: Ready to be merged!
+
+All content must follow our [style guidelines](#style-guidelines).
+
+### 1. Prepare Your Changes {#1-prepare-your-changes}
+
+This website is open-source, and it is developed in a GitHub repository, which means that we rely on the GitHub flow:
+
+1. [Fork the GitHub repository](https://github.com/FabricMC/fabric-docs/fork)
+2. Create a new branch on your fork
+3. Make your changes on that branch
+4. Open a Pull Request to the original repository
+
+You can read more about the [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow).
+
+You can either make changes from the web UI on GitHub, or you can develop and preview the website locally.
+
+#### Cloning Your Fork {#clone-your-fork}
+
+If you want to develop locally, you will need to install [Git](https://git-scm.com/).
+
+After that, clone your fork of the repository with:
+
+```sh
+# make sure to replace "your-username" with your actual username
+git clone https://github.com/your-username/fabric-docs.git
+```
+
+#### Installing Dependencies {#install-dependencies}
+
+If you want to preview your changes locally, you will need to install [Node.js 18+](https://nodejs.org/en/).
+
+After that, make sure to install all dependencies with:
+
+```sh
+npm install
+```
+
+#### Running the Development Server {#run-the-development-server}
+
+This will allow you to preview your changes locally at `localhost:5173` and will automatically reload the page when you make changes.
 
 ```sh
 npm run dev
 ```
 
-**建構網站：**
+Now you can open and browse the website from the browser by visiting `http://localhost:5173`.
 
-這將把所有的 Markdown 檔案編譯成靜態 HTML 檔案，並將它們放置在 `.vitepress/dist` 資料夾中。
+#### Building the Website {#building-the-website}
+
+This will compile all Markdown files into static HTML files and place them in `.vitepress/dist`:
 
 ```sh
 npm run build
 ```
 
-**預覽已建置的網站：**
+#### Previewing the Built Website {#previewing-the-built-website}
 
-這將在連接埠 3000 上啟動本機伺服器，提供在 `.vitepress/dist` 中找到的內容。
+This will start a local server on port `4173` serving the content found in `.vitepress/dist`:
 
 ```sh
 npm run preview
 ```
 
-## 貢獻框架
+#### Opening a Pull Request {#opening-a-pull-request}
 
-框架指的是網站的內部結構，任何修改網站框架的合併請求應該標記為 `framework` 標籤。
+Once you're happy with your changes, you may `push` your changes:
 
-在進行框架合併請求前，你應該先與 [Fabric Discord](https://discord.gg/v6v4pMv) 上的文件團隊諮詢，或者透過提出問題進行討論。
+```sh
+git add .
+git commit -m "Description of your changes"
+git push
+```
 
-**備註：修改側邊欄檔案和導覽列配置不算作框架合併請求。**
+Then, follow the link in the output of `git push` to open a PR.
 
-## 貢獻內容
+### 2. <Badge type="tip">stage:expansion</Badge> Guidance for Expansion if Needed {#2-guidance-for-expansion-if-needed}
 
-貢獻內容是貢獻 Fabric 文件的主要方式。
+If the documentation team thinks that you could expand upon your pull request, a member of the team will add the <Badge type="tip">stage:expansion</Badge> label to your pull request alongside a comment explaining what they think you could expand upon. If you agree with the suggestion, you can expand upon your pull request.
 
-所有內容應遵循我們的風格指南。
+If you do not want to expand upon your pull request, but you are happy for someone else to expand upon it at a later date, you should create an issue on the [Issues page](https://github.com/FabricMC/fabric-docs/issues) and explain what you think could be expanded upon. The documentation team will then add the <Badge type="tip">help-wanted</Badge> label to your PR.
 
-### 風格指南
+### 3. <Badge type="tip">stage:verification</Badge> Content Verification {#3-content-verification}
 
-所有 Fabric 文件網站上的頁面都應遵循風格指南。 所有 Fabric 文件網站上的頁面都應遵循風格指南。 如果你對任何事情感到不確定，可以在 [Fabric Discord](https://discord.gg/v6v4pMv) 或 GitHub 討論中提問。 所有 Fabric 文件網站上的頁面都應遵循風格指南。 所有 Fabric 文件網站上的頁面都應遵循風格指南。 如果你對任何事情感到不確定，可以在 [Fabric Discord](https://discord.gg/v6v4pMv) 或 GitHub 討論中提問。 所有 Fabric 文件網站上的頁面都應遵循風格指南。 所有 Fabric 文件網站上的頁面都應遵循風格指南。 如果你對任何事情感到不確定，可以在 [Fabric Discord](https://discord.gg/v6v4pMv) 或 GitHub 討論中提問。 所有 Fabric 文件網站上的頁面都應遵循風格指南。 如果你對任何事情感到不確定，可以在 [Fabric Discord](https://discord.gg/v6v4pMv) 或 GitHub 討論中提問。
+This is the most important stage as it ensures that the content is accurate and follows the Fabric Documentation style guide.
 
-風格指南如下：
+In this stage, the following questions should be answered:
 
-1. 所有頁面必須在 frontmatter 中包含標題和描述。
+- Is all of the content correct?
+- Is all of the content up-to-date?
+- Does the content cover all cases, such as different operating systems?
 
-   ```md
-   ---
-   title: 這是頁面的標題
-   description: 這是頁面的描述
-   authors:
-     - GitHub 使用者名稱
-   ---
-   ```
+### 4. <Badge type="tip">stage:cleanup</Badge> Cleanup {#4-cleanup}
 
-2. 如果你建立或修改包含程式碼的頁面，請將程式碼放置在參考模組的適當位置（位於儲存庫的 `/reference` 資料夾中）。 如果你建立或修改包含程式碼的頁面，請將程式碼放置在參考模組的適當位置（位於儲存庫的 `/reference` 資料夾中）。 接著，使用 VitePress 提供的 [程式碼片段功能](https://vitepress.dev/guide/markdown#import-code-snippets) 嵌入程式碼，或者如果你需要更大的控制範圍，可以使用 `markdown-it-vuepress-code-snippet-enhanced` 的 [轉入功能](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced)。
+In this stage, the following happens:
 
-   **範例：**
+- Fixing of any grammar issues using [LanguageTool](https://languagetool.org/)
+- Linting of all Markdown files using [`markdownlint`](https://github.com/DavidAnson/markdownlint)
+- Formatting of all Java code using [Checkstyle](https://checkstyle.sourceforge.io/)
+- Other miscellaneous fixes or improvements
 
-   ```md
-   <<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21 java}
-   ```
+## <Badge type="tip">framework</Badge> Contributing Framework {#contributing-framework}
 
-   這將在參考模組中嵌入 `ExampleMod.java` 檔案的第 15 至 21 行程式碼。
+Framework refers to the internal structure of the website, any pull requests that modify the framework of the website will be labeled with the <Badge type="tip">framework</Badge> label.
 
-   產生的程式碼片段將如下所示：
+You should really only make framework pull requests after consulting with the documentation team on the [Fabric Discord](https://discord.fabricmc.net/) or via an issue.
 
-   ```java
-     @Override
-   public void onInitialize() {
-     // 當 Minecraft 達到模組載入就緒的狀態時，這個程式碼將立即執行。
-     // 但是，某些事物（如資源）可能仍未初始化。
-     // 請小心謹慎地進行。
+::: info
 
-     LOGGER.info("你好，Fabric 世界！");
-   }
-   ```
+Modifying sidebar files and the navigation bar configuration does not count as a framework pull request.
 
-   **轉入範例：**
+:::
 
-   ```md
-   @[code transcludeWith=#test_transclude](@/reference/.../blah.java)
-   ```
+## Style Guidelines {#style-guidelines}
 
-   這將嵌入標記為 `#test_transclude` 的 `blah.java` 檔案的部分。
+If you are unsure about anything, you can ask in the [Fabric Discord](https://discord.fabricmc.net/) or via GitHub Discussions.
 
-   例如：
+### Write the Original in American English {#write-the-original-in-american-english}
 
-   ```java
-   public final String test = "再見，世界！";
+All original documentation is written in English, following the American rules of grammar.
 
-   // #test_transclude
-   public void test() {
-     System.out.println("你好，世界！");
-   }
-   // #test_transclude
-   ```
+### Add Data to the Frontmatter {#add-data-to-the-frontmatter}
 
-   只有位於 `#test_transclude` 標籤之間的程式碼將被嵌入。
+Each page must have a `title` and a `description` in the frontmatter.
 
-   ```java
-   public void test() {
-     System.out.println("你好，世界！");
-   }
-   ```
+Remember to also add your GitHub username to `authors` in the frontmatter of the Markdown file! This way we can give you proper credit.
 
-3. 所有的原始文件都會以英語撰寫，並遵循美式英語的文法規則。 你可以使用 [LanguageTool](https://languagetool.org/) 在輸入時檢查你的語法，但不要太擔心。 我們的文件團隊將在清理階段審查並更正文法錯誤。 然而，一開始就努力做到正確可以節省我們的時間。 我們的文件團隊將在清理階段審查並更正文法錯誤。 然而，一開始就努力做到正確可以節省我們的時間。
+```yaml
+---
+title: Title of the Page
+description: This is the description of the page.
+authors:
+  - your-username
+---
+```
 
-4. 如果你正在建立新章節，你應該在 `.vitepress/sidebars` 資料夾中建立一個新的側邊欄，並將其新增到 `config.mts` 檔案中。 如果你需要幫助，請在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#wiki` 頻道中提問。 如果你需要幫助，請在 [Fabric Discord](https://discord.gg/v6v4pMv) 的 `#docs` 頻道中提問。
+### Add Anchors to Headings {#add-anchors-to-headings}
 
-5. 當建立新頁面時，你應將其新增到 `.vitepress/sidebars` 資料夾中相關的側邊欄中。 同上，如果你需要幫助，請在Fabric Discord上的`#docs`頻道中提問。
+Each heading must have an anchor, which is used to link to that heading:
 
-6. 任何影像應該放置在 `/assets` 資料夾中的適當位置。
+```md
+## This Is a Heading {#this-is-a-heading}
+```
 
-7. ⚠️ **連結其他頁面時，請使用相對連結。** ⚠️
+The anchor must use lowercase characters, numbers and dashes.
 
-   這是因為系統中存在的版本控制系統，該系統將處理連結以在前面新增版本號。 如果你使用絕對連結，則不會將版本號新增到連結中。 如果你使用絕對連結，則不會將版本號新增到連結中。
+### Place Code Within the Example Mod {#place-code-within-the-example-mod}
 
-   例如，對於位於 `/players` 資料夾中的頁面，要連結到 `/players/installing-fabric.md` 中的 `installing-fabric` 頁面，你應該執行以下動作：
+If you create or modify pages containing code, place the code in an appropriate location within the example mod (located in the `/reference` folder of the repository). Then, use the [code snippet feature offered by VitePress](https://vitepress.dev/guide/markdown#import-code-snippets) to embed the code.
 
-   ```md
-   [這是指向另一個頁面的連結](./installing-fabric)
-   ```
+For example, to highlight lines 15-21 of the `ExampleMod.java` file from the mod:
 
-   你**不應該**執行以下動作：
+::: code-group
 
-   ```md
-   [這是指向另一個頁面的連結](/players/installing-fabric)
-   ```
+```md
+<<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21}
+```
 
-所有內容貢獻經歷三個階段：
+<<< @/reference/latest/src/main/java/com/example/docs/ExampleMod.java{15-21}[java]
 
-1. 擴充指導（如果可能）
-2. 內容驗證
-3. 清理（語法等）
+:::
 
-### 擴充指南
+If you need a greater span of control, you can use the [transclude feature from `markdown-it-vuepress-code-snippet-enhanced`](https://github.com/fabioaanthony/markdown-it-vuepress-code-snippet-enhanced).
 
-如果文件團隊認為你可以擴充你的合併請求，團隊成員將在你的合併請求中新增 `expansion` 標籤，並附上一則留言，解釋他們認為你可以擴展的內容。 如果你同意這個建議，你可以擴充你的合併請求。
+For example, this will embed the sections of the file above that are marked with the `#entrypoint` tag:
 
-**不要感到被迫擴充你的合併請求。**如果你不想擴充你的合併請求，你可以簡單地要求移除 `expansion` 標籤。
+::: code-group
 
-如果你不想擴展你的合併請求，但你願意讓其他人在以後擴展它，最好是在[議題頁面](https://github.com/FabricMC/fabric-docs/issues)上建立一個問題，並解釋你認為可以擴展的內容。
+```md
+@[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
+```
 
-### 內容驗證
+@[code transcludeWith=#entrypoint](@/reference/latest/src/main/java/com/example/docs/ExampleMod.java)
 
-所有新增內容的合併請求都經過內容驗證，這是最重要的階段，因為它確保內容準確無誤並符合 Fabric 文件的風格指南。
+:::
 
-### 清理
+### Create a Sidebar for Each New Section {#create-a-sidebar-for-each-new-section}
 
-在這個階段，文件團隊將在合併之前修復任何文法問題並進行他們認為必要的任何其他變更！
+If you're creating a new section, you should create a new sidebar in the `.vitepress/sidebars` folder and add it to the `i18n.mts` file.
 
-## 翻譯文件
+If you need assistance with this, please ask in the [Fabric Discord](https://discord.fabricmc.net/)'s `#docs` channel.
 
-如果想將文件翻譯成別的語言，你可以在[Fabric Crowdin](https://crowdin.com/project/fabricmc)頁面上翻譯。
+### Add New Pages to the Relevant Sidebars {#add-new-pages-to-the-relevant-sidebars}
+
+When creating a new page, you should add it to the relevant sidebar in the `.vitepress/sidebars` folder.
+
+Again, if you need assistance, ask in the Fabric Discord in the `#docs` channel.
+
+### Place Media in `/assets` {#place-media-in-assets}
+
+Any images should be placed in a suitable place in the `/public/assets` folder.
+
+### Use Relative Links! {#use-relative-links}
+
+This is because of the versioning system in place, which will process the links to add the version beforehand. If you use absolute links, the version number will not be added to the link.
+
+You must also not add the file extension to the link either.
+
+For example, to link to the page found in `/players/index.md` from the page `/develop/index.md`, you would have to do the following:
+
+::: code-group
+
+```md:no-line-numbers [✅ Correct]
+This is a relative link!
+[Page](../players/index)
+```
+
+```md:no-line-numbers [❌ Wrong]
+This is an absolute link.
+[Page](/players/index)
+```
+
+```md:no-line-numbers [❌ Wrong]
+This relative link has the file extension.
+[Page](../players/index.md)
+```
+
+:::
+
+<!---->

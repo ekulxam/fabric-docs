@@ -15,7 +15,7 @@ authors:
 
 ### Базовая прочность {#base-durability}
 
-Эта константа будет использоваться в методе `Item.Settings#maxDamage(int damageValue)` при создании наших предметов брони. Она также потребуется в качестве параметра в конструкторе `ArmorMaterial`, когда мы позже создадим наш объект `ArmorMaterial`.
+This constant will be used in the `Item.Properties#maxDamage(int damageValue)` method when creating our armor items, it is also required as a parameter in the `ArmorMaterial` constructor when we create our `ArmorMaterial` object later.
 
 @[code transcludeWith=:::base_durability](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
 
@@ -48,6 +48,10 @@ authors:
 | `repairIngredient`    | Метка предмета, представляющая все предметы, которые могут быть использованы для ремонта доспехов из этого материала в наковальне.                                                                                                                          |
 | `assetId`             | Ключ реестра `EquipmentAsset`. Это должна быть константа ключа реестра активов оборудования, созданная вами ранее.                                                                                                                          |
 
+Мы определяем ссылку на тег ингредиента ремонта следующим образом:
+
+@[code transcludeWith=:::repair_tag](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
+
 Если вам трудно определить значения для любого из параметров, вы можете обратиться к экземплярам `ArmorMaterial`, которые можно найти в интерфейсе `ArmorMaterials`.
 
 ## Создание предметов брони {#creating-the-armor-items}
@@ -56,13 +60,13 @@ authors:
 
 Очевидно, что комплект брони необязательно должен включать все типы предметов, вы можете иметь комплект, состоящий только из ботинок, штанов и т.д. — классический черепаший панцирь — хороший пример комплекта брони с отсутствующими слотами.
 
-В отличие от `ToolMaterial`, `ArmorMaterial` не хранит никакой информации о прочности предметов. По этой причине базовая прочность должна быть добавлена вручную к предметам `Item.Settings` при их регистрации.
+В отличие от `ToolMaterial`, `ArmorMaterial` не хранит никакой информации о прочности предметов. For this reason the base durability needs to be manually added to the armor items' `Item.Properties` when registering them.
 
-Это достигается путем передачи константы `BASE_DURABILITY`, которую мы создали ранее, в метод `maxDamage` в классе `Item.Settings`.
+This is achieved by passing the `BASE_DURABILITY` constant we created previously into the `maxDamage` method in the `Item.Properties` class.
 
 @[code transcludeWith=:::6](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 
-Вам также потребуется **добавить предметы в группу предметов**, если вы хотите, чтобы они были доступны из творческого инвентаря.
+You will also need to **add the items to a creative tab** if you want them to be accessible from the creative inventory.
 
 Как и для всех элементов, для них также следует создать ключи перевода.
 
@@ -78,45 +82,49 @@ authors:
 
 <DownloadEntry visualURL="/assets/develop/items/armor_0.png" downloadURL="/assets/develop/items/example_armor_item_textures.zip">Текстуры предметов</DownloadEntry>
 
-:::info
-Вам понадобятся файлы моделей JSON для всех предметов, а не только для шлема, принцип тот же, что и для других моделей предметов.
+::: info
+
+You will need model JSON files for all the items, not just the helmet, it's the same principle as other item models.
+
 :::
 
 @[code](@/reference/latest/src/main/generated/assets/example-mod/models/item/guidite_helmet.json)
 
-Как видите, в игре предметы брони должны иметь подходящие модели:
+As you can see, in-game the armor items should have suitable models:
 
-![Модели предметов брони](/assets/develop/items/armor_1.png)
+![Armor item models](/assets/develop/items/armor_1.png)
 
-### Текстуры брони {#armor-textures}
+### Armor Textures {#armor-textures}
 
-Когда существо наденет вашу броню, ничего не будет показано. Это происходит потому, что вам не хватает текстур и определений моделей оборудования.
+When an entity wears your armor, nothing will be shown. This is because you're missing textures and the equipment model definitions.
 
-![Модель сломанной брони на игроке](/assets/develop/items/armor_2.png)
+![Broken armor model on player](/assets/develop/items/armor_2.png)
 
-Для текстуры брони есть два слоя, оба должны присутствовать.
+There are two layers for the armor texture, both must be present.
 
-Ранее мы создали константу `RegistryKey<EquipmentAsset>` с именем `GUIDITE_ARMOR_MATERIAL_KEY`, которую мы передали в наш конструктор `ArmorMaterial`. Рекомендуется называть текстуру аналогичным образом, поэтому в нашем случае это `guidite.png`
+Previously, we created a `ResourceKey<EquipmentAsset>` constant called `GUIDITE_ARMOR_MATERIAL_KEY` which we passed into our `ArmorMaterial` constructor. It's recommended to name the texture similarly, so in our case, `guidite.png`
 
-- `assets/example-mod/textures/entity/equipment/humanoid/guid item.png` - Содержит текстуры верхней части тела и ботинок.
-- `assets/example-mod/textures/entity/equipment/humanoid_leggings/guid item.png` - Содержит текстуры ног.
+- `assets/example-mod/textures/entity/equipment/humanoid/guidite.png` - Contains upper body and boot textures.
+- `assets/example-mod/textures/entity/equipment/humanoid_leggings/guidite.png` - Contains legging textures.
 
-<DownloadEntry downloadURL="/assets/develop/items/example_armor_layer_textures.zip">Текстуры моделей брони Guidite</DownloadEntry>
+<DownloadEntry downloadURL="/assets/develop/items/example_armor_layer_textures.zip">Guidite Armor Model Textures</DownloadEntry>
 
-:::tip
-Если вы обновляетесь до версии 1.21.4 со старой версии игры, то текстура брони `layer0.png` будет помещена в папку `humanoid`, а текстура брони `layer1.png` - в папку `humanoid_leggings`.
+::: tip
+
+If you're updating to 1.21.11 from an older version of the game, the `humanoid` folder is where your `layer0.png` armor texture goes, and the `humanoid_leggings` folder is where your `layer1.png` armor texture goes.
+
 :::
 
-Далее вам нужно будет создать соответствующее определение модели оборудования. Они находятся в папке `/assets/example-mod/equipment/`.
+Next, you'll need to create an associated equipment model definition. These go in the `/assets/example-mod/equipment/` folder.
 
-Константа `RegistryKey<EquipmentAsset>`, которую мы создали ранее, будет определять имя файла JSON. В данном случае это будет `guidite.json`.
+The `ResourceKey<EquipmentAsset>` constant we created earlier will determine the name of the JSON file. In this case, it'll be `guidite.json`.
 
-Так как мы планируем добавлять только "гуманоидов" (шлем, нагрудник, поножи, ботинки и т.д.) части брони, определение модели нашего снаряжения, будут выглядеть следующим образом:
+Since we only plan to add "humanoid" (helmet, chestplate, leggings, boots etc.) armor pieces, our equipment model definition will look like this:
 
 @[code](@/reference/latest/src/main/resources/assets/example-mod/equipment/guidite.json)
 
-При наличии текстур и определения модели снаряжения вы сможете увидеть свою броню на объектах, которые ее носят:
+With the textures and equipment model definition present, you should be able to see your armor on entities that wear it:
 
-![Рабочая модель брони на игроке](/assets/develop/items/armor_3.png)
+![Working armor model on player](/assets/develop/items/armor_3.png)
 
 <!-- TODO: A guide on creating equipment for dyeable armor could prove useful. -->

@@ -24,6 +24,10 @@ authors:
 | `enchantmentValue`        | "Зачарованность" инструментов, изготовленных из этого `ToolMaterial`.                                                                                                                          |
 | `repairItems`             | Любые предметы, указанные в этом теге, могут быть использованы для ремонта инструментов из этого `ToolMaterial` на наковальне.                                                                 |
 
+В этом примере мы будем использовать тот же предмет для ремонта, что и для брони. Мы определяем ссылку на тег следующим образом:
+
+@[code transcludeWith=:::repair_tag](@/reference/latest/src/main/java/com/example/docs/item/armor/GuiditeArmorMaterial.java)
+
 Если вам трудно определить сбалансированные значения для любого из числовых параметров, вам следует рассмотреть возможность использования стандартные константы материала инструмента, таких как `ToolMaterial.STONE` or `ToolMaterial.DIAMOND`.
 
 ## Создание инструментов {#creating-tool-items}
@@ -34,7 +38,7 @@ authors:
 
 Два плавающих значений (`1f, 1f`) относятся к урону от атаки инструмента и скорости атаки инструмента соответственно.
 
-Не забудьте добавить их в группу предметов, если вы хотите получить к ним доступ из творческого инвентаря!
+Remember to add them to a creative tab if you want to access them from the creative inventory!
 
 @[code transcludeWith=:::8](@/reference/latest/src/main/java/com/example/docs/item/ModItems.java)
 

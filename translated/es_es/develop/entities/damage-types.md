@@ -13,7 +13,7 @@ Los tipos de daño definen los tipos de daño que pueden tomar las entidades. De
 
 Procedamos a crear un nuevo tipo de daño llamado _Tater_. Empezaremos creando el archivo JSON para tu tipo de daño. Este archivo será puesto en el folder de `data` de tu mod, en un sub-folder llamado `damage_types`.
 
-```:no-line-numbers
+```text:no-line-numbers
 resources/data/example-mod/damage_type/tater.json
 ```
 
@@ -31,9 +31,10 @@ Verifica la [Wiki de Minecraft](https://minecraft.wiki/w/Damage_type#JSON_format
 
 ### Accediendo los Tipos de Daño en El Código
 
-Cuando necesitamos acceder nuestro tipo de daño en el código, necesitaremos usar su `RegistryKey` (Llave de Registro) para crear una instancia de `DamageSource` (Fuente de Daño).
+When we need to access our custom damage type through code, we will use it's `ResourceKey` to build an instance
+of `DamageSource`.
 
-El `RegistryKey` puede ser obtenida de la siguiente manera:
+The `ResourceKey` can be obtained as follows:
 
 @[code lang=java transcludeWith=:::1](@/reference/latest/src/main/java/com/example/docs/damage/ExampleModDamageTypes.java)
 
@@ -41,15 +42,15 @@ El `RegistryKey` puede ser obtenida de la siguiente manera:
 
 Para demostrar el uso de tipos de daño personalizados, usaremos un bloque personalizado llamado **Tater Block**. Hagamos que cuando una entidad viviente pise sobre un **Bloque de Tater**, dará un daño de _Tater_.
 
-Puedes anular el método `onSteppedOn` para dar este daño.
+You can override `stepOn` to inflict this damage.
 
 Empezamos creando un `DamageSource` de nuestro tipo de daño personalizado.
 
-@[code lang=java transclude={21-24}](@/reference/latest/src/main/java/com/example/docs/damage/TaterBlock.java)
+@[code lang=java transclude={22-26}](@/reference/latest/src/main/java/com/example/docs/damage/TaterBlock.java)
 
 Después, llamamos `entity.damage()` con nuestro `DamageSource` y una cantidad.
 
-@[code lang=java transclude={25-25}](@/reference/latest/src/main/java/com/example/docs/damage/TaterBlock.java)
+@[code lang=java transclude={27-27}](@/reference/latest/src/main/java/com/example/docs/damage/TaterBlock.java)
 
 La implementación del bloque completa:
 
@@ -61,7 +62,11 @@ Ahora cuando una entidad viviente pise sobre nuestro bloque personalizado, tomar
 
 Puedes definir un mensje de muerte para el tipo de daño en el formato de `death.attack.<message_id>` en nuestro archivo `en_us.json` de nuestro mod.
 
-@[code lang=json transclude={4-4}](@/reference/latest/src/main/resources/assets/example-mod/lang/en_us.json)
+```json
+{
+  "death.attack.tater": "%1$s died from Tater damage!"
+}
+```
 
 Cuando suceda una muerta por nuestro tipo de daño, verás el siguiente mensaje:
 
@@ -83,7 +88,7 @@ Agreguemos nuestro tipo de daño de Tater al tag de `bypasses_armor`.
 
 Para agregar nuestro tipo de daño a uno de estos tags, crearemos un archivo JSON bajo el namespace de `minecraft`.
 
-```:no-line-numbers
+```text:no-line-numbers
 data/minecraft/tags/damage_type/bypasses_armor.json
 ```
 
